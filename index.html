@@ -160,21 +160,21 @@
             <div class="flex justify-between h-20 items-center">
                 <div class="flex items-center">
                     <img src="images/logo.jpeg" alt="NoraSol Logo" class="h-12 w-auto mr-3">
-                    <span class="ml-2 bg-emerald-100 text-emerald-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Indigenous</span>
+                    <span class="ml-2 bg-emerald-100 text-emerald-700 text-[10px] font-black px-2 py-0.5 rounded uppercase text-nowrap">Indigenous</span>
                 </div>
-                <div class="hidden md:flex space-x-10 font-bold text-slate-600 text-sm uppercase tracking-wider">
+                <div class="hidden lg:flex space-x-8 font-bold text-slate-600 text-sm uppercase tracking-wider">
                     <a href="#showcase" class="hover:text-emerald-600 transition">Products</a>
                     <a href="#app" class="hover:text-emerald-600 transition">Smart App</a>
                     <a href="#load" class="hover:text-emerald-600 transition">Capability</a>
                     <a href="#specs" class="hover:text-emerald-600 transition">Tech Specs</a>
                 </div>
                 <div class="flex items-center">
-                    <a href="tel:03097512900" class="hidden lg:block mr-6 font-bold text-slate-800">
+                    <a href="tel:03097512900" class="hidden xl:block mr-6 font-bold text-slate-800">
                         <i class="fas fa-phone-alt mr-2 text-emerald-600"></i> 0309 7512900
                     </a>
-                    <a href="https://wa.me/923097512900" class="bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-emerald-700 transition flex items-center shadow-xl shadow-emerald-200">
-                        <i class="fab fa-whatsapp mr-2 text-xl"></i> <span class="hidden sm:inline">Ask Price</span>
-                    </a>
+                    <button onclick="toggleCheckout()" class="bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-emerald-700 transition flex items-center shadow-xl shadow-emerald-200">
+                        <i class="fas fa-shopping-cart mr-2"></i> Buy Now
+                    </button>
                 </div>
             </div>
         </div>
@@ -194,7 +194,7 @@
                     Designed in Pakistan, for Pakistan. NoraSol Nora-3 offers 3.2kW of pure sine wave hybrid power with integrated LiFePO4 storage. Beat load-shedding with 96% efficiency.
                 </p>
                 <div class="flex flex-wrap gap-5">
-                    <a href="#showcase" class="bg-white text-emerald-950 px-10 py-4 rounded-2xl font-extrabold hover:bg-emerald-50 transition shadow-2xl">Explore Models</a>
+                    <button onclick="toggleCheckout()" class="bg-white text-emerald-950 px-10 py-4 rounded-2xl font-extrabold hover:bg-emerald-50 transition shadow-2xl">Buy Now</button>
                     <button onclick="toggleOptimizer()" class="bg-emerald-500 text-white px-10 py-4 rounded-2xl font-extrabold hover:bg-emerald-600 transition shadow-2xl">Load Optimizer ✨</button>
                 </div>
             </div>
@@ -202,8 +202,8 @@
                 <div class="animate-float relative">
                     <div class="bg-white/10 p-4 rounded-[40px] backdrop-blur-xl border border-white/20 shadow-2xl">
                         <div class="bg-white rounded-[32px] p-2 text-center text-slate-900 w-72 md:w-80 overflow-hidden">
-                            <img src="images/logo.jpeg" alt="Nora-3 Hybrid Inverter" class="w-full h-auto rounded-2xl mb-4">
-                            <h3 class="text-2xl font-black">Nora-3</h3>
+                            <img src="images/WhatsApp Image 2026-01-07 at 5.18.02 PM.jpeg" alt="Nora-3 Hybrid Inverter" class="w-full h-auto rounded-2xl mb-4">
+                            <h3 class="text-2xl font-black text-emerald-700">Nora-3</h3>
                             <p class="text-sm font-bold text-emerald-600 uppercase tracking-widest mb-4">Hybrid Power System</p>
                             <div class="px-6 pb-6 space-y-2 text-left text-sm font-medium">
                                 <p><i class="fas fa-check text-emerald-500 mr-2"></i> 3.2kW Output</p>
@@ -216,6 +216,95 @@
             </div>
         </div>
     </header>
+
+    <!-- Buy Now / Checkout Modal ✨ -->
+    <div id="checkoutModal" class="fixed inset-0 z-[110] hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+        <div class="bg-white w-full max-w-4xl rounded-[40px] shadow-2xl flex flex-col md:flex-row overflow-hidden animate-fade-in-up">
+            <!-- Left: Order Summary -->
+            <div class="md:w-2/5 bg-slate-50 p-8 border-r border-slate-100 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-800 mb-6">Order Summary</h3>
+                    <div class="flex gap-4 mb-8 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+                        <div class="w-20 h-20 bg-emerald-100 rounded-xl flex items-center justify-center shrink-0">
+                            <i class="fas fa-bolt text-3xl text-emerald-600"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-900">Nora-3 System</p>
+                            <p class="text-xs text-slate-500 uppercase font-bold tracking-tighter">Hybrid Inverter + Battery</p>
+                            <p class="text-emerald-600 font-black mt-1">Contact for Best Price</p>
+                        </div>
+                    </div>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex justify-between"><span>Inverter Capacity:</span><span class="font-bold">3.2kW</span></li>
+                        <li class="flex justify-between"><span>Battery Storage:</span><span class="font-bold">3.06kWh</span></li>
+                        <li class="flex justify-between"><span>Warranty:</span><span class="font-bold">4-6 Years</span></li>
+                    </ul>
+                </div>
+                <div class="mt-10 p-4 bg-emerald-900 text-white rounded-2xl">
+                    <p class="text-[10px] uppercase font-bold opacity-60 mb-1">Official Support</p>
+                    <p class="text-sm font-bold"><i class="fas fa-headset mr-2"></i> 0309 7512900</p>
+                </div>
+            </div>
+
+            <!-- Right: Order Form -->
+            <div class="md:w-3/5 p-8 relative">
+                <button onclick="toggleCheckout()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 transition"><i class="fas fa-times text-xl"></i></button>
+                <h3 class="text-2xl font-black text-slate-800 mb-2">Delivery Details</h3>
+                <p class="text-sm text-slate-500 mb-6">Free Delivery & On-Site Consultation available in major cities.</p>
+
+                <form id="orderForm" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-black text-slate-400 uppercase mb-1">Full Name</label>
+                            <input type="text" placeholder="e.g. Ahmed Khan" class="w-full bg-slate-50 border-0 rounded-xl p-3 outline-emerald-500 text-sm" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black text-slate-400 uppercase mb-1">Phone Number</label>
+                            <input type="tel" placeholder="03XX XXXXXXX" class="w-full bg-slate-50 border-0 rounded-xl p-3 outline-emerald-500 text-sm" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-black text-slate-400 uppercase mb-1">Select City</label>
+                        <select class="w-full bg-slate-50 border-0 rounded-xl p-3 outline-emerald-500 text-sm font-bold">
+                            <option>Lahore</option>
+                            <option>Karachi</option>
+                            <option>Islamabad / Rawalpindi</option>
+                            <option>Faisalabad</option>
+                            <option>Multan</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-black text-slate-400 uppercase mb-1">Payment Method</label>
+                        <div class="flex gap-3">
+                            <label class="flex-1 bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center gap-2 cursor-pointer hover:border-emerald-500 transition">
+                                <input type="radio" name="payment" checked class="text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-xs font-bold">Cash on Delivery</span>
+                            </label>
+                            <label class="flex-1 bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center gap-2 cursor-pointer hover:border-emerald-500 transition">
+                                <input type="radio" name="payment" class="text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-xs font-bold">Bank Transfer</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button type="button" onclick="alert('Order Inquiry Submitted! Our team will call you within 2 hours.')" class="w-full bg-emerald-600 text-white font-black py-4 rounded-2xl hover:bg-emerald-700 transition shadow-xl shadow-emerald-100 flex items-center justify-center gap-2 uppercase tracking-widest">
+                        Confirm My Order
+                    </button>
+                    
+                    <div class="flex items-center gap-4 py-2">
+                        <div class="flex-1 h-px bg-slate-100"></div>
+                        <span class="text-[10px] font-bold text-slate-300 uppercase">OR</span>
+                        <div class="flex-1 h-px bg-slate-100"></div>
+                    </div>
+
+                    <a href="https://wa.me/923097512900" class="w-full border-2 border-emerald-600 text-emerald-600 font-black py-4 rounded-2xl hover:bg-emerald-50 transition flex items-center justify-center gap-2 uppercase tracking-widest">
+                        <i class="fab fa-whatsapp"></i> Buy on WhatsApp
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!-- Smart Load Optimizer Modal (High Performance JS Calculator) ✨ -->
     <div id="optimizerModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
@@ -248,7 +337,7 @@
                     Calculate Backup Time
                 </button>
                 <div id="optimizerResult" class="mt-6 p-6 bg-emerald-50 border border-emerald-100 rounded-2xl hidden">
-                    <!-- Result text will appear here via JavaScript -->
+                    <!-- Result text via JavaScript -->
                 </div>
             </div>
         </div>
@@ -265,51 +354,51 @@
             <!-- Swiper Slider -->
             <div class="swiper mySwiper" data-aos="fade-up" data-aos-delay="200">
                 <div class="swiper-wrapper">
-                    <!-- Slide 1 -->
                     <div class="swiper-slide">
                         <div class="product-card">
                             <div class="h-64 bg-slate-100 overflow-hidden">
                                 <img src="images/WhatsApp Image 2026-01-07 at 4.44.48 PM.jpeg" alt="Nora-3 Home" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
                             </div>
                             <div class="p-6">
-                                <h3 class="text-xl font-bold mb-2">Nora-3 Home</h3>
+                                <h3 class="text-xl font-bold mb-2 text-emerald-800">Nora-3 Home</h3>
                                 <p class="text-sm text-slate-500">Perfect for apartments and homes. Runs fans, lights, and 1.5 Ton Inverter AC.</p>
+                                <button onclick="toggleCheckout()" class="mt-4 w-full bg-emerald-600 text-white py-2 rounded-lg font-bold hover:bg-emerald-700 transition">Order Now</button>
                             </div>
                         </div>
                     </div>
-                    <!-- Slide 2 -->
                     <div class="swiper-slide">
                         <div class="product-card">
                             <div class="h-64 bg-slate-800 overflow-hidden">
                                 <img src="images/WhatsApp Image 2026-01-07 at 4.44.49 PM.jpeg" alt="Nora Industrial" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
                             </div>
                             <div class="p-6">
-                                <h3 class="text-xl font-bold mb-2">Nora Industrial</h3>
+                                <h3 class="text-xl font-bold mb-2 text-emerald-800">Nora Industrial</h3>
                                 <p class="text-sm text-slate-500">Heavy duty three-phase solution for factories and workshops.</p>
+                                <button onclick="toggleCheckout()" class="mt-4 w-full bg-emerald-600 text-white py-2 rounded-lg font-bold hover:bg-emerald-700 transition text-sm">Request Price</button>
                             </div>
                         </div>
                     </div>
-                    <!-- Slide 3 -->
                     <div class="swiper-slide">
                         <div class="product-card">
                             <div class="h-64 bg-emerald-600 overflow-hidden">
                                 <img src="images/WhatsApp Image 2026-01-07 at 4.44.50 PM.jpeg" alt="Energy Vault" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
                             </div>
                             <div class="p-6">
-                                <h3 class="text-xl font-bold mb-2">Energy Vault</h3>
+                                <h3 class="text-xl font-bold mb-2 text-emerald-800">Energy Vault</h3>
                                 <p class="text-sm text-slate-500">Scalable LiFePO4 storage. Keep your business running 24/7.</p>
+                                <button onclick="toggleCheckout()" class="mt-4 w-full bg-emerald-600 text-white py-2 rounded-lg font-bold hover:bg-emerald-700 transition text-sm">Reserve Unit</button>
                             </div>
                         </div>
                     </div>
-                    <!-- Slide 4 -->
                     <div class="swiper-slide">
                         <div class="product-card">
                             <div class="h-64 bg-slate-200 overflow-hidden">
                                 <img src="images/WhatsApp Image 2026-01-07 at 4.44.48 PM (1).jpeg" alt="Smart Core V2" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
                             </div>
                             <div class="p-6">
-                                <h3 class="text-xl font-bold mb-2">Smart Core V2</h3>
+                                <h3 class="text-xl font-bold mb-2 text-emerald-800">Smart Core V2</h3>
                                 <p class="text-sm text-slate-500">Proprietary PCB & Firmware that powers the heart of NoraSol.</p>
+                                <button onclick="toggleCheckout()" class="mt-4 w-full bg-emerald-600 text-white py-2 rounded-lg font-bold hover:bg-emerald-700 transition text-sm text-nowrap">Licensing Options</button>
                             </div>
                         </div>
                     </div>
@@ -407,7 +496,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Decorative elements -->
                     <div class="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/10 blur-[100px] rounded-full"></div>
                 </div>
             </div>
@@ -520,7 +608,7 @@
                     <p class="text-slate-400">Our engineering labs in Lahore & Karachi are available for consultation.</p>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-5">
-                    <a href="tel:03097512900" class="bg-white text-slate-900 px-10 py-5 rounded-2xl font-black text-2xl hover:bg-emerald-400 transition flex items-center shadow-2xl">
+                    <a href="tel:03097512900" class="bg-white text-slate-900 px-10 py-5 rounded-2xl font-black text-2xl hover:bg-emerald-400 transition flex items-center shadow-2xl text-nowrap">
                         <i class="fas fa-phone-alt mr-4 text-emerald-600"></i> 0309 7512900
                     </a>
                 </div>
@@ -534,7 +622,7 @@
             <div>
                 <div class="flex items-center mb-6">
                     <img src="images/logo.jpeg" alt="Logo" class="h-10 w-auto mr-3">
-                    <span class="text-2xl font-bold text-white">NORA<span class="text-emerald-500">SOL</span></span>
+                    <span class="text-2xl font-bold text-white uppercase tracking-tighter">Nora<span class="text-emerald-500">Sol</span></span>
                 </div>
                 <p class="text-sm leading-relaxed">Redefining energy access through indigenous innovation. NoraSol is committed to making Pakistan a global player in green energy hardware.</p>
                 <div class="mt-8 flex space-x-6 text-2xl">
@@ -544,7 +632,7 @@
                 </div>
             </div>
             <div>
-                <h4 class="text-white font-bold mb-8 uppercase tracking-widest">Regional Hubs</h4>
+                <h4 class="text-white font-bold mb-8 uppercase tracking-widest text-xs">Regional Hubs</h4>
                 <ul class="space-y-4 text-sm font-medium">
                     <li><i class="fas fa-map-marker-alt mr-3 text-emerald-500"></i> Lahore - Hall Road R&D Lab</li>
                     <li><i class="fas fa-map-marker-alt mr-3 text-emerald-500"></i> Karachi - SITE Area Production</li>
@@ -552,7 +640,7 @@
                 </ul>
             </div>
             <div>
-                <h4 class="text-white font-bold mb-8 uppercase tracking-widest">Direct Contact</h4>
+                <h4 class="text-white font-bold mb-8 uppercase tracking-widest text-xs">Direct Contact</h4>
                 <p class="text-white text-xl font-black mb-2">0309 7512900</p>
                 <p class="text-sm mb-6">Available 9:00 AM - 6:00 PM (PKT)</p>
                 <a href="mailto:info@norasol.pk" class="text-emerald-400 font-bold border-b border-emerald-400/30">info@norasol.pk</a>
@@ -635,8 +723,11 @@
 
         // UI Interactions
         function toggleOptimizer() {
-            const modal = document.getElementById('optimizerModal');
-            modal.classList.toggle('hidden');
+            document.getElementById('optimizerModal').classList.toggle('hidden');
+        }
+
+        function toggleCheckout() {
+            document.getElementById('checkoutModal').classList.toggle('hidden');
         }
 
         function toggleAIChat() {
@@ -670,7 +761,7 @@
             }
         }
 
-        // --- LOCAL LOAD CALCULATOR LOGIC (NO AI) ---
+        // LOCAL LOAD CALCULATOR
         function runOptimization() {
             const ac = parseInt(document.getElementById('load-ac').value) || 0;
             const fans = parseInt(document.getElementById('load-fans').value) || 0;
@@ -682,71 +773,42 @@
                 return;
             }
 
-            // Consumption Estimates (Watts)
-            const AC_WATT = 1000;    // Inverter AC running average
-            const FAN_WATT = 80;     // Standard ceiling fan
-            const FRIDGE_WATT = 150; // Average cycling fridge
-            const LIGHT_WATT = 15;   // LED light
+            const AC_WATT = 1000;
+            const FAN_WATT = 80;
+            const FRIDGE_WATT = 150;
+            const LIGHT_WATT = 15;
 
             const totalLoad = (ac * AC_WATT) + (fans * FAN_WATT) + (fridge * FRIDGE_WATT) + (lights * LIGHT_WATT);
-            const usableWh = 2700; // 2.7kWh usable battery
+            const usableWh = 2700;
+
+            const resultDiv = document.getElementById('optimizerResult');
+            resultDiv.classList.remove('hidden');
 
             if (totalLoad > 3200) {
-                const resultDiv = document.getElementById('optimizerResult');
-                resultDiv.classList.remove('hidden');
-                resultDiv.innerHTML = `
-                    <div class="text-red-600">
-                        <p class="font-bold text-lg">⚠️ Overload Warning</p>
-                        <p class="text-sm">Your calculated load is <strong>${totalLoad}W</strong>, which exceeds the 3.2kW (3200W) limit of Nora-3. Please reduce appliances to protect the system.</p>
-                    </div>`;
+                resultDiv.innerHTML = `<div class="text-red-600"><p class="font-bold text-lg">⚠️ Overload</p><p class="text-sm">Load is ${totalLoad}W. Limit is 3200W.</p></div>`;
                 return;
             }
 
             const backupHours = usableWh / totalLoad;
             const hours = Math.floor(backupHours);
             const minutes = Math.round((backupHours - hours) * 60);
-
-            const resultDiv = document.getElementById('optimizerResult');
-            resultDiv.classList.remove('hidden');
             
-            resultDiv.innerHTML = `
-                <div class="text-emerald-800">
-                    <p class="text-xs uppercase font-black tracking-widest text-emerald-600 mb-1">Estimated Backup Time</p>
-                    <p class="text-4xl font-black mb-4">${hours}h ${minutes}m</p>
-                    
-                    <div class="space-y-2 border-t border-emerald-200 pt-4 text-sm font-medium">
-                        <div class="flex justify-between"><span>Total Load:</span><span>${totalLoad} Watts</span></div>
-                        <div class="flex justify-between"><span>Battery Utilized:</span><span>90% DoD</span></div>
-                        <div class="flex justify-between"><span>System Capacity:</span><span>${Math.round((totalLoad/3200)*100)}% Used</span></div>
-                    </div>
-                    
-                    <p class="mt-4 text-xs italic text-slate-500 bg-white/50 p-3 rounded-lg border border-emerald-100">
-                        <strong>Expert Tip:</strong> This estimate assumes a night-time scenario without solar input. Running your Inverter AC at 26°C can increase your backup time by up to 2 hours.
-                    </p>
-                </div>`;
+            resultDiv.innerHTML = `<div class="text-emerald-800"><p class="text-xs uppercase font-black text-emerald-600 mb-1">Backup Estimate</p><p class="text-4xl font-black mb-2">${hours}h ${minutes}m</p><p class="text-xs italic opacity-60">Calculated for 2.7kWh usable battery pack.</p></div>`;
         }
 
-        // Chat Logic ✨
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') sendMessage();
-        }
-
+        // Chat Logic
+        function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
         async function sendMessage() {
             const input = document.getElementById('userInput');
             const text = input.value.trim();
             if (!text) return;
-
             appendMessage(text, 'user');
             input.value = '';
-
-            const loader = document.getElementById('chatLoader');
-            loader.style.display = 'block';
-
+            document.getElementById('chatLoader').style.display = 'block';
             const response = await callGemini(text);
-            loader.style.display = 'none';
+            document.getElementById('chatLoader').style.display = 'none';
             appendMessage(response, 'bot');
         }
-
         function appendMessage(text, side) {
             const container = document.getElementById('chatMessages');
             const div = document.createElement('div');
