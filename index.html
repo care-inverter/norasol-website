@@ -47,7 +47,7 @@
         .animate-float { animation: float 3s ease-in-out infinite; }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
 
-        /* AI Features Styling */
+        /* AI Chat Features Styling */
         .ai-chat-window {
             position: fixed;
             bottom: 100px;
@@ -160,7 +160,6 @@
             <div class="flex justify-between h-20 items-center">
                 <div class="flex items-center">
                     <img src="images/logo.jpeg" alt="NoraSol Logo" class="h-12 w-auto mr-3">
-                    <!-- <span class="text-2xl font-extrabold tracking-tighter text-emerald-700">NORA<span class="text-slate-800">SOL</span></span> -->
                     <span class="ml-2 bg-emerald-100 text-emerald-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Indigenous</span>
                 </div>
                 <div class="hidden md:flex space-x-10 font-bold text-slate-600 text-sm uppercase tracking-wider">
@@ -196,14 +195,14 @@
                 </p>
                 <div class="flex flex-wrap gap-5">
                     <a href="#showcase" class="bg-white text-emerald-950 px-10 py-4 rounded-2xl font-extrabold hover:bg-emerald-50 transition shadow-2xl">Explore Models</a>
-                    <button onclick="toggleOptimizer()" class="bg-emerald-500 text-white px-10 py-4 rounded-2xl font-extrabold hover:bg-emerald-600 transition shadow-2xl">Smart Load Optimizer ✨</button>
+                    <button onclick="toggleOptimizer()" class="bg-emerald-500 text-white px-10 py-4 rounded-2xl font-extrabold hover:bg-emerald-600 transition shadow-2xl">Load Optimizer ✨</button>
                 </div>
             </div>
             <div class="md:w-2/5 flex justify-center" data-aos="zoom-in">
                 <div class="animate-float relative">
                     <div class="bg-white/10 p-4 rounded-[40px] backdrop-blur-xl border border-white/20 shadow-2xl">
                         <div class="bg-white rounded-[32px] p-2 text-center text-slate-900 w-72 md:w-80 overflow-hidden">
-                            <img src="images/logo.jpeg" alt="Nora-3 Hybrid Inverter" class="w-full h-auto rounded-2xl mb-4">
+                            <img src="images/WhatsApp Image 2026-01-07 at 5.18.02 PM.jpeg" alt="Nora-3 Hybrid Inverter" class="w-full h-auto rounded-2xl mb-4">
                             <h3 class="text-2xl font-black">Nora-3</h3>
                             <p class="text-sm font-bold text-emerald-600 uppercase tracking-widest mb-4">Hybrid Power System</p>
                             <div class="px-6 pb-6 space-y-2 text-left text-sm font-medium">
@@ -218,39 +217,38 @@
         </div>
     </header>
 
-    <!-- Smart Load Optimizer Modal ✨ -->
+    <!-- Smart Load Optimizer Modal (High Performance JS Calculator) ✨ -->
     <div id="optimizerModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
         <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden animate-fade-in-up">
             <div class="bg-emerald-600 p-6 text-white flex justify-between items-center">
-                <h3 class="text-xl font-bold">Smart Load Optimizer ✨</h3>
+                <h3 class="text-xl font-bold">Smart Load Calculator ✨</h3>
                 <button onclick="toggleOptimizer()" class="text-white hover:text-emerald-200 transition"><i class="fas fa-times text-xl"></i></button>
             </div>
             <div class="p-8">
-                <p class="text-slate-600 mb-6">Tell us what you want to run on the Nora-3, and our AI will calculate your battery backup time!</p>
+                <p class="text-slate-600 mb-6">Enter your appliances to calculate exactly how much backup the Nora-3 system will provide (assuming 2.7kWh usable battery).</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                     <div>
                         <label class="block text-sm font-bold text-slate-700 mb-1">Inverter ACs (1.5 Ton)</label>
-                        <input type="number" id="load-ac" placeholder="0" class="w-full border rounded-lg p-2 outline-emerald-500">
+                        <input type="number" id="load-ac" placeholder="0" min="0" class="w-full border rounded-lg p-2 outline-emerald-500">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-slate-700 mb-1">Ceiling Fans</label>
-                        <input type="number" id="load-fans" placeholder="0" class="w-full border rounded-lg p-2 outline-emerald-500">
+                        <input type="number" id="load-fans" placeholder="0" min="0" class="w-full border rounded-lg p-2 outline-emerald-500">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-slate-700 mb-1">Refrigerators</label>
-                        <input type="number" id="load-fridge" placeholder="0" class="w-full border rounded-lg p-2 outline-emerald-500">
+                        <input type="number" id="load-fridge" placeholder="0" min="0" class="w-full border rounded-lg p-2 outline-emerald-500">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-slate-700 mb-1">LED Lights</label>
-                        <input type="number" id="load-lights" placeholder="0" class="w-full border rounded-lg p-2 outline-emerald-500">
+                        <input type="number" id="load-lights" placeholder="0" min="0" class="w-full border rounded-lg p-2 outline-emerald-500">
                     </div>
                 </div>
                 <button id="optimizeBtn" onclick="runOptimization()" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700 transition flex items-center justify-center gap-3">
-                    Calculate My Backup ✨
-                    <div id="optLoader" class="loader"></div>
+                    Calculate Backup Time
                 </button>
-                <div id="optimizerResult" class="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-2xl hidden max-h-60 overflow-y-auto">
-                    <!-- Result text will appear here -->
+                <div id="optimizerResult" class="mt-6 p-6 bg-emerald-50 border border-emerald-100 rounded-2xl hidden">
+                    <!-- Result text will appear here via JavaScript -->
                 </div>
             </div>
         </div>
@@ -393,10 +391,10 @@
                                     <p class="text-sm font-bold text-emerald-600">85%</p>
                                 </div>
                             </div>
-                            <div class="flex-1 bg-white rounded-2xl p-4 border border-slate-200 overflow-hidden relative">
+                            <div class="flex-1 bg-white rounded-2xl p-4 border border-slate-200 overflow-hidden relative text-center flex flex-col justify-center">
                                 <img src="images/WhatsApp Image 2026-01-07 at 4.44.49 PM (1).jpeg" alt="App Visual" class="absolute inset-0 w-full h-full object-cover opacity-20">
                                 <p class="text-[10px] font-bold text-slate-400 mb-3 uppercase relative z-10">Energy Flow</p>
-                                <div class="flex flex-col items-center justify-center space-y-4 pt-2 relative z-10">
+                                <div class="flex flex-col items-center space-y-3 relative z-10">
                                     <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 text-xs shadow-sm"><i class="fas fa-sun"></i></div>
                                     <i class="fas fa-arrow-down text-emerald-400 text-[10px] animate-bounce"></i>
                                     <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm"><i class="fas fa-bolt"></i></div>
@@ -416,7 +414,7 @@
         </div>
     </section>
 
-    <!-- Load Capability: "What can it run?" -->
+    <!-- Load Capability: Quick Load Check -->
     <section id="load" class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4">
             <div class="grid md:grid-cols-2 gap-16 items-center">
@@ -449,11 +447,11 @@
                 </div>
                 <div class="relative px-10" data-aos="fade-left">
                     <div class="bg-emerald-900 rounded-[40px] p-1 text-white relative shadow-3xl text-center overflow-hidden">
-                        <img src="images/WhatsApp Image 2026-01-07 at 4.44.49 PM (2).jpeg" alt="Smart Inverter" class="w-full h-auto opacity-50 mb-8">
+                        <img src="images/WhatsApp Image 2026-01-07 at 4.44.49 PM (2).jpeg" alt="Smart Inverter" class="w-full h-auto opacity-50">
                         <div class="p-12 pt-0 absolute inset-0 flex flex-col justify-center items-center bg-emerald-900/40">
-                            <h3 class="text-3xl font-bold mb-6 italic">AI Power Expert ✨</h3>
-                            <p class="text-emerald-100 mb-8 leading-relaxed max-w-sm">Let our AI calculate exactly how much backup you will get with your specific load.</p>
-                            <button onclick="toggleOptimizer()" class="bg-white text-emerald-900 px-8 py-3 rounded-xl font-bold hover:bg-emerald-50 transition shadow-lg">Open Smart Optimizer</button>
+                            <h3 class="text-3xl font-bold mb-6 italic">Quick Load Check</h3>
+                            <p class="text-emerald-100 mb-8 leading-relaxed max-w-sm">Calculate exactly how much backup you will get with your specific load using our high-precision local calculator.</p>
+                            <button onclick="toggleOptimizer()" class="bg-white text-emerald-900 px-8 py-3 rounded-xl font-bold hover:bg-emerald-50 transition shadow-lg">Open Calculator</button>
                         </div>
                     </div>
                 </div>
@@ -536,7 +534,7 @@
             <div>
                 <div class="flex items-center mb-6">
                     <img src="images/logo.jpeg" alt="Logo" class="h-10 w-auto mr-3">
-                    <!-- <span class="text-2xl font-bold text-white">NORA<span class="text-emerald-500">SOL</span></span> -->
+                    <span class="text-2xl font-bold text-white">NORA<span class="text-emerald-500">SOL</span></span>
                 </div>
                 <p class="text-sm leading-relaxed">Redefining energy access through indigenous innovation. NoraSol is committed to making Pakistan a global player in green energy hardware.</p>
                 <div class="mt-8 flex space-x-6 text-2xl">
@@ -646,7 +644,7 @@
             chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        async function callGemini(prompt, isOptimizer = false) {
+        async function callGemini(prompt) {
             const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${apiModel}:generateContent?key=${apiKey}`;
             const payload = {
                 contents: [{ parts: [{ text: prompt }] }],
@@ -672,32 +670,60 @@
             }
         }
 
-        // Smart Load Optimizer Logic ✨
-        async function runOptimization() {
-            const ac = document.getElementById('load-ac').value || 0;
-            const fans = document.getElementById('load-fans').value || 0;
-            const fridge = document.getElementById('load-fridge').value || 0;
-            const lights = document.getElementById('load-lights').value || 0;
+        // --- LOCAL LOAD CALCULATOR LOGIC (NO AI) ---
+        function runOptimization() {
+            const ac = parseInt(document.getElementById('load-ac').value) || 0;
+            const fans = parseInt(document.getElementById('load-fans').value) || 0;
+            const fridge = parseInt(document.getElementById('load-fridge').value) || 0;
+            const lights = parseInt(document.getElementById('load-lights').value) || 0;
 
-            if (!ac && !fans && !fridge && !lights) {
+            if (ac === 0 && fans === 0 && fridge === 0 && lights === 0) {
                 alert("Please enter at least one appliance.");
                 return;
             }
 
-            const loader = document.getElementById('optLoader');
+            // Consumption Estimates (Watts)
+            const AC_WATT = 1000;    // Inverter AC running average
+            const FAN_WATT = 80;     // Standard ceiling fan
+            const FRIDGE_WATT = 150; // Average cycling fridge
+            const LIGHT_WATT = 15;   // LED light
+
+            const totalLoad = (ac * AC_WATT) + (fans * FAN_WATT) + (fridge * FRIDGE_WATT) + (lights * LIGHT_WATT);
+            const usableWh = 2700; // 2.7kWh usable battery
+
+            if (totalLoad > 3200) {
+                const resultDiv = document.getElementById('optimizerResult');
+                resultDiv.classList.remove('hidden');
+                resultDiv.innerHTML = `
+                    <div class="text-red-600">
+                        <p class="font-bold text-lg">⚠️ Overload Warning</p>
+                        <p class="text-sm">Your calculated load is <strong>${totalLoad}W</strong>, which exceeds the 3.2kW (3200W) limit of Nora-3. Please reduce appliances to protect the system.</p>
+                    </div>`;
+                return;
+            }
+
+            const backupHours = usableWh / totalLoad;
+            const hours = Math.floor(backupHours);
+            const minutes = Math.round((backupHours - hours) * 60);
+
             const resultDiv = document.getElementById('optimizerResult');
-            loader.style.display = 'block';
-            resultDiv.classList.add('hidden');
-
-            const prompt = `Perform a load calculation for Nora-3 system (2.7kWh usable battery). 
-            User load: ${ac} Inverter ACs, ${fans} Fans, ${fridge} Refrigerators, ${lights} LED Lights.
-            Calculate estimated battery backup time in hours assuming no solar input (night time). 
-            Give a 2-3 sentence power management tip.`;
-
-            const result = await callGemini(prompt, true);
-            loader.style.display = 'none';
-            resultDiv.innerHTML = `<p class="text-slate-800 font-medium">${result}</p>`;
             resultDiv.classList.remove('hidden');
+            
+            resultDiv.innerHTML = `
+                <div class="text-emerald-800">
+                    <p class="text-xs uppercase font-black tracking-widest text-emerald-600 mb-1">Estimated Backup Time</p>
+                    <p class="text-4xl font-black mb-4">${hours}h ${minutes}m</p>
+                    
+                    <div class="space-y-2 border-t border-emerald-200 pt-4 text-sm font-medium">
+                        <div class="flex justify-between"><span>Total Load:</span><span>${totalLoad} Watts</span></div>
+                        <div class="flex justify-between"><span>Battery Utilized:</span><span>90% DoD</span></div>
+                        <div class="flex justify-between"><span>System Capacity:</span><span>${Math.round((totalLoad/3200)*100)}% Used</span></div>
+                    </div>
+                    
+                    <p class="mt-4 text-xs italic text-slate-500 bg-white/50 p-3 rounded-lg border border-emerald-100">
+                        <strong>Expert Tip:</strong> This estimate assumes a night-time scenario without solar input. Running your Inverter AC at 26°C can increase your backup time by up to 2 hours.
+                    </p>
+                </div>`;
         }
 
         // Chat Logic ✨
