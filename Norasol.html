@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoraSol</title>
+    <link rel="icon" type="image/jpeg" href="Images/Norasol%20icon.jpg">
+    <link rel="shortcut icon" type="image/jpeg" href="Images/Norasol%20icon.jpg">
+    <link rel="apple-touch-icon" href="Images/Norasol%20icon.jpg">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        brandGreen: '#559E3F',
+                        brandDark: '#2C3E26',
+                        luxLeaf: '#1E351A',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root{
+            /* Use padding that always stays within viewport to avoid hidden/blank side gutters */
+            --safe-pad-x: clamp(10px, 2.5vw, 18px);
+            --safe-pad-bottom: clamp(16px, 5vh, 26px);
+            --header-h: 5rem;
+        }
+
+        /* Ensure full-height layout and that fixed elements never extend beyond viewport */
+        html, body { height: 100%; }
+
+        /* Keep right/left positioned fixed widgets inside viewport */
+        .ai-chat-panel,
+        .ai-chat-toggle,
+        .whatsapp-float,
+        #flashSaleOverlay {
+            max-width: 100vw;
+        }
+        body {
+            background-color: #f4fbf2;
+
+            background-image: radial-gradient(circle at top left, rgba(101, 196, 73, 0.18), transparent 32%),
+                              radial-gradient(circle at 80% 20%, rgba(34, 211, 238, 0.14), transparent 28%),
+                              linear-gradient(135deg, #f7fdf5 0%, #f1f9eb 45%, #eef8e8 100%);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            color: #123022;
+        }
+
+       /* DYNAMIC IMAGE BACKGROUND WITH 5-IMAGE CYCLE & PANNING */
+.animated-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -3;
+    background-size: 115% 115%;
+    background-position: center;
+    /* Keeps the dark branding tint over all cycling images */
+    background-image: linear-gradient(135deg, rgba(18, 48, 34, 0.5) 0%, rgba(18, 48, 34, 0.7) 100%), 
+                      url('https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2070&auto=format&fit=crop');
+    animation: 
+        imageMovement 24s ease-in-out infinite alternate,
+        imageCycle 40s linear infinite;
+}
+
+/* Smoothly crossfades between 5 different high-res images */
+@keyframes imageCycle {
+    0%, 16% {
+        background-image: linear-gradient(135deg, rgba(18, 48, 34, 0.5), rgba(18, 48, 34, 0.7)), 
+                          url('https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2070&auto=format&fit=crop'); /* Solar + Turbines */
+    }
+    20%, 36% {
+        background-image: linear-gradient(135deg, rgba(18, 48, 34, 0.5), rgba(18, 48, 34, 0.7)), 
+                          url('https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=2070&auto=format&fit=crop'); /* Wind Farm Green Field */
+    }
+    40%, 56% {
+        background-image: linear-gradient(135deg, rgba(18, 48, 34, 0.5), rgba(18, 48, 34, 0.7)), 
+                          url('https://images.unsplash.com/photo-1548345680-f5475ea5df84?q=80&w=2070&auto=format&fit=crop'); /* Premium Clean Tech Lines */
+    }
+    60%, 76% {
+        background-image: linear-gradient(135deg, rgba(18, 48, 34, 0.5), rgba(18, 48, 34, 0.7)), 
+                          url('https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d?q=80&w=2070&auto=format&fit=crop'); /* Silicon/AI Macro Network */
+    }
+    80%, 96% {
+        background-image: linear-gradient(135deg, rgba(18, 48, 34, 0.5), rgba(18, 48, 34, 0.7)), 
+                          url('https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=2070&auto=format&fit=crop'); /* Solar Panels Close-up */
+    }
+    100% {
+        background-image: linear-gradient(135deg, rgba(18, 48, 34, 0.5), rgba(18, 48, 34, 0.7)), 
+                          url('https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2070&auto=format&fit=crop'); /* Loop Back */
+    }
+}
+
+        @keyframes imageMovement {
+            0% { background-position: 0% 50%; background-size: 110% 110%; }
+            50% { background-position: 100% 50%; background-size: 120% 120%; }
+            100% { background-position: 50% 100%; background-size: 110% 110%; }
+        }
+
+        /* TECH CIRCUIT OVERLAY */
+        .tech-circuit-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.06;
+            background-image: 
+                radial-gradient(circle at 20% 30%, transparent 120px, rgba(85, 158, 63, 0.25) 121px, rgba(85, 158, 63, 0.25) 123px, transparent 124px),
+                linear-gradient(90deg, rgba(85, 158, 63, 0.08) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(85, 158, 63, 0.08) 1px, transparent 1px);
+            background-size: 100% 100%, 60px 60px, 60px 60px;
+        }
+
+        /* TRUE LOGO-MATCHED GLASSMORPHISM */
+        .logo-glass {
+            position: relative;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.28));
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.68);
+            box-shadow: 0 22px 60px -24px rgba(15, 23, 42, 0.28);
+            isolation: isolate;
+        }
+
+        .logo-glass::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.24), rgba(255,255,255,0.04));
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .logo-glass > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .glass-card-premium {
+            background: linear-gradient(135deg, rgba(255,255,255,0.74), rgba(255,255,255,0.40));
+            backdrop-filter: blur(20px) saturate(160%);
+            -webkit-backdrop-filter: blur(20px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            box-shadow: 0 16px 36px -20px rgba(15, 23, 42, 0.24);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card-premium:hover {
+            border-color: rgba(255, 255, 255, 0.84);
+            background: linear-gradient(135deg, rgba(255,255,255,0.82), rgba(255,255,255,0.46));
+            box-shadow: 0 18px 42px -20px rgba(15, 23, 42, 0.28);
+            transform: translateY(-5px);
+        }
+
+        .product-line-card h4 {
+            color: #123022;
+        }
+
+        .product-line-card p,
+        .product-line-card span {
+            color: #35503c;
+        }
+
+        .site-header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(85, 158, 63, 0.16);
+        }
+
+        .site-header a,
+        .site-header button {
+            color: #123022 !important;
+        }
+
+        .font-display {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+        }
+
+        body .text-white {
+            color: #123022 !important;
+        }
+
+        body .text-gray-200 {
+            color: #4d6d56 !important;
+        }
+
+        body .text-gray-300 {
+            color: #3b5a47 !important;
+        }
+
+        body .text-gray-400 {
+            color: #2e4f3f !important;
+        }
+
+        body .bg-black\/20 {
+            background-color: rgba(255, 255, 255, 0.82) !important;
+        }
+
+        body .bg-white\/5,
+        body .bg-white\/10 {
+            background-color: rgba(255, 255, 255, 0.92) !important;
+        }
+
+        body .border-white\/10,
+        body .border-white\/15,
+        body .border-white\/20 {
+            border-color: rgba(85, 158, 63, 0.16) !important;
+        }
+
+        body .bg-luxLeaf\/40 {
+            background-color: rgba(255, 255, 255, 0.82) !important;
+        }
+
+        .product-dropdown {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(85, 158, 63, 0.16);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .product-dropdown a {
+            color: #123022 !important;
+        }
+
+        .product-dropdown a:hover {
+            background: rgba(85, 158, 63, 0.10);
+            color: #2f6b2f !important;
+        }
+
+        .page-section {
+            display: none;
+        }
+        .page-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .about-hero-shell {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(85, 158, 63, 0.22);
+            background:
+                radial-gradient(circle at 12% 18%, rgba(85, 158, 63, 0.32), transparent 24%),
+                radial-gradient(circle at 86% 18%, rgba(34, 211, 238, 0.22), transparent 28%),
+                radial-gradient(circle at 50% 100%, rgba(5, 255, 180, 0.16), transparent 48%),
+                linear-gradient(135deg, #020806 0%, #07110b 44%, #0b1612 100%);
+            box-shadow: 0 24px 60px -22px rgba(2, 10, 7, 0.62);
+        }
+
+        .about-hero-shell::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(255,255,255,0.06) 1px, transparent 1px),
+                linear-gradient(120deg, transparent 0 32%, rgba(85,158,63,0.18) 33% 36%, transparent 37% 62%, rgba(34,211,238,0.16) 63% 66%, transparent 67%),
+                linear-gradient(180deg, transparent 0%, rgba(2, 7, 5, 0.78) 100%);
+            background-size: 48px 48px, 48px 48px, 100% 100%, 100% 100%;
+            opacity: 0.95;
+            z-index: 0;
+            transform: perspective(900px) rotateX(58deg) translateY(16%);
+            transform-origin: bottom;
+        }
+
+        .about-hero-shell::after {
+            content: "";
+            position: absolute;
+            inset: -8% 0 0 0;
+            background-image:
+                radial-gradient(circle at 15% 22%, rgba(85, 158, 63, 0.95), transparent 7px),
+                radial-gradient(circle at 66% 28%, rgba(34, 211, 238, 0.85), transparent 6px),
+                linear-gradient(90deg, transparent 0 20%, rgba(255,255,255,0.14) 20% 21%, transparent 21% 31%, rgba(255,255,255,0.10) 31% 32%, transparent 32% 45%, rgba(85,158,63,0.15) 45% 46%, transparent 46% 72%, rgba(34,211,238,0.15) 72% 73%, transparent 73%),
+                linear-gradient(0deg, transparent 0 22%, rgba(255,255,255,0.10) 22% 23%, transparent 23% 39%, rgba(255,255,255,0.08) 39% 40%, transparent 40% 56%, rgba(85,158,63,0.12) 56% 57%, transparent 57% 74%, rgba(34,211,238,0.12) 74% 75%, transparent 75%);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+            opacity: 0.35;
+            animation: techPulse 10s ease-in-out infinite alternate;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .about-hero-shell > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .about-card-soft {
+            background: linear-gradient(145deg, rgba(248, 253, 243, 0.96), rgba(235, 246, 226, 0.96));
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(85, 158, 63, 0.20);
+            box-shadow: 0 16px 40px rgba(7, 20, 12, 0.08);
+            color: #123022;
+        }
+
+        .about-card-soft h3,
+        .about-card-soft h4,
+        .about-card-soft .about-card-title {
+            color: #133321;
+        }
+
+        .about-card-soft p,
+        .about-card-soft span,
+        .about-card-soft li,
+        .about-card-soft .about-card-text {
+            color: #39533d;
+        }
+
+        .about-hero-shell .text-slate-200 {
+            color: #e7f6e0 !important;
+        }
+
+
+        .about-content-grid {
+            align-items: start;
+        }
+
+        .product-visual-frame {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        .product-visual-frame::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.28) 50%, transparent 100%);
+            background-size: 220% 100%;
+            animation: shimmerSweep 8s linear infinite;
+            opacity: 0.45;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .product-visual-frame::after {
+            content: "";
+            position: absolute;
+            inset: -8px;
+            background-image:
+                linear-gradient(rgba(101, 196, 73, 0.25) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34, 211, 238, 0.22) 1px, transparent 1px),
+                radial-gradient(circle at 20% 25%, rgba(255, 255, 255, 0.2), transparent 34%);
+            background-size: 34px 34px, 34px 34px, 100% 100%;
+            opacity: 0.35;
+            animation: circuitDrift 14s ease-in-out infinite alternate;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .product-visual-frame img {
+            position: relative;
+            z-index: 0;
+            transform: scale(1.08);
+            transition: transform 0.6s ease;
+        }
+
+        .product-visual-frame:hover img {
+            transform: scale(1.14);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shimmerSweep {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        @keyframes circuitDrift {
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            100% { transform: translate3d(-6px, -6px, 0) scale(1.04); }
+        }
+
+        @keyframes techPulse {
+            0% { transform: translate3d(-6px, -3px, 0) scale(1); }
+            100% { transform: translate3d(6px, 4px, 0) scale(1.03); }
+        }
+/* UPDATED AI INTERFACE OVERLAYS */
+        .flash-sale-overlay {
+            position: fixed;
+            left: 15px;
+            bottom: 50px;
+            z-index: 80;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+        }
+
+        .flash-sale-card {
+            width: 310px;
+            min-height: 560px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 16px;
+            text-align: left;
+            color: #123022;
+            overflow: hidden;
+            position: relative;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.78), rgba(239,248,234,0.68));
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            box-shadow: 0 22px 48px -22px rgba(15, 23, 42, 0.24);
+        }
+
+        .flash-sale-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(135deg, rgba(255,255,255,0.34), rgba(255,255,255,0.06));
+            pointer-events: none;
+        }
+
+        .flash-sale-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .flash-sale-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 16px;
+            margin-bottom: 2px;
+            border: 1px solid rgba(255,255,255,0.72);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+        }
+
+        .flash-sale-card h2 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            margin: 0;
+            line-height: 1.3;
+            color: #123022;
+        }
+
+        .flash-sale-card p {
+            margin: 0;
+            line-height: 1.5;
+            color: #35503c;
+            font-size: 0.9rem;
+            max-width: 100%;
+            word-break: break-word;
+        }
+
+        .flash-sale-tag {
+            display: inline-block;
+            align-self: flex-start;
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(85, 158, 63, 0.12);
+            color: #2f6b2f;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .flash-sale-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            border: none;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #559E3F, #2bb673);
+            color: white;
+            padding: 12px 14px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 10px 24px rgba(85, 158, 63, 0.18);
+            margin-top: auto;
+        }
+
+        .flash-sale-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .flash-sale-close {
+            margin-top: 2px;
+            border: none;
+            background: transparent;
+            color: #4d6d56;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            align-self: flex-start;
+        }
+
+        .ai-chat-toggle {
+            position: fixed;
+            bottom: 100px;
+            left: 24px;
+            z-index: 60;
+            border: none;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #559E3F, #2bb673);
+            color: white !important;
+            padding: 12px 18px;
+            font-weight: 700;
+            font-size: 13px;
+            box-shadow: 0 12px 32px rgba(85, 158, 63, 0.2);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+
+        .ai-chat-panel {
+            position: fixed;
+            bottom: 120px;
+            left: 1580px;
+            z-index: 60;
+            width: 310px;
+            height: 520px;
+            display: block; /* Kept open on desktop */
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+            background: transparent;
+        }
+
+        .whatsapp-float {
+            display: none !important;
+        }
+
+        .whatsapp-float:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 36px rgba(85, 158, 63, 0.24);
+        }
+
+        @keyframes pulseLogo {
+            0%, 100% { opacity: 0.55; transform: scale(1); }
+            50% { opacity: 0.95; transform: scale(1.06); }
+        }
+
+        @keyframes pulseSlow {
+            0%, 100% { opacity: 0.35; transform: scale(1); }
+            50% { opacity: 0.9; transform: scale(1.07); }
+        }
+
+        .ai-chat-panel iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Adjust site content layout margin spacing on large monitors if needed */
+        @media (min-width: 1280px) {
+            body .max-w-7xl {
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        /* Mobile responsive behaviors to override open setups */
+        @media (max-width: 1024px) {
+            .ai-chat-panel {
+                display: none;
+                bottom: calc(var(--safe-pad-bottom, 24px) + 84px);
+                left: 50%;
+                transform: translateX(50%);
+                right: auto;
+                width: min(92vw, 360px);
+                height: min(75vh, 560px);
+            }
+            .ai-chat-panel.open {
+                display: block;
+            }
+            .ai-chat-toggle {
+                display: inline-flex;
+                left: auto;
+                right: var(--safe-pad-x, 20px);
+                bottom: 24px;
+                padding: 10px 14px;
+                font-size: 12px;
+            }
+
+            .whatsapp-float {
+                bottom: calc(var(--safe-pad-bottom, 24px) + 8px);
+                right: 0;
+                left: auto;
+                margin-right: var(--safe-pad-x, 20px);
+                width: 56px;
+                height: 56px;
+                padding: 0;
+                border-radius: 999px;
+            }
+
+            .whatsapp-float span {
+                display: none;
+            }
+            .flash-sale-overlay {
+                left: var(--safe-pad-x, 20px);
+                bottom: calc(var(--safe-pad-bottom, 24px) + 76px);
+                z-index: 85;
+            }
+            .flash-sale-card {
+                width: min(86vw, 320px);
+                min-height: unset;
+                padding: 14px;
+                border-radius: 18px;
+            }
+            .flash-sale-image { height: 150px; }
+        }
+
+        /* Small phones: reduce header spacing and prevent clipping */
+        @media (max-width: 420px) {
+            .flash-sale-overlay { bottom: calc(var(--safe-pad-bottom, 24px) + 62px); }
+            .flash-sale-image { height: 130px; }
+            .ai-chat-panel {
+                width: min(92vw, 330px);
+                height: min(78vh, 520px);
+            }
+        }
+
+        /* Hamburger menu + safe spacing */
+        .hamburger {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            nav { display: none; }
+            /* show hamburger */
+            .hamburger { display: inline-flex; }
+            .get-quote-desktop { display: none; }
+
+            /* Slide-down dropdown */
+            #mobileProductsMenu {
+                display: none;
+            }
+            #mobileProductsMenu.open {
+                display: block;
+            }
+        }
+
+    </style>
+</head>
+<body class="antialiased selection:bg-brandGreen selection:text-white">
+
+    <!-- Background Layers matching your image scheme -->
+    <div class="animated-bg"></div>
+    <div class="tech-circuit-overlay"></div>
+
+
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="site-header fixed top-0 left-0 w-full z-50 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#" onclick="switchPage('home')" class="flex items-center">
+                <img src="Images/norasol%20logo.png" alt="NoraSol logo" class="h-12 w-auto  object-contain bg-white/00 p-1 ">
+            </a>
+
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-200">
+                <a href="#" onclick="switchPage('home')" class="hover:text-brandGreen transition-colors">Home</a>
+                <div class="relative">
+                    <button id="productsMenuButton" type="button" onclick="toggleProductDropdown()" class="hover:text-brandGreen transition-colors flex items-center space-x-1 py-2">
+                        <span>Products</span>
+                        <i class="fa-solid fa-chevron-down text-xs opacity-60"></i>
+                    </button>
+                    <div id="productsMenu" class="product-dropdown absolute top-full left-0 mt-2 w-64 rounded-xl p-2 hidden backdrop-blur-2xl" onclick="event.stopPropagation()">
+                        <a href="#" onclick="switchPage('nora3')" class="block px-4 py-2.5 rounded-lg text-xs font-semibold hover:text-brandGreen">NORA-3 Hybrid System</a>
+                        <a href="#" onclick="switchPage('store5')" class="block px-4 py-2.5 rounded-lg text-xs font-semibold hover:text-brandGreen">NoraStore-5 Battery</a>
+                        <a href="#" onclick="switchPage('store12')" class="block px-4 py-2.5 rounded-lg text-xs font-semibold hover:text-brandGreen">NoraStore-12 Battery</a>
+                        <a href="#" onclick="switchPage('store16')" class="block px-4 py-2.5 rounded-lg text-xs font-semibold hover:text-brandGreen">NoraStore-16 Battery</a>
+                    </div>
+                </div>
+                <a href="#" onclick="switchPage('about')" class="hover:text-brandGreen transition-colors">About Us</a>
+                <a href="#" onclick="switchPage('testimonials')" class="hover:text-brandGreen transition-colors">Testimonials</a>
+                <a href="#" onclick="switchPage('contact')" class="hover:text-brandGreen transition-colors">Contact</a>
+            </nav>
+
+
+                <div class="flex items-center gap-3">
+                    <a href="#" onclick="switchPage('consult')" class="inline-flex items-center gap-3 px-4 py-1 rounded-full bg-gradient-to-r from-brandGreen via-emerald-500 to-cyan-500 text-white font-bold text-xs tracking-wider uppercase hover:brightness-110 transition-all shadow-md shadow-brandGreen/30 relative overflow-hidden">
+                        <span class="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(43,182,115,0.65),transparent_55%)] opacity-90 animate-pulseSlow" style="pointer-events:none;"></span>
+                        <span class="relative flex items-center justify-center w-7 h-7 rounded-full bg-white/10 border border-white/15">
+                            <img src="Images/norasol%20icon.jpg" alt="NoraSol" class="w-7 h-7 object-contain rounded-full" />
+                        </span>
+                        <span class="relative">NoraSol AI</span>
+                    </a>
+
+                    <button id="mobileMenuButton" type="button" class="hamburger md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/60 border border-white/10 hover:bg-white/80" onclick="toggleMobileMenu()" aria-label="Open menu">
+                        <span class="block w-5 h-0.5 bg-brandGreen"></span>
+                        <span class="block w-5 h-0.5 bg-brandGreen mt-1"></span>
+                        <span class="block w-5 h-0.5 bg-brandGreen mt-1"></span>
+                    </button>
+
+                    <div class="hidden md:flex items-center get-quote-desktop">
+                    <a href="https://wa.me/923228650402" target="_blank" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-brandGreen via-emerald-500 to-cyan-500 text-white font-bold text-xs tracking-wider uppercase hover:brightness-110 transition-all shadow-md shadow-brandGreen/30 relative overflow-hidden">
+                            <span class="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.35),transparent_55%)] opacity-70 pointer-events-none animate-pulseSlow"></span>
+                            Get Quote
+                        </a>
+                    </div>
+                </div>
+        </div>
+
+        <!-- Mobile Products / Nav Dropdown -->
+        <div class="md:hidden">
+            <div id="mobileProductsMenu" class="absolute top-[5rem] left-0 right-0 mx-auto w-full px-[var(--safe-pad-x, 20px)]" style="display:none;">
+                <div class="rounded-3xl product-dropdown p-3" style="max-width: 520px; margin: 0 auto;">
+                    <div class="flex flex-col">
+                        <a href="#" onclick="switchPage('home')" class="px-3 py-3 rounded-xl text-sm font-semibold hover:text-brandGreen">Home</a>
+                        <div class="h-px bg-white/10 my-1"></div>
+                        <div class="px-3 py-2 text-xs font-bold text-brandGreen">Products</div>
+                        <a href="#" onclick="switchPage('nora3'); closeMobileMenu()" class="px-3 py-3 rounded-xl text-sm font-semibold hover:text-brandGreen">NORA-3 Hybrid System</a>
+                        <a href="#" onclick="switchPage('store5'); closeMobileMenu()" class="px-3 py-3 rounded-xl text-sm font-semibold hover:text-brandGreen">NoraStore-5 Battery</a>
+                        <a href="#" onclick="switchPage('store12'); closeMobileMenu()" class="px-3 py-3 rounded-xl text-sm font-semibold hover:text-brandGreen">NoraStore-12 Battery</a>
+                        <a href="#" onclick="switchPage('store16'); closeMobileMenu()" class="px-3 py-3 rounded-xl text-sm font-semibold hover:text-brandGreen">NoraStore-16 Battery</a>
+                        <div class="h-px bg-white/10 my-1"></div>
+                        <a href="#" onclick="switchPage('about'); closeMobileMenu()" class="px-3 py-3 rounded-xl text-sm font-semibold hover:text-brandGreen">About Us</a>
+                        <a href="#" onclick="switchPage('consult'); closeMobileMenu()" class="px-3 py-3 rounded-xl text-sm font-semibold hover:text-brandGreen">Consult AI</a>
+                        <a href="#" onclick="switchPage('testimonials'); closeMobileMenu()" class="px-3 py-3 rounded-xl text-sm font-semibold hover:text-brandGreen">Testimonials</a>
+                        <a href="#" onclick="switchPage('contact'); closeMobileMenu()" class="px-3 py-3 rounded-xl text-sm font-semibold hover:text-brandGreen">Contact</a>
+
+                        <div class="h-px bg-white/10 my-1"></div>
+                        <a href="https://wa.me/923228650402" target="_blank" class="px-3 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-brandGreen via-emerald-500 to-cyan-500 text-white text-center">Get Quote</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+        </div>
+    </header>
+
+    <!-- MAIN APP WRAPPER -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-28 pb-12">
+        <div class="w-full logo-glass rounded-[32px] p-6 sm:p-12 min-h-[80vh] relative overflow-hidden">
+
+            <!-- SECTION 0.5: CONSULT WITH NORA Sol AI (FULL PAGE) -->
+            <div id="consultPage" class="page-section">
+                <div class="flex items-center justify-between gap-4 mb-4">
+                    <button onclick="switchPage('home')" class="text-xs text-brandGreen font-bold hover:underline flex items-center gap-1">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Back
+                    </button>
+                    <div class="flex items-center gap-2 text-xs text-gray-300">
+                        <i class="fa-solid fa-wand-magic-sparkles text-brandGreen"></i>
+                        Consult with NoraSol AI
+                    </div>
+                </div>
+
+                <div class="rounded-[20px] overflow-hidden border border-white/20 bg-white/5" style="height: calc(100vh - 220px); min-height: 520px;">
+                    <iframe
+                        src="ai.html"
+                        title="Consult with NoraSol AI"
+                        style="width: 100%; height: 100%; border: 0; display:block;"
+                    ></iframe>
+                </div>
+
+                <div class="mt-4 text-xs text-gray-300 leading-relaxed">
+                    You can ask NoraSol AI about inverters, batteries, pricing, and specifications.
+                </div>
+            </div>
+
+            <!-- SECTION 1: HOME -->
+            <div id="homePage" class="page-section active">
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center pt-6">
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-brandGreen/30 via-cyan-400/20 to-brandGreen/20 border border-brandGreen/50 text-xs font-bold text-white shadow-lg shadow-brandGreen/20">
+                            <i class="fa-solid fa-leaf text-brandGreen"></i>
+                            <span>Sustainable In-House Engineering</span>
+                        </div>
+                        <h1 class="font-display text-4xl sm:text-6xl font-bold tracking-tight text-white leading-tight">
+                            Premium Solar Power, <br><span class="text-brandGreen">Engineered Locally</span>
+                        </h1>
+                        <p class="text-gray-200 text-sm sm:text-base max-w-xl leading-relaxed">
+                            Designed by the expert engineering minds at CARE Pvt. Ltd. We build high-performance solar inverters and long-lasting lithium storage arrays tailored directly for regional climates.
+                        </p>
+                        <div class="pt-2 flex flex-wrap gap-4">
+                            <a href="#" onclick="switchPage('nora3')" class="px-8 py-4 rounded-xl bg-gradient-to-r from-brandGreen via-emerald-500 to-cyan-500 text-white font-bold text-sm tracking-wide shadow-xl shadow-brandGreen/30 hover:brightness-110 transition-all">
+                                Explore Nora-3 Inverter
+                            </a>
+                            <a href="#showroom" class="px-8 py-4 rounded-xl glass-card-premium text-white text-sm font-semibold transition-all">
+                                View Fleet Showroom
+                            </a>
+                        </div>
+
+                        
+                    </div>
+
+                    <!-- Highlight Card Frame -->
+                    <div class="lg:col-span-5 flex justify-end">
+                        <div id="featuredSystemCard" class="w-full max-w-sm glass-card-premium bg-black/20 rounded-2xl p-8 border-white/20 text-center space-y-6 h-full">
+                            <span id="featuredSystemTag" class="text-xs uppercase font-mono tracking-wider text-brandGreen font-bold">Featured System</span>
+                            <div class="w-full h-[280px] sm:h-72 mx-auto overflow-hidden rounded-[28px] border border-brandGreen/40 bg-white/80 p-2 shadow-inner">
+                                <img id="featuredSystemImage" src="Images/Nora3.png" alt="NORA-3 hybrid inverter" class="w-full h-full object-cover object-center rounded-[20px]">
+                            </div>
+                            <h3 id="featuredSystemTitle" class="font-sans text-2xl font-bold text-white tracking-tight">NORA-3 Hybrid Layout</h3>
+                            <p id="featuredSystemDesc" class="text-xs text-gray-300">A smart 3.2 kW hybrid inverter paired seamlessly with a built-in 3.06 kWh lithium energy storage configuration.</p>
+                            <div class="pt-2 border-t border-white/10 flex justify-between text-[11px] text-gray-300">
+                                <span id="featuredSystemBadge1">Zero-Export Ready</span>
+                                <span id="featuredSystemBadge2" class="text-brandGreen font-bold">98% MPPT Target</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="glass-card-premium p-6 rounded-2xl space-y-3">
+                        <div class="flex items-center gap-3 text-brandGreen">
+                            <i class="fa-solid fa-bolt text-xl"></i>
+                            <h3 class="font-display text-xl font-bold">Reliable Backup Power</h3>
+                        </div>
+                        <p class="text-sm leading-relaxed">Keep essential lights, fans, routers, and appliances running during outages with dependable hybrid power.</p>
+                    </div>
+                    <div class="glass-card-premium p-6 rounded-2xl space-y-3">
+                        <div class="flex items-center gap-3 text-brandGreen">
+                            <i class="fa-solid fa-shield-halved text-xl"></i>
+                            <h3 class="font-display text-xl font-bold">Built for Local Conditions</h3>
+                        </div>
+                        <p class="text-sm leading-relaxed">Engineered for Pakistan’s heat, dust, and grid instability with proven local support and service.</p>
+                    </div>
+                    <div class="glass-card-premium p-6 rounded-2xl space-y-3">
+                        <div class="flex items-center gap-3 text-brandGreen">
+                            <i class="fa-solid fa-chart-line text-xl"></i>
+                            <h3 class="font-display text-xl font-bold">Scalable Growth</h3>
+                        </div>
+                        <p class="text-sm leading-relaxed">Start with a smart system and expand battery capacity as your energy needs grow over time.</p>
+                    </div>
+                </div>
+
+                <div class="mt-10 rounded-[28px] border border-white/30 bg-white/20 p-6 sm:p-8 shadow-lg shadow-brandGreen/10 backdrop-blur-xl">
+                    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
+                        <div class="max-w-2xl">
+                            <p class="text-xs uppercase tracking-[0.3em] text-brandGreen font-bold">Why customers choose NoraSol</p>
+                            <h3 class="mt-2 font-display text-2xl sm:text-3xl font-bold text-[#123022]">Fast quotes, expert guidance, and systems sized around your real load.</h3>
+                            <p class="mt-3 text-sm leading-relaxed text-[#23422f]">We help homeowners and businesses compare inverter capacity, battery backup time, and future expansion before they buy.</p>
+                        </div>
+                        <a href="https://wa.me/923228650402" target="_blank" class="inline-flex items-center justify-center rounded-full bg-white/90 text-luxLeaf px-6 py-3 text-sm font-bold shadow-sm hover:brightness-110 transition-all">
+                            Request a Free Consultation
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                    <div class="glass-card-premium p-5 rounded-2xl">
+                        <p class="text-[11px] uppercase tracking-[0.3em] text-brandGreen font-bold">What buyers check first</p>
+                        <p class="mt-2 text-sm leading-relaxed">Battery backup duration, warranty coverage, and whether the system can expand later.</p>
+                    </div>
+                    <div class="glass-card-premium p-5 rounded-2xl">
+                        <p class="text-[11px] uppercase tracking-[0.3em] text-brandGreen font-bold">Installation support</p>
+                        <p class="mt-2 text-sm leading-relaxed">We guide customers through sizing, installation readiness, and safe operating expectations.</p>
+                    </div>
+                    <div class="glass-card-premium p-5 rounded-2xl">
+                        <p class="text-[11px] uppercase tracking-[0.3em] text-brandGreen font-bold">Smart monitoring</p>
+                        <p class="mt-2 text-sm leading-relaxed">Modern systems are designed for monitoring, communications, and future upgrades.</p>
+                    </div>
+                    <div class="glass-card-premium p-5 rounded-2xl">
+                        <p class="text-[11px] uppercase tracking-[0.3em] text-brandGreen font-bold">Service confidence</p>
+                        <p class="mt-2 text-sm leading-relaxed">Ask us about availability, after-sales support, and the right option for your property.</p>
+                    </div>
+                </div>
+
+                <!-- SHOWROOM SUB-GRID -->
+                <div id="showroom" class="mt-24 pt-12 border-t border-brandGreen/15">
+                    <div class="text-center max-w-xl mx-auto mb-12">
+                        <h2 class="text-2xl sm:text-3xl font-bold font-display">Our Premium Product Line</h2>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- Card 1 -->
+                        <div class="glass-card-premium p-6 rounded-xl flex flex-col justify-between cursor-pointer hover:scale-105 transition-transform" onclick="switchPage('nora3')">
+                            <div>
+                                <div class="w-full h-32 rounded-lg overflow-hidden mb-4 bg-gradient-to-br from-brandGreen/10 to-cyan-500/10">
+                                    <img src="Images/Nora3.png" alt="NORA-3 Inverter" class="w-full h-full object-cover object-center">
+                                </div>
+                                <h4 class="font-bold text-white text-base">NORA-3 Inverter</h4>
+                                <p class="text-xs text-gray-300 mt-1">3.2 kW hybrid architecture with an integrated battery system pack.</p>
+                            </div>
+                            <span class="text-xs text-brandGreen font-bold mt-4 block">View Parameters →</span>
+                        </div>
+                        <!-- Card 2 -->
+                        <div class="glass-card-premium product-line-card p-6 rounded-xl flex flex-col justify-between cursor-pointer hover:scale-105 transition-transform" onclick="switchPage('store5')">
+                            <div>
+                                <div class="w-full h-32 rounded-lg overflow-hidden mb-4 bg-gradient-to-br from-brandGreen/10 to-cyan-500/10">
+                                    <img src="Images/Norastore%205.png" alt="NoraStore-5" class="w-full h-full object-cover object-center">
+                                </div>
+                                <h4 class="font-bold text-base">NoraStore-5</h4>
+                                <p class="text-xs mt-1">5.12 kWh LiFePO4 scalable module stackable up to 16 units.</p>
+                            </div>
+                            <span class="text-xs text-brandGreen font-bold mt-4 block">View Parameters →</span>
+                        </div>
+                        <!-- Card 3 -->
+                        <div class="glass-card-premium p-6 rounded-xl flex flex-col justify-between cursor-pointer hover:scale-105 transition-transform" onclick="switchPage('store12')">
+                            <div>
+                                <div class="w-full h-32 rounded-lg overflow-hidden mb-4 bg-gradient-to-br from-brandGreen/10 to-cyan-500/10">
+                                    <img src="Images/norastore12.png" alt="NoraStore-12" class="w-full h-full object-cover object-center">
+                                </div>
+                                <h4 class="font-bold text-white text-base">NoraStore-12</h4>
+                                <p class="text-xs text-gray-300 mt-1">11.77 kWh capacity for reliable high-demand home protection loads.</p>
+                            </div>
+                            <span class="text-xs text-brandGreen font-bold mt-4 block">View Parameters →</span>
+                        </div>
+                        <!-- Card 4 -->
+                        <div class="glass-card-premium p-6 rounded-xl flex flex-col justify-between cursor-pointer hover:scale-105 transition-transform" onclick="switchPage('store16')">
+                            <div>
+                                <div class="w-full h-32 rounded-lg overflow-hidden mb-4 bg-gradient-to-br from-brandGreen/10 to-cyan-500/10">
+                                    <img src="Images/norastore16.png" alt="NoraStore-16" class="w-full h-full object-cover object-center">
+                                </div>
+                                <h4 class="font-bold text-white text-base">NoraStore-16</h4>
+                                <p class="text-xs text-gray-300 mt-1">Our flagship 16 kWh ultimate large-capacity battery matrix tier.</p>
+                            </div>
+                            <span class="text-xs text-brandGreen font-bold mt-4 block">View Parameters →</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instagram Live Feed (Home only) -->
+                <div class="mt-10 rounded-[32px] border border-brandGreen/20 bg-white/80 p-4 sm:p-6 shadow-xl shadow-brandGreen/10 w-full">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                            <p class="text-xs uppercase tracking-[0.3em] text-brandGreen font-bold">Instagram</p>
+                            <h3 class="text-2xl font-bold text-[#123022]">Latest posts from NoraSol</h3>
+                        </div>
+                        <a href="https://instagram.com/norasol.pk" target="_blank" class="inline-flex items-center gap-2 rounded-full border border-brandGreen/20 bg-brandGreen/10 px-4 py-2 text-sm font-semibold text-brandGreen transition hover:bg-brandGreen hover:text-white">
+                            <i class="fa-brands fa-instagram"></i>
+                            View on Instagram
+                        </a>
+                    </div>
+
+                    <div class="mt-5 overflow-hidden rounded-[24px] border border-brandGreen/10 bg-[#f7fdf5]">
+                        <iframe
+                            src="https://www.instagram.com/norasol.pk/embed"
+                            title="NoraSol Instagram feed"
+                            loading="lazy"
+                            class="min-h-[480px] w-full border-0 sm:min-h-[540px]"
+                        ></iframe>
+                    </div>
+
+                    <p class="mt-3 text-xs text-[#4d6d56]">
+                    </p>
+                </div>
+            </div>
+
+            <!-- SECTION 2: NORA 3 -->
+            <div id="nora3Page" class="page-section">
+                <button onclick="switchPage('home')" class="text-xs text-brandGreen font-bold mb-6 hover:underline"><i class="fa-solid fa-arrow-left mr-1"></i> Back</button>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div class="space-y-5">
+                        <p class="text-xs uppercase tracking-[0.3em] text-brandGreen font-bold">Solar Inverters</p>
+                        <h2 class="text-4xl sm:text-5xl font-bold text-white font-display">High-efficiency energy systems engineered for intelligent power conversion.</h2>
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            NoraSol hybrid solar inverters deliver advanced energy management by combining solar, grid, and battery power into a single intelligent system. Designed for residential, commercial, and industrial applications, they ensure maximum efficiency, stability, and uninterrupted power delivery.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 text-xs">
+                            <div class="p-4 rounded-xl bg-black/20 border border-white/10"><b class="text-brandGreen block mb-1">Capacity</b> 3.2 kW output for homes and small businesses.</div>
+                            <div class="p-4 rounded-xl bg-black/20 border border-white/10"><b class="text-brandGreen block mb-1">Efficiency</b> Up to 96% intelligent power conversion.</div>
+                            <div class="p-4 rounded-xl bg-black/20 border border-white/10"><b class="text-brandGreen block mb-1">Battery</b> 3.06 kWh LiFePO₄ battery pack, expandable.</div>
+                            <div class="p-4 rounded-xl bg-black/20 border border-white/10"><b class="text-brandGreen block mb-1">Cooling</b> Advanced thermal management for harsh climates.</div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                            <div class="p-4 rounded-xl glass-card-premium">
+                                <p class="text-[11px] uppercase tracking-[0.25em] text-brandGreen font-bold">NORA-3</p>
+                                <p class="mt-2 text-sm text-gray-200">The future of intelligent power conversion for modern homes.</p>
+                            </div>
+                            <div class="p-4 rounded-xl glass-card-premium">
+                                <p class="text-[11px] uppercase tracking-[0.25em] text-brandGreen font-bold">Designed for</p>
+                                <p class="mt-2 text-sm text-gray-200">Residential, commercial and light industrial applications.</p>
+                            </div>
+                            <div class="p-4 rounded-xl glass-card-premium">
+                                <p class="text-[11px] uppercase tracking-[0.25em] text-brandGreen font-bold">Local Excellence</p>
+                                <p class="mt-2 text-sm text-gray-200">Engineered in Pakistan with in-house R&D precision.</p>
+                            </div>
+                        </div>
+                        <div class="pt-4 flex flex-wrap gap-4">
+                            <a href="https://norasol.net/inverters" target="_blank" class="inline-flex items-center justify-center rounded-full bg-brandGreen px-5 py-3 text-sm font-bold text-white hover:brightness-110 transition-all">Explore Inverters</a>
+                            <a href="https://api.whatsapp.com/send/?phone=923228650402&text&type=phone_number&app_absent=0" target="_blank" class="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:text-brandGreen transition-all">Request Quote</a>
+                        </div>
+                        <div class="mt-4 p-5 rounded-2xl border border-brandGreen/10 bg-brandGreen/5 text-[#123022]">
+                            <h3 class="text-sm font-semibold">NORA-3: The future of intelligent power conversion</h3>
+                            <p class="mt-3 text-sm leading-6">An indigenously developed hybrid inverter designed for homes and small businesses, combining high-efficiency power conversion with integrated energy storage in a single durable unit.</p>
+                        </div>
+                    </div>
+                    <div class="p-6 rounded-2xl glass-card-premium bg-black/20 text-xs space-y-4">
+                        <div class="product-visual-frame w-full h-64 rounded-xl bg-white/5 p-3 border border-white/10">
+                            <img src="Images/Nora3.png" alt="NORA-3 hybrid inverter" class="w-full h-full object-cover object-center rounded-lg">
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div class="rounded-2xl bg-white/10 p-4 border border-white/10 text-center">
+                                <p class="text-[11px] uppercase tracking-[0.25em] text-brandGreen font-bold">High Efficiency</p>
+                                <p class="mt-2 text-sm text-white font-semibold">Up to 96% Output</p>
+                            </div>
+                            <div class="rounded-2xl bg-white/10 p-4 border border-white/10 text-center">
+                                <p class="text-[11px] uppercase tracking-[0.25em] text-brandGreen font-bold">Battery</p>
+                                <p class="mt-2 text-sm text-white font-semibold">3.06 kWh LiFePO₄</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="https://norasol.net/brochures/NoraSol_Nora3_Brochure.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-full bg-brandGreen px-4 py-2 text-[11px] font-bold text-white hover:brightness-110 transition-all">Download Brochure</a>
+                            <a href="https://api.whatsapp.com/send/?phone=923228650402&text&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-full border border-white/15 px-4 py-2 text-[11px] font-semibold text-gray-200 hover:text-brandGreen transition-all">Request Quote</a>
+                        </div>
+                        <div class="flex flex-col gap-3 text-sm">
+                            <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-gray-400">Capacity</span><span class="text-white font-bold">3.2 kW Output</span></div>
+                            <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-gray-400">Efficiency</span><span class="text-white font-bold">Up to 96%</span></div>
+                            <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-gray-400">Battery</span><span class="text-white font-bold">3.06 kWh LiFePO₄ (Expandable)</span></div>
+                            <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-gray-400">Cooling</span><span class="text-white font-bold">Advanced Thermal Management</span></div>
+                            <div class="flex justify-between"><span class="text-gray-400">Warranty</span><span class="text-brandGreen font-bold">3 Years Inverter / 5 Years Cells</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: STORE 5 -->
+            <div id="store5Page" class="page-section">
+                <button onclick="switchPage('home')" class="text-xs text-brandGreen font-bold mb-6 hover:underline"><i class="fa-solid fa-arrow-left mr-1"></i> Back</button>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div class="space-y-4">
+                        <h2 class="text-3xl font-bold text-white font-display">NoraStore-5 Lithium Battery</h2>
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            Stores your daytime excess solar generation to run home appliances overnight seamlessly. Uses stable, long-life Lithium Iron Phosphate (LiFePO4) chemistry arrays.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                            <div class="p-4 rounded-xl glass-card-premium">
+                                <p class="text-[11px] uppercase tracking-[0.25em] text-brandGreen font-bold">Best for</p>
+                                <p class="mt-2 text-sm text-gray-200">Households wanting efficient nightly backup and gradual system expansion.</p>
+                            </div>
+                            <div class="p-4 rounded-xl glass-card-premium">
+                                <p class="text-[11px] uppercase tracking-[0.25em] text-brandGreen font-bold">Key benefit</p>
+                                <p class="mt-2 text-sm text-gray-200">Store extra solar power and use it when the grid is weak or unavailable.</p>
+                            </div>
+                            <div class="p-4 rounded-xl glass-card-premium">
+                                <p class="text-[11px] uppercase tracking-[0.25em] text-brandGreen font-bold">Service</p>
+                                <p class="mt-2 text-sm text-gray-200">Long-cycle life, standard communications, and easy integration with hybrid systems.</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 p-5 rounded-2xl border border-brandGreen/10 bg-brandGreen/5 text-[#123022]">
+                            <p class="text-sm font-semibold">NoraStore-5 Buyer Highlights</p>
+                            <ul class="list-disc list-inside mt-3 space-y-2 text-sm leading-6">
+                                <li>5.12 kWh capacity designed for nightly solar storage and emergency support.</li>
+                                <li>Modular stackability allows growth from one unit up to 16 units.</li>
+                                <li>Built-in BMS protection with stable LiFePO4 chemistry.</li>
+                                <li>Plug-and-play compatibility with common hybrid inverter setups.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="p-6 rounded-2xl glass-card-premium bg-black/20 text-xs space-y-4">
+                        <div class="product-visual-frame w-full h-56 rounded-xl bg-white/5 p-3 border border-white/10">
+                            <img src="Images/Norastore%205.png" alt="NoraStore-5 battery" class="w-full h-full object-cover object-center rounded-lg">
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="Images/NoraStore-5.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-full bg-brandGreen px-4 py-2 text-[11px] font-bold text-white hover:brightness-110 transition-all">Download Battery PDF</a>
+                            <a href="Images/New%20Catalougue%20of%20NORASOL.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-full border border-white/15 px-4 py-2 text-[11px] font-semibold text-gray-200 hover:text-brandGreen transition-all">View Catalogue</a>
+                        </div>
+                        <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-gray-400">Model Identification</span><span class="text-white font-bold">NoraStore-5 (ZP-512K)</span></div>
+                        <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-gray-400">Stored Energy Density</span><span class="text-white font-bold">5.12 kWh Pack Capacity</span></div>
+                        <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-gray-400">Voltage Index</span><span class="text-white font-bold">51.2V DC Core Level</span></div>
+                        <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-gray-400">Life Expectancy Matrix</span><span class="text-white font-bold">&ge; 6,000 Charging Cycles</span></div>
+                        <div class="flex justify-between"><span class="text-gray-400">Data Connections</span><span class="text-brandGreen font-bold">Standard RS485 & CAN Interfacing</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: STORE 12 -->
+            <div id="store12Page" class="page-section">
+                <button onclick="switchPage('home')" class="text-xs text-brandGreen font-bold mb-6 hover:underline"><i class="fa-solid fa-arrow-left mr-1"></i> Back</button>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div class="space-y-4">
+                        <h2 class="text-3xl font-bold text-white font-display">NoraStore-12 High Capacity Module</h2>
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            An intermediate power-dense option crafted to cover extensive backup requirements during long blackouts without import supply dependencies.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                            <div class="p-4 rounded-xl glass-card-premium">
+                                <p class="text-[11px] uppercase tracking-[0.25em] text-brandGreen font-bold">Best for</p>
+                                <p class="mt-2 text-sm text-gray-200">Families and small businesses needing substantial backup for long outages.</p>
+                            </div>
+                            <div class="p-4 rounded-xl glass-card-premium">
+                                <p class="text-[11px] uppercase tracking-[0.25em] text-brandGreen font-bold">Why it sells</p>
+                                <p class="mt-2 text-sm text-gray-200">High storage capacity without compromising on reliability or cycle life.</p>
+                            </div>
+                            <div class="p-4 rounded-xl glass-card-premium">
+                                <p class="text-[11px] uppercase tracking-[0.25em] text-brandGreen font-bold">Customer value</p>
+                                <p class="mt-2 text-sm text-gray-200">Less dependency on the grid and stronger comfort during outages.</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 p-5 rounded-2xl border border-brandGreen/10 bg-brandGreen/5 text-[#123022]">
+                            <p class="text-sm font-semibold">NoraStore-12 Value Summary</p>
+                            <ul class="list-disc list-inside mt-3 space-y-2 text-sm leading-6">
+                                <li>11.77 kWh capacity ideal for full-home backup duration of 6-10 hours.</li>
+                                <li>Compatible with hybrid inverters, solar charge controllers, and remote monitoring.</li>
+                                <li>Easy to install in homes, offices, and retail outlets requiring higher reserve power.</li>
+                                <li>Designed for consistent performance in hot climates and frequent cycling.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="p-6 rounded-2xl glass-card-premium bg-black/20 text-xs space-y-4">
+                        <div class="product-visual-frame w-full h-56 rounded-xl bg-white/5 p-3 border border-brandGreen/10">
+                            <img src="Images/norastore12.png" alt="NoraStore-12 battery" class="w-full h-full object-cover object-center rounded-lg">
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="Images/New%20Catalougue%20of%20NORASOL.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-full bg-brandGreen px-4 py-2 text-[11px] font-bold text-white hover:brightness-110 transition-all">View Full Catalogue</a>
+                        </div>
+                        <div class="flex justify-between border-b border-brandGreen/10 pb-2"><span class="text-gray-400">Battery Base Substrate</span><span class="font-bold">Lithium Iron Phosphate (LiFePO4)</span></div>
+                        <div class="flex justify-between border-b border-brandGreen/10 pb-2"><span class="text-gray-400">Total Structural Output</span><span class="font-bold">11.77 kWh Pack Density</span></div>
+                        <div class="flex justify-between border-b border-brandGreen/10 pb-2"><span class="text-gray-400">Nominal Voltage Configuration</span><span class="font-bold">51.2V Operating Level</span></div>
+                        <div class="flex justify-between"><span class="text-gray-400">System Lifecycle Ratings</span><span class="text-brandGreen font-bold">&gt; 6,000 High-Depth Cycles</span></div>
+                        <div class="rounded-xl border border-brandGreen/15 bg-brandGreen/5 p-3">
+                            <p class="text-[11px] uppercase tracking-[0.25em] text-brandGreen font-bold">Typical use case</p>
+                            <p class="mt-2 text-sm leading-relaxed">Great for larger homes, clinics, and small businesses that want dependable power through long outages.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 5: STORE 16 -->
+            <div id="store16Page" class="page-section">
+                <button onclick="switchPage('home')" class="text-xs text-brandGreen font-bold mb-6 hover:underline"><i class="fa-solid fa-arrow-left mr-1"></i> Back</button>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div class="space-y-4">
+                        <h2 class="text-3xl font-bold text-white font-display">NoraStore-16 Flagship Storage Tower</h2>
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            Our ultimate large-scale storage solution built for high-end luxury homes and small commercial units requiring maximum power reliability.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                            <div class="p-4 rounded-xl glass-card-premium">
+                                <p class="text-[11px] uppercase tracking-[0.25em] text-brandGreen font-bold">Best for</p>
+                                <p class="mt-2 text-sm text-gray-200">Luxury homes, villas, and commercial sites needing maximum backup reserve.</p>
+                            </div>
+                            <div class="p-4 rounded-xl glass-card-premium">
+                                <p class="text-[11px] uppercase tracking-[0.25em] text-brandGreen font-bold">Why it stands out</p>
+                                <p class="mt-2 text-sm text-gray-200">Large capacity, smart connectivity, and strong future-ready performance.</p>
+                            </div>
+                            <div class="p-4 rounded-xl glass-card-premium">
+                                <p class="text-[11px] uppercase tracking-[0.25em] text-brandGreen font-bold">Customer value</p>
+                                <p class="mt-2 text-sm text-gray-200">Long-term peace of mind for high-demand energy users and premium properties.</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 p-5 rounded-2xl border border-brandGreen/10 bg-brandGreen/5 text-[#123022]">
+                            <p class="text-sm font-semibold">NoraStore-16 Premium Benefits</p>
+                            <ul class="list-disc list-inside mt-3 space-y-2 text-sm leading-6">
+                                <li>16 kWh capacity built for heavy loads, long runtime, and multiple circuits.</li>
+                                <li>Integrated smart communications for energy monitoring and diagnostics.</li>
+                                <li>Robust construction for demanding residential and light commercial use.</li>
+                                <li>Expandable architecture for future energy storage upgrades.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="p-6 rounded-2xl glass-card-premium bg-black/20 text-xs space-y-4">
+                        <div class="product-visual-frame w-full h-56 rounded-xl bg-white/5 p-3 border border-white/10">
+                            <img src="Images/norastore16.png" alt="NoraStore-16 battery" class="w-full h-full object-cover object-center rounded-lg">
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="Images/New%20Catalougue%20of%20NORASOL.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-full bg-brandGreen px-4 py-2 text-[11px] font-bold text-white hover:brightness-110 transition-all">View Full Catalogue</a>
+                        </div>
+                        <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-gray-400">Gross Stored Power Metric</span><span class="text-white font-bold">16 kWh Absolute Capacity</span></div>
+                        <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-gray-400">Cell Capacity Rating</span><span class="text-white font-bold">314 Ah Deep-Cycle Elements</span></div>
+                        <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-gray-400">System Voltage</span><span class="text-white font-bold">51.2V Direct Terminal</span></div>
+                        <div class="flex justify-between"><span class="text-gray-400">Network Interfaces</span><span class="text-brandGreen font-bold">CAN / RS485 with built-in Wi-Fi Cloud Server Node</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 6: ABOUT US -->
+            <div id="aboutPage" class="page-section max-w-6xl mx-auto space-y-8 pt-2 sm:pt-6">
+                <div class="about-hero-shell rounded-[36px] p-7 sm:p-10 lg:p-12">
+                    <div class="max-w-3xl text-center lg:text-left">
+                        <p class="text-xs uppercase tracking-[0.3em] text-brandGreen font-bold">Powering a New Era</p>
+                        <h2 class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold text-[#f5fff2] font-display leading-tight">Powering a New Era of Smart, Accessible Energy</h2>
+                        <p class="mt-4 text-sm sm:text-base text-slate-200 max-w-2xl leading-relaxed">
+                            Built on decades of R&D excellence through CARE Pvt. Ltd., NoraSol is transforming Pakistan’s energy landscape with locally engineered solar inverters, advanced battery systems, and intelligent energy solutions,designed for reliability, affordability, and real-world conditions.
+                        </p>
+                        <div class="mt-6 flex flex-wrap justify-center lg:justify-start gap-3">
+                            <a href="#" onclick="switchPage('home')" class="inline-flex items-center justify-center rounded-full bg-brandGreen px-5 py-3 text-sm font-bold text-white hover:brightness-110 transition-all">Our Innovation</a>
+                            <a href="#" onclick="switchPage('contact')" class="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-brandGreen via-emerald-500 to-cyan-500 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-brandGreen/25 hover:brightness-110 transition-all">Contact Us</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 xl:grid-cols-[1.05fr_0.95fr] gap-8 about-content-grid">
+                    <div class="space-y-6">
+                        <div class="about-card-soft rounded-[28px] p-6 sm:p-7 shadow-lg shadow-black/10">
+                            <h3 class="text-2xl font-bold text-[#f5fff2]">Engineering a Greener Pakistan Through Innovation</h3>
+                            <p class="mt-4 text-sm text-slate-200 leading-relaxed">
+                                NoraSol is a forward-thinking energy company dedicated to transforming how Pakistan generates, stores, and consumes power. With a strong focus on local innovation, we design and develop advanced solar inverters, battery management systems, and smart energy solutions tailored for real-world challenges.
+                            </p>
+                            <p class="mt-4 text-sm text-slate-200 leading-relaxed">
+                                Our mission is simple,make clean energy more accessible, affordable, and reliable for every home, business, and community.
+                            </p>
+                        </div>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="about-card-soft rounded-[28px] p-6">
+                                <h4 class="text-lg font-bold text-[#f5fff2]">Our Mission</h4>
+                                <p class="mt-3 text-sm text-slate-200 leading-relaxed">
+                                    To make clean energy accessible, reliable, and affordable for every home and business in Pakistan by delivering intelligently engineered solar and storage solutions. We don’t just build products - we build energy independence.
+                                </p>
+                            </div>
+                            <div class="about-card-soft rounded-[28px] p-6">
+                                <h4 class="text-lg font-bold text-[#f5fff2]">Our Vision</h4>
+                                <p class="mt-3 text-sm text-slate-200 leading-relaxed">
+                                    To transform Pakistan’s energy landscape through local innovation, where advanced technology powers every home efficiently, reduces dependency on imports, and drives sustainable economic growth for the nation.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="rounded-[32px] overflow-hidden border border-brandGreen/20 shadow-xl shadow-black/20">
+                            <img src="https://norasol.net/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fnorasol_products_2.0.-nafk0cyijy.webp&w=3840&q=75" alt="NoraSol product showcase" class="w-full h-80 object-cover">
+                        </div>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="about-card-soft rounded-[28px] p-6">
+                                <h4 class="text-lg font-bold text-[#f5fff2]">Our Journey</h4>
+                                <div class="mt-4 space-y-4 text-sm text-slate-200 leading-relaxed">
+                                    <div class="space-y-1">
+                                        <span class="text-brandGreen font-bold">2003</span>
+                                        <p class="font-semibold">Foundation in Advanced R&D</p>
+                                        <p>With the establishment of CARE Pvt. Ltd., a leading research organization in defense technologies, the foundation was laid for deep engineering expertise, innovation, and precision-driven development.</p>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <span class="text-brandGreen font-bold">2024</span>
+                                        <p class="font-semibold">Birth of NoraSol</p>
+                                        <p>NoraSol was launched to bring this R&D excellence into the energy sector,focusing on in-house development of solar inverters, battery management systems, and smart energy solutions tailored for Pakistan.</p>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <span class="text-brandGreen font-bold">Present</span>
+                                        <p class="font-semibold">Driving Local Innovation at Scale</p>
+                                        <p>With a dedicated team of engineers and designers, NoraSol is delivering reliable, cost-effective energy solutions,reducing import dependency, increasing accessibility, and powering homes and businesses across Pakistan.</p>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <span class="text-brandGreen font-bold">Future</span>
+                                        <p class="font-semibold">Towards a Sustainable Energy Ecosystem</p>
+                                        <p>NoraSol aims to expand its footprint beyond borders, enabling exports and building a future where clean, intelligent, and affordable energy is accessible to all.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="about-card-soft rounded-[28px] p-6">
+                                <h4 class="text-lg font-bold text-[#f5fff2]">Our Core Values</h4>
+                                <div class="mt-4 space-y-4 text-sm text-slate-200 leading-relaxed">
+                                    <div>
+                                        <p class="font-semibold text-brandGreen">Innovation</p>
+                                        <p>Driving in-house research and engineering to develop smarter, more efficient solar and energy storage solutions tailored for real-world needs.</p>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-brandGreen">Reliability</p>
+                                        <p>Designing robust systems built to withstand heat, dust, and power outages,ensuring consistent performance when it matters most.</p>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-brandGreen">Sustainability</p>
+                                        <p>Promoting clean energy adoption through locally developed solutions that reduce environmental impact and long-term energy costs.</p>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-brandGreen">Customer Commitment</p>
+                                        <p>Empowering our customers with accessible, affordable, and intelligent energy solutions backed by trust, support, and long-term value.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="rounded-[32px] border border-brandGreen/20 bg-gradient-to-br from-[#10261a] via-[#153122] to-[#0a1510] p-6 text-[#eaf6e3] shadow-xl shadow-black/20">
+                    <h3 class="text-2xl font-bold text-[#f6ffe9]">Why Choose NoraSol</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-[#d7ecd0]">
+                        We deliver more than energy. We deliver intelligent, locally engineered power solutions built for reliability, efficiency, and long-term value.
+                    </p>
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="rounded-[24px] border border-white/10 bg-white/10 p-5">
+                            <h4 class="font-semibold text-brandGreen">Engineered for Local Conditions</h4>
+                            <p class="mt-2 text-sm text-[#1f3a2a]">Robust systems designed to withstansd Pakistan's heat, dust, and power fluctuations,ensuring consistent performance with minimal maintenance.</p>
+                        </div>
+                        <div class="rounded-[24px] border border-white/10 bg-white/10 p-5">
+                            <h4 class="font-semibold text-brandGreen">Smart Energy Intelligence</h4>
+                            <p class="mt-2 text-sm text-[#1f3a2a]">Advanced monitoring and intelligent power management optimize energy usage across solar, grid, and battery,maximizing efficiency and savings.</p>
+                        </div>
+                        <div class="rounded-[24px] border border-white/10 bg-white/10 p-5">
+                            <h4 class="font-semibold text-brandGreen">Long-Term Reliability</h4>
+                            <p class="mt-2 text-sm text-[#1f3a2a]">High-quality components and intelligent BMS technology ensure extended system lifespan with safe and stable operation.</p>
+                        </div>
+                        <div class="rounded-[24px] border border-white/10 bg-white/10 p-5">
+                            <h4 class="font-semibold text-brandGreen">Accessible & Scalable Solutions</h4>
+                            <p class="mt-2 text-sm text-[#1f3a2a]">Modular designs and locally developed systems reduce costs, simplify installation, and allow seamless expansion as energy needs grow.</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 text-center">
+                        <p class="text-sm uppercase tracking-[0.3em] text-brandGreen font-bold">Join Us in Building a Sustainable Future</p>
+                        <p class="mt-3 text-sm text-[#d7ecd0] leading-relaxed">Whether you are an industrial partner or a homeowner, your journey toward clean energy starts with a single conversation.</p>
+                        <a href="#" onclick="switchPage('contact')" class="inline-flex items-center justify-center mt-4 rounded-full bg-gradient-to-r from-brandGreen via-emerald-500 to-cyan-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-brandGreen/25 hover:brightness-110 transition-all">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 7: TESTIMONIALS -->
+            <div id="testimonialsPage" class="page-section max-w-6xl mx-auto space-y-8 pt-6">
+                <div class="text-center space-y-3">
+                    <p class="text-xs uppercase tracking-[0.3em] text-brandGreen font-bold">Testimonials</p>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white font-display">What our customers say about NoraSol</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="rounded-[24px] border border-brandGreen/20 bg-white/80 p-6 shadow-lg shadow-brandGreen/10">
+                        <div class="flex items-center gap-2 text-brandGreen text-sm font-bold">
+                            <span>★★★★★</span>
+                            <span>4.5/5</span>
+                        </div>
+                        <p class="mt-4 text-sm leading-relaxed text-[#35503c]">This 5kWh battery is very good. It gives backup and works nice in load shedding. NoraSol is good company and support also good.</p>
+                        <p class="mt-3 font-semibold text-[#123022]">-Ali, Islamabad</p>
+                    </div>
+
+                    <div class="rounded-[24px] border border-brandGreen/20 bg-white/80 p-6 shadow-lg shadow-brandGreen/10">
+                        <div class="flex items-center gap-2 text-brandGreen text-sm font-bold">
+                            <span>★★★★★</span>
+                            <span>4.9/5</span>
+                        </div>
+                        <p class="mt-4 text-sm leading-relaxed text-[#35503c]">Ghar ka light aur fans chalta rehta hai. Good Job.</p>
+                        <p class="mt-3 font-semibold text-[#123022]">-Ahmed, Rawalpindi</p>
+                    </div>
+
+                    <div class="rounded-[24px] border border-brandGreen/20 bg-white/80 p-6 shadow-lg shadow-brandGreen/10">
+                        <div class="flex items-center gap-2 text-brandGreen text-sm font-bold">
+                            <span>★★★★☆</span>
+                            <span>4.5/5</span>
+                        </div>
+                        <p class="mt-4 text-sm leading-relaxed text-[#35503c]">Very good battery, simple and strong. I like NoraSol for good service</p>
+                        <p class="mt-3 font-semibold text-[#123022]">-Farhan, Lahore</p>
+                    </div>
+
+                    <div class="rounded-[24px] border border-brandGreen/20 bg-white/80 p-6 shadow-lg shadow-brandGreen/10">
+                        <div class="flex items-center gap-2 text-brandGreen text-sm font-bold">
+                            <span>★★★★★</span>
+                            <span>5.0/5</span>
+                        </div>
+                        <p class="mt-4 text-sm leading-relaxed text-[#35503c]">Yeh 5kWh battery bohat better hai aur backup bhi acha deti ha.</p>
+                        <p class="mt-3 font-semibold text-[#123022]">-Saima, Karachi</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 8: CONTACT -->
+            <div id="contactPage" class="page-section max-w-4xl mx-auto space-y-10 pt-6">
+                <div class="text-center space-y-4">
+                    <p class="text-xs uppercase tracking-[0.3em] text-brandGreen font-bold">Contact Us</p>
+                    <h2 class="text-4xl sm:text-5xl font-bold text-white font-display">We’re here to help with your energy needs.</h2>
+                    <p class="text-sm text-gray-200 max-w-3xl mx-auto leading-relaxed">
+                        Whether you're exploring solar for home or industrial scale innovation, our precision team is ready to assist.
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="rounded-3xl border border-brandGreen/15 bg-white/10 p-8 shadow-lg shadow-brandGreen/10 space-y-6">
+                        <div class="space-y-2">
+                            <h3 class="text-lg font-bold text-white">Email Support</h3>
+                            <a href="mailto:info@norasol.net" class="text-brandGreen font-semibold">info@norasol.net</a>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-lg font-bold text-white">Call Us</h3>
+                            <a href="tel:+92518432273" class="text-brandGreen font-semibold">+92-51-8432273</a>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-lg font-bold text-white">WhatsApp Us</h3>
+                            <a href="https://wa.me/923228650402" target="_blank" class="text-brandGreen font-semibold">+92-322-8650402</a>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-lg font-bold text-white">Address</h3>
+                            <a href="https://maps.app.goo.gl/qAm39ho5Chm9mUX17" target="_blank" class="text-brandGreen font-semibold">NoraSol Pvt Ltd, Plot # 424, Sector I-9/3, Islamabad, Pakistan</a>
+                        </div>
+                        <div class="rounded-3xl border border-brandGreen/15 bg-black/20 p-4 text-sm text-gray-200">
+                            <p class="font-semibold text-white">Live Network Status</p>
+                            <p class="mt-2">24/7 Monitoring & Support Active</p>
+                        </div>
+                    </div>
+                    <div class="rounded-3xl border border-brandGreen/15 bg-black/20 p-8 shadow-lg shadow-brandGreen/10">
+                        <form id="contactForm" class="space-y-4" onsubmit="sendInquiryToWhatsApp(event)">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <input id="contactName" type="text" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-brandGreen" placeholder="Full Name" required>
+                                <input id="contactEmail" type="email" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-brandGreen" placeholder="Email Address" required>
+                                <input id="contactPhone" type="tel" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-brandGreen" placeholder="Phone Number" required>
+                                <select id="contactSubject" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-brandGreen">
+                                    <option value="Subject">Subject</option>
+                                    <option value="Residential Inquiry">Residential Inquiry</option>
+                                    <option value="Commercial Solutions">Commercial Solutions</option>
+                                    <option value="Technical Support">Technical Support</option>
+                                    <option value="General Question">General Question</option>
+                                </select>
+                            </div>
+                            <textarea id="contactMessage" rows="5" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-brandGreen" placeholder="Message" required></textarea>
+                            <button type="submit" class="w-full py-3.5 rounded-xl bg-brandGreen text-white text-xs font-bold uppercase tracking-wider hover:brightness-110 transition-all">Send Message</button>
+                        </form>
+                        <div class="mt-8 text-center text-gray-300 text-xs">
+                            <p class="font-semibold text-white">Connect with our community</p>
+                            <div class="mt-3 flex flex-wrap justify-center gap-4 text-brandGreen">
+                                <a href="https://norasol.net/contact#" target="_blank" class="hover:underline">LinkedIn</a>
+                                <a href="https://www.facebook.com/norasol.net/" target="_blank" class="hover:underline">Facebook</a>
+                                <a href="https://www.instagram.com/norasol.pk/" target="_blank" class="hover:underline">Twitter</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- LOWER INNER FOOTER -->
+            <div class="mt-16 pt-6 border-t border-white/20 flex flex-wrap items-center justify-between gap-4 text-xs font-medium text-gray-300">
+                <div class="flex items-center space-x-2">
+                    <span>Follow us:</span>
+                    <a href="https://instagram.com/norasol.pk" target="_blank" class="hover:text-brandGreen text-white transition-colors"><i class="fa-brands fa-instagram mr-1"></i>norasol.pk</a>
+                    <span class="opacity-30">|</span>
+                    <a href="https://www.facebook.com/norasol.net/" target="_blank" class="hover:text-brandGreen text-white transition-colors"><i class="fa-brands fa-facebook"></i> norasol.net</a>
+                </div>
+                <div class="text-gray-400">
+                    <a href="https://www.norasol.net" target="_blank" class="hover:underline">www.norasol.net</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    
+
+    <!-- ACCESSIBILITY WHATSAPP LINK FLOATER -->
+
+
+
+    <!-- LITE ROUTING INTERNALS -->
+    <script>
+        const productsMenu = document.getElementById('productsMenu');
+        const productsMenuButton = document.getElementById('productsMenuButton');
+
+        function toggleProductDropdown() {
+            if (!productsMenu) return;
+            productsMenu.classList.toggle('hidden');
+        }
+
+        function closeProductDropdown() {
+            if (!productsMenu) return;
+            productsMenu.classList.add('hidden');
+        }
+
+        function sendInquiryToWhatsApp(event) {
+            event.preventDefault();
+            const name = document.getElementById('contactName')?.value || 'N/A';
+            const email = document.getElementById('contactEmail')?.value || 'N/A';
+            const phone = document.getElementById('contactPhone')?.value || 'N/A';
+            const subject = document.getElementById('contactSubject')?.value || 'N/A';
+            const message = document.getElementById('contactMessage')?.value || 'N/A';
+            const whatsappNumber = '923228650402';
+            const text = `New inquiry from NoraSol website:%0A%0AName: ${encodeURIComponent(name)}%0AEmail: ${encodeURIComponent(email)}%0APhone: ${encodeURIComponent(phone)}%0ASubject: ${encodeURIComponent(subject)}%0AMessage: ${encodeURIComponent(message)}`;
+            window.open(`https://wa.me/${whatsappNumber}?text=${text}`, '_blank');
+        }
+
+        function generateAuthCode() {
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        }
+
+        function openFlashSaleWhatsApp() {
+            const authCode = generateAuthCode();
+            const whatsappNumber = '923228650402';
+            const text = `Hello NoraSol Team, I came from the flash sale card for NoraStore 5kW. Please contact me. Authorization code: ${authCode}`;
+            window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        const flashSaleOverlay = document.getElementById('flashSaleOverlay');
+        const flashSaleButton = document.getElementById('flashSaleButton');
+        const flashSaleClose = document.getElementById('flashSaleClose');
+
+        if (flashSaleOverlay && flashSaleButton) {
+            flashSaleButton.addEventListener('click', () => {
+                openFlashSaleWhatsApp();
+                flashSaleOverlay.style.display = 'none';
+            });
+
+            if (flashSaleClose) {
+                flashSaleClose.addEventListener('click', () => {
+                    flashSaleOverlay.style.display = 'none';
+                });
+            }
+        }
+
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest('#productsMenu') && !event.target.closest('#productsMenuButton')) {
+                closeProductDropdown();
+            }
+        });
+
+        function switchPage(pageId) {
+            closeProductDropdown();
+            closeMobileMenu();
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Support both "home" -> homePage and "consult" -> consultPage
+            const target = document.getElementById(pageId + 'Page');
+
+            if(target) {
+                target.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                // If consulting AI, keep iframe visible and usable
+                const aiIframe = target.querySelector('iframe');
+                if (aiIframe) aiIframe.focus();
+            }
+        }
+
+
+        function toggleMobileMenu(){
+            const menu = document.getElementById('mobileProductsMenu');
+            const btn = document.getElementById('mobileMenuButton');
+            if(!menu || !btn) return;
+            const isOpen = menu.classList.toggle('open');
+            menu.style.display = 'block';
+            if(!isOpen){
+                menu.style.display = 'none';
+            }
+        }
+
+        function closeMobileMenu(){
+            const menu = document.getElementById('mobileProductsMenu');
+            if(!menu) return;
+            menu.classList.remove('open');
+            menu.style.display = 'none';
+        }
+
+
+        const featuredProducts = [
+            {
+                tag: 'Featured Product',
+                title: 'NORA-3 Hybrid Layout',
+                image: 'Images/Nora3.png',
+                alt: 'NORA-3 hybrid inverter',
+                description: 'A smart 3.2 kW hybrid inverter paired seamlessly with a built-in 3.06 kWh lithium energy storage configuration.',
+                badge1: 'Zero-Export Ready',
+                badge2: '98% MPPT Target'
+            },
+            {
+                tag: 'Featured Product',
+                title: 'NoraStore-5 Battery Stack',
+                image: 'Images/Norastore 5.png',
+                alt: 'NoraStore-5 battery stack',
+                description: 'A compact 5.12 kWh scalable battery solution built for dependable backup and modular expansion.',
+                badge1: 'Parallel Ready',
+                badge2: '5.12 kWh Capacity'
+            },
+            {
+                tag: 'Featured Product',
+                title: 'NoraStore-12 Battery Tower',
+                image: 'Images/norastore12.png',
+                alt: 'NoraStore-12 battery tower',
+                description: 'A larger 12 kWh storage system designed for homes and businesses needing longer backup runtime.',
+                badge1: 'Longer Runtime',
+                badge2: '12 kWh Storage'
+            },
+            {
+                tag: 'Featured Product',
+                title: 'NoraStore-16 Flagship Storage',
+                image: 'Images/norastore16.png',
+                alt: 'NoraStore-16 flagship storage tower',
+                description: 'A premium 16 kWh storage solution suited for high-demand properties and future-ready energy planning.',
+                badge1: 'Premium Capacity',
+                badge2: '16 kWh Reserve'
+            }
+        ];
+
+        let featuredIndex = 0;
+
+        function rotateFeaturedProduct() {
+            const featuredImage = document.getElementById('featuredSystemImage');
+            const featuredTitle = document.getElementById('featuredSystemTitle');
+            const featuredDesc = document.getElementById('featuredSystemDesc');
+            const featuredTag = document.getElementById('featuredSystemTag');
+            const featuredBadge1 = document.getElementById('featuredSystemBadge1');
+            const featuredBadge2 = document.getElementById('featuredSystemBadge2');
+
+            if (!featuredImage || !featuredTitle || !featuredDesc || !featuredTag || !featuredBadge1 || !featuredBadge2) return;
+
+            featuredIndex = (featuredIndex + 1) % featuredProducts.length;
+            const product = featuredProducts[featuredIndex];
+
+            featuredImage.src = product.image;
+            featuredImage.alt = product.alt;
+            featuredTitle.textContent = product.title;
+            featuredDesc.textContent = product.description;
+            featuredTag.textContent = product.tag;
+            featuredBadge1.textContent = product.badge1;
+            featuredBadge2.textContent = product.badge2;
+        }
+
+        setInterval(rotateFeaturedProduct, 4000);
+
+        
+    </script>
+</body>
+</html>
