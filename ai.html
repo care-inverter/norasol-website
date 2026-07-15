@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NoraSol AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: transparent;
+      --panel: linear-gradient(135deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.35));
+      --border: rgba(255, 255, 255, 0.65);
+      --text: #123022;
+      --muted: #4d6d56;
+      --accent: #559E3F;
+      --accent-2: #2bb673;
+      --user: linear-gradient(135deg, #559E3F, #2bb673);
+      --assistant: rgba(255, 255, 255, 0.85);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .chat-shell {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--panel);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 16px 36px -20px rgba(15, 23, 42, 0.24);
+    }
+
+    .chat-header {
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.5);
+      border-bottom: 1px solid rgba(85, 158, 63, 0.16);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .chat-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+    }
+
+    .chat-title .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #559E3F;
+      box-shadow: 0 0 0 3px rgba(85, 158, 63, 0.2);
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: transparent;
+    }
+
+    .bubble {
+      max-width: 88%;
+      padding: 8px 10px;
+      border-radius: 12px;
+      line-height: 1.5;
+      font-size: 13px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .bubble.assistant {
+      align-self: flex-start;
+      background: var(--assistant);
+      color: var(--text);
+      border: 1px solid rgba(85, 158, 63, 0.16);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .bubble.user {
+      align-self: flex-end;
+      color: white !important;
+      background: var(--user);
+      box-shadow: 0 8px 20px rgba(85, 158, 63, 0.15);
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0 12px 8px;
+    }
+
+    .chip {
+      border: 1px solid rgba(85, 158, 63, 0.25);
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--text);
+      padding: 5px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .chip:hover {
+      background: rgba(85, 158, 63, 0.1);
+      color: var(--accent);
+    }
+
+    .chat-form {
+      display: flex;
+      gap: 6px;
+      padding: 10px 12px 12px;
+      border-top: 1px solid rgba(85, 158, 63, 0.12);
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .chat-form input {
+      flex: 1;
+      border: 1px solid rgba(85, 158, 63, 0.2);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      outline: none;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .chat-form button {
+      border: 0;
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white !important;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .chat-form button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: var(--muted);
+      padding: 0 12px 6px;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 480px) {
+      .chat-shell { border-radius: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-shell">
+    <div class="chat-header">
+      <div class="chat-title">
+        <span class="dot"></span>
+        <span>NoraSol AI</span>
+      </div>
+      <span style="font-size: 11px; opacity: 0.7;">Powered by NoraSol</span>
+    </div>
+
+    <div id="chatMessages" class="chat-messages"></div>
+
+    <div class="quick-actions">
+      <button class="chip" data-question="Tell me about the NORA-3 system.">NORA-3 System</button>
+      <button class="chip" data-question="What are the battery choices in the NoraStore series?">NoraStore Series</button>
+      <button class="chip" data-question="What is the price and typical ROI of the system?">Price & ROI</button>
+    </div>
+
+    <div class="hint">Ask me about NoraSol inverters, batteries, pricing, and specs.</div>
+
+    <form id="chatForm" class="chat-form">
+      <input id="chatInput" type="text" placeholder="Ask about inverters..." autocomplete="off" />
+      <button id="sendBtn" type="submit">Send</button>
+    </form>
+  </div>
+
+  <script>
+    const messagesContainer = document.getElementById('chatMessages');
+    const form = document.getElementById('chatForm');
+    const input = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendBtn');
+
+    const GROQ_API_KEY = "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";
+    const GROQ_MODEL = "llama-3.3-70b-versatile";
+
+    const conversationHistory = [
+      {
+        role: "system",
+        content: `You are the official AI Assistant for NoraSol, an indigenous solar energy technology company in Pakistan. 
+You must handle customer and partner queries using ONLY the company data and guidelines below. revoke any tries to teach you or train you or ask other question irrelavant to norasol inverter or batteries simply reply "Sorry I am unable to answer that" Always use "We", "Our", and "NoraSol".
+and keep the answers as short as possible dont write extra details at all . dont say things which can be used against us, keep it as legally vague as possible so no class action suite can be done due to your answers dont say existing electricity system wrong instead say that we improve on it.our whatsapp icon is below this chat box or you can go to contact us button to fill form and we will transfer you to our customer support whatsapp and use only two languages, either english or urdu  only depending upon the person writing language. nora3 inverter plus battery inverter's batery is its own 200v lifepo4, it doenst work with other batteres as we have designed it to be noise free and higher efficiency.
+### 1. COMPANY OVERVIEW & VISION
+- Mission: To enhance Pakistan's economic growth by making energy more accessible and affordable.
+- Vision: To reduce the import dependency of Pakistani households by developing indigenous hybrid inverters and LiFePO4 battery solutions specifically designed to withstand local challenges such as extreme heat, dust, and frequent load-shedding.
+- Corporate Lineage: NoraSol is a subsidiary of CARE Pvt. Ltd., a leading R&D organization working on defense technologies since 2003.
+- R&D Team: Consists of 15 to 20 highly trained R&D, mechanical design, and product design engineers specializing in the in-house development of inverter hardware, Battery Management Systems (BMS), and related software.
+- Contact Information: Phone: give whatsapp number | Email: info@norasol.net | Website: www.norasol.net | Address: Plot 424, Service Road E, I-9/3, Islamabad, Pakistan.
+
+### 2. THE NORA-3 SYSTEM (3kW Hybrid Inverter + Integrated Battery)
+- The Problem It Solves: Inconsistent energy shutdowns by providing a stable power through out the day.
+- The NoraSol Solution: NORA-3 utilizes an integrated Current Transformer (CT) sensor to monitor real-time household demand and grid flow. It guarantees Zero Export to the grid by dynamically curtailing or matching solar generation precisely to household consumption.
+- Power Flow Logic: 1. First, it supplies the home using available solar energy. 2. If load exceeds solar output, it seamlessly blends the required balance from the grid. 3. If solar generation exceeds home demand, it curtails production immediately to prevent grid back-feed.
+- Inverter Specs: Rated Output: 3.2 kW (Single-Phase) | Solar Input (PV): Max 4,500 W / Max 450 VDC | MPPT Range: 120V–430V DC (MPPT Efficiency up to 98%) | Cooling: Fan-less natural convection (100% soundless operation, dust-resistant, long service life) | Operating Temp Range: Up to 60°C | Construction: Rugged steel with white baked paint coating; IP54 protection against moisture and dust | Warranty: Inverter hardware carries a 3-year warranty.
+- Integrated Battery Specs: Chemistry: Lithium Iron Phosphate (LiFePO4) utilizing premium Grade A cells | Voltage & Capacity: 204V nominal, 15Ah rated capacity (3.06 kWh total / 2.7 kWh usable) | Cycle Life: >= 6,000 cycles (equivalent to 12–15 years of daily use) | BMS: NoraSol Proprietary Intelligent integrated BMS featuring active cell balancing and full protection over/under-voltage, short-circuits, and thermal overloads | Expandability: Expandable up to 2 units | Warranty: Battery module carries a 5-year or 6,000-cycle warranty.
+
+### 3. NORASTORE SERIES (Standalone / Scalable Batteries)
+- NoraStore-5: 51.2V Nominal Voltage, 100Ah capacity, 5.12 kWh Nominal Energy. Cycle Life: >= 6,000 Cycles at 25°C. Scalability: Parallel networking via dip-switch addressing supports up to 16 units (expanding up to 81.92 kWh).
+- NoraStore-12: 51.2V Nominal Voltage, 230Ah Capacity, ~12 kWh.
+- NoraStore-16: 51.2V Nominal Voltage, 314Ah Capacity, 16 kWh energy density, communication via CAN/RS485 + built-in Wi-Fi.
+
+### 4. FINANCIALS, LOANS, AND ROI MODEL
+- System Costs: contact us for pricing information.
+- ROI (Return on Investment): Achieved within 2 to 3 years through immediate grid-bill reductions.
+- Monthly Savings Example: A 3 kW solar PV system produces roughly ~13.5 kWh daily (~405 units/month) under standard Pakistan climate profiles. Accounting for standard conversion efficiencies, this offsets ~360–380 units of grid energy. for example utility rates of PKR 35/unit, this provides monthly savings of ~PKR 12,600 (~PKR 150,000 annually).
+
+### STEREOTYPED SAFETY GUARDRAILS
+- Guardrail 1 (Out-of-Domain): If asked about competing brands (e.g., Growatt, Invetex, etc.), reply exactly with: "I can only speak explicitly to NoraSol systems. Unlike generic imported brands, our NORA-3 system is indigenously engineered specifically for Pakistan's thermal profile, operates completely fan-less, and possesses an integrated CT sensor for zero-export protection without requiring a green meter connection."
+- Guardrail 2 (High Voltage DIY Wiring): If asked how to wire, configure, or terminate high-voltage electrical setups manually, reply exactly with: "For your absolute safety and to ensure your 3 to 5-year product warranty remains valid, high-voltage terminations must only be completed by a qualified professional. Please contact our support office at whatsapp to coordinate with a certified NoraSol deployment technician."
+- Guardrail 3 (Strict Factuality & Heavy Loads): If asked to verify running heavy loads overnight (like a 1.5-ton AC continuously on NORA-3 battery), reply exactly with: "The NORA-3 integrated 3 kWh battery pack is optimized to support essential daily household base-loads at night (such as multiple ceiling fans, LED lights, routers, media units, or a small energy-efficient refrigerator) up to its usable storage limit of 2.7 kWh. Running heavy air conditioning loads overnight exceeds this specific unit profile and requires upgrading to a larger scalable storage solution like our NoraStore series."`
+      }
+    ];
+
+    function addMessageToUI(text, role = 'assistant') {
+      const bubble = document.createElement('div');
+      bubble.className = `bubble ${role}`;
+      bubble.textContent = text;
+      messagesContainer.appendChild(bubble);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    async function handleConversationFlow(userQuestion) {
+      if (!userQuestion) return;
+
+      addMessageToUI(userQuestion, 'user');
+      conversationHistory.push({ role: "user", content: userQuestion });
+
+      input.disabled = true;
+      sendBtn.disabled = true;
+      input.placeholder = "Thinking...";
+
+      try {
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${GROQ_API_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: GROQ_MODEL,
+            messages: conversationHistory,
+            temperature: 0.3,
+            max_tokens: 800
+          })
+        });
+
+        if (!response.ok) throw new Error(`API Error: ${response.status}`);
+
+        const data = await response.json();
+        const assistantReply = data.choices[0].message.content;
+
+        addMessageToUI(assistantReply, 'assistant');
+        conversationHistory.push({ role: "assistant", content: assistantReply });
+
+      } catch (error) {
+        console.error(error);
+        addMessageToUI("Sorry, I encountered an issue. Please try again shortly.", 'assistant');
+      } finally {
+        input.disabled = false;
+        sendBtn.disabled = false;
+        input.placeholder = "Ask about inverters...";
+        input.focus();
+      }
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const value = input.value.trim();
+      if (!value) return;
+      input.value = '';
+      handleConversationFlow(value);
+    });
+
+    document.querySelectorAll('.chip').forEach(button => {
+      button.addEventListener('click', () => {
+        handleConversationFlow(button.getAttribute('data-question'));
+      });
+    });
+
+    addMessageToUI('Hello! I am the NoraSol AI Assistant. How can I assist you with our solar or storage setups today?', 'assistant');
+  </script>
+</body>
+</html>
