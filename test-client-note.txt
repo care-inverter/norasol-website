@@ -1,0 +1,12 @@
+Backend endpoint test (after you set .env and run node server.js):
+
+1) Install deps: npm install
+2) Run: node server.js
+3) Test:
+
+curl -X POST http://localhost:3000/api/chat \
+  -H "Content-Type: application/json" \
+  -d "{\"message\":\"What is the NORA-3 system?\",\"sessionMessages\":[]}"
+
+Browser: open ai.html in your site; it calls /api/chat.
+
