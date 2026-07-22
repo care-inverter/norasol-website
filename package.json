@@ -1,33 +1,13 @@
-<<<<<<< HEAD
 {
   "name": "norasol-chat-server",
   "version": "1.0.0",
   "private": true,
-  "main": "server.js",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "wrangler dev",
+    "deploy": "wrangler deploy"
   },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.19.2"
+  "devDependencies": {
+    "wrangler": "^3.72.0"
   }
 }
-
-=======
-{
-  "name": "norasol-chat-server",
-  "version": "1.0.0",
-  "private": true,
-  "main": "server.js",
-  "type": "commonjs",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.19.2"
-  }
-}
-
->>>>>>> 02b027d79b6e9e92884fe737df17e32993b69a58

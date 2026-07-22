@@ -1,0 +1,31 @@
+name = "norasol-website"
+main = "src/index.js"
+type = "service"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[env.production]
+name = "norasol-website-production"
+
+[build]
+command = ""
+cwd = ""
+watch_paths = []
+
+[build.upload]
+format = "service-worker"
+
+# Environment variables - set in Cloudflare Dashboard
+# GROQ_API_KEY=your_key_here
+# GROQ_MODEL=mixtral-8x7b-32768
+
+# Optional: Cloudflare KV for static file caching
+# [[kv_namespaces]]
+# binding = "KV_STORE"
+# id = "your_kv_namespace_id"
+# preview_id = "your_preview_id"
+
+# Optional: Cloudflare R2 for asset storage
+# [[r2_buckets]]
+# binding = "ASSETS"
+# bucket_name = "norasol-website-assets"
