@@ -1,52 +1,14 @@
 name = "norasol-website"
-main = "src/index.js"
-type = "service"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
-[build.upload]
-format = "service-worker"
+# This tells Cloudflare to serve static files from your main repository folder
+[assets]
+directory = "."
+binding = "ASSETS"
 
 [env.production]
 name = "norasol-website-production"
 routes = [
   { pattern = "norasol.workers.dev/*", zone_name = "workers.dev" }
 ]
-
-# ============================================
-# ENVIRONMENT VARIABLES
-# ============================================
-# Set these in Cloudflare Dashboard:
-# 1. Go to Workers & Pages → Your Worker
-# 2. Settings → Environment Variables
-# 3. Add:
-#    - GROQ_API_KEY: Your Groq API key
-#    - GROQ_MODEL: mixtral-8x7b-32768 (or your preferred model)
-#
-# Example values:
-# GROQ_API_KEY = "gsk_..." (from https://console.groq.com)
-# GROQ_MODEL = "mixtral-8x7b-32768"
-
-# ============================================
-# OPTIONAL: Cloudflare KV (for static file caching)
-# ============================================
-# Uncomment to enable KV-based static file caching
-# [[kv_namespaces]]
-# binding = "KV_STORE"
-# id = "your_kv_namespace_id"
-# preview_id = "your_preview_id"
-
-# To create a KV namespace:
-# npx wrangler kv:namespace create "norasol-store"
-
-# ============================================
-# OPTIONAL: Cloudflare R2 (for asset storage)
-# ============================================
-# Uncomment to enable R2-based asset storage
-# [[r2_buckets]]
-# binding = "ASSETS"
-# bucket_name = "norasol-website-assets"
-# preview_bucket_name = "norasol-website-assets-preview"
-
-# To create an R2 bucket:
-# npx wrangler r2 bucket create norasol-website-assets
