@@ -52,67 +52,53 @@
             max-width: 100vw;
         }
         body {
-            background-color: #f4fbf2;
-
+            background-color: #0a1f12;
             background-image: radial-gradient(circle at top left, rgba(101, 196, 73, 0.18), transparent 32%),
                               radial-gradient(circle at 80% 20%, rgba(34, 211, 238, 0.14), transparent 28%),
-                              linear-gradient(135deg, #f7fdf5 0%, #f1f9eb 45%, #eef8e8 100%);
+                              linear-gradient(135deg, #0d2416 0%, #0f2a1a 45%, #0a1f12 100%);
             font-family: 'Plus Jakarta Sans', sans-serif;
             overflow-x: hidden;
             color: #123022;
         }
 
-       /* DYNAMIC IMAGE BACKGROUND WITH 5-IMAGE CYCLE & PANNING */
-.animated-bg {
+       /* VIDEO BACKGROUND - 3 PEXELS VIDEOS WITH FADE TRANSITIONS */
+.video-bg-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: -3;
-    background-size: 115% 115%;
-    background-position: center;
-    /* Keeps the dark branding tint over all cycling images */
-    background-image: linear-gradient(135deg, rgba(18, 48, 34, 0.5) 0%, rgba(18, 48, 34, 0.7) 100%), 
-                      url('https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2070&auto=format&fit=crop');
-    animation: 
-        imageMovement 24s ease-in-out infinite alternate,
-        imageCycle 40s linear infinite;
+    overflow: hidden;
 }
 
-/* Smoothly crossfades between 5 different high-res images */
-@keyframes imageCycle {
-    0%, 16% {
-        background-image: linear-gradient(135deg, rgba(18, 48, 34, 0.5), rgba(18, 48, 34, 0.7)), 
-                          url('https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2070&auto=format&fit=crop'); /* Solar + Turbines */
-    }
-    20%, 36% {
-        background-image: linear-gradient(135deg, rgba(18, 48, 34, 0.5), rgba(18, 48, 34, 0.7)), 
-                          url('https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=2070&auto=format&fit=crop'); /* Wind Farm Green Field */
-    }
-    40%, 56% {
-        background-image: linear-gradient(135deg, rgba(18, 48, 34, 0.5), rgba(18, 48, 34, 0.7)), 
-                          url('https://images.unsplash.com/photo-1548345680-f5475ea5df84?q=80&w=2070&auto=format&fit=crop'); /* Premium Clean Tech Lines */
-    }
-    60%, 76% {
-        background-image: linear-gradient(135deg, rgba(18, 48, 34, 0.5), rgba(18, 48, 34, 0.7)), 
-                          url('https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d?q=80&w=2070&auto=format&fit=crop'); /* Silicon/AI Macro Network */
-    }
-    80%, 96% {
-        background-image: linear-gradient(135deg, rgba(18, 48, 34, 0.5), rgba(18, 48, 34, 0.7)), 
-                          url('https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=2070&auto=format&fit=crop'); /* Solar Panels Close-up */
-    }
-    100% {
-        background-image: linear-gradient(135deg, rgba(18, 48, 34, 0.5), rgba(18, 48, 34, 0.7)), 
-                          url('https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2070&auto=format&fit=crop'); /* Loop Back */
-    }
+.video-bg-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+    filter: blur(3px);
 }
 
-        @keyframes imageMovement {
-            0% { background-position: 0% 50%; background-size: 110% 110%; }
-            50% { background-position: 100% 50%; background-size: 120% 120%; }
-            100% { background-position: 50% 100%; background-size: 110% 110%; }
-        }
+.video-bg-container video.active {
+    opacity: 1;
+}
+
+/* Dark gradient overlay on top of videos */
+.video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    background: linear-gradient(135deg, rgba(18, 48, 34, 0.5) 0%, rgba(18, 48, 34, 0.7) 100%);
+    pointer-events: none;
+}
 
         /* TECH CIRCUIT OVERLAY */
         .tech-circuit-overlay {
@@ -670,8 +656,13 @@
 </head>
 <body class="antialiased selection:bg-brandGreen selection:text-white">
 
-    <!-- Background Layers matching your image scheme -->
-    <div class="animated-bg"></div>
+    <!-- Background Layers: Pexels Videos with fade transitions + gradient overlay -->
+    <div class="video-bg-container" id="videoBgContainer">
+        <video id="bgVideo0" class="active" muted loop playsinline preload="auto"></video>
+        <video id="bgVideo1" muted loop playsinline preload="auto"></video>
+        <video id="bgVideo2" muted loop playsinline preload="auto"></video>
+    </div>
+    <div class="video-overlay"></div>
     <div class="tech-circuit-overlay"></div>
 
 
@@ -1606,7 +1597,68 @@
 
         setInterval(rotateFeaturedProduct, 4000);
 
-        
+        // ===== VIDEO BACKGROUND: LOCAL FILES + FADE CYCLING =====
+        (function() {
+            'use strict';
+
+            // Local video files in Images folder
+            var VIDEO_FILES = [
+                'Images/15338260_640_360_23fps.mp4',
+                'Images/9788714-sd_640_360_30fps.mp4',
+                'Images/14580851_640_360_30fps.mp4'
+            ];
+
+            var vids = [
+                document.getElementById('bgVideo0'),
+                document.getElementById('bgVideo1'),
+                document.getElementById('bgVideo2')
+            ];
+
+            var curIdx = 0;
+
+            // Switch visible video
+            function show(idx) {
+                for (var i = 0; i < vids.length; i++) {
+                    if (vids[i]) vids[i].classList.remove('active');
+                }
+                var v = vids[idx];
+                if (v) {
+                    v.classList.add('active');
+                    v.currentTime = 0;
+                    var p = v.play();
+                    if (p && p['catch']) p['catch'](function(){});
+                }
+                curIdx = idx;
+            }
+
+            // Init
+            function init() {
+                // Set source on all videos
+                for (var i = 0; i < vids.length; i++) {
+                    if (vids[i]) {
+                        vids[i].src = VIDEO_FILES[i];
+                        vids[i].load();
+                    }
+                }
+                
+                // Show first video after a short buffer
+                setTimeout(function() {
+                    show(0);
+                }, 500);
+                
+                // Cycle every 10 seconds
+                setInterval(function() {
+                    var next = (curIdx + 1) % vids.length;
+                    show(next);
+                }, 10000);
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
     </script>
 </body>
 </html>
