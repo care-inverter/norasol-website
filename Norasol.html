@@ -61,61 +61,6 @@
             color: #123022;
         }
 
-       /* VIDEO BACKGROUND - 3 PEXELS VIDEOS WITH FADE TRANSITIONS */
-.video-bg-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -3;
-    overflow: hidden;
-}
-
-.video-bg-container video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    transition: opacity 1.5s ease-in-out;
-    filter: blur(3px);
-}
-
-.video-bg-container video.active {
-    opacity: 1;
-}
-
-/* Dark gradient overlay on top of videos */
-.video-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -2;
-    background: linear-gradient(135deg, rgba(18, 48, 34, 0.5) 0%, rgba(18, 48, 34, 0.7) 100%);
-    pointer-events: none;
-}
-
-        /* TECH CIRCUIT OVERLAY */
-        .tech-circuit-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.06;
-            background-image: 
-                radial-gradient(circle at 20% 30%, transparent 120px, rgba(85, 158, 63, 0.25) 121px, rgba(85, 158, 63, 0.25) 123px, transparent 124px),
-                linear-gradient(90deg, rgba(85, 158, 63, 0.08) 1px, transparent 1px),
-                linear-gradient(0deg, rgba(85, 158, 63, 0.08) 1px, transparent 1px);
-            background-size: 100% 100%, 60px 60px, 60px 60px;
-        }
-
         /* TRUE LOGO-MATCHED GLASSMORPHISM */
         .logo-glass {
             position: relative;
@@ -655,17 +600,6 @@
     </style>
 </head>
 <body class="antialiased selection:bg-brandGreen selection:text-white">
-
-    <!-- Background Layers: Pexels Videos with fade transitions + gradient overlay -->
-    <div class="video-bg-container" id="videoBgContainer">
-        <video id="bgVideo0" class="active" muted loop playsinline preload="auto"></video>
-        <video id="bgVideo1" muted loop playsinline preload="auto"></video>
-        <video id="bgVideo2" muted loop playsinline preload="auto"></video>
-    </div>
-    <div class="video-overlay"></div>
-    <div class="tech-circuit-overlay"></div>
-
-
 
     <!-- HEADER / NAVIGATION -->
     <header class="site-header fixed top-0 left-0 w-full z-50 backdrop-blur-md border-b border-white/10">
@@ -1596,69 +1530,8 @@
         }
 
         setInterval(rotateFeaturedProduct, 4000);
-
-        // ===== VIDEO BACKGROUND: LOCAL FILES + FADE CYCLING =====
-        (function() {
-            'use strict';
-
-            // Local video files in Images folder
-            var VIDEO_FILES = [
-                'Images/15338260_640_360_23fps.mp4',
-                'Images/9788714-sd_640_360_30fps.mp4',
-                'Images/14580851_640_360_30fps.mp4'
-            ];
-
-            var vids = [
-                document.getElementById('bgVideo0'),
-                document.getElementById('bgVideo1'),
-                document.getElementById('bgVideo2')
-            ];
-
-            var curIdx = 0;
-
-            // Switch visible video
-            function show(idx) {
-                for (var i = 0; i < vids.length; i++) {
-                    if (vids[i]) vids[i].classList.remove('active');
-                }
-                var v = vids[idx];
-                if (v) {
-                    v.classList.add('active');
-                    v.currentTime = 0;
-                    var p = v.play();
-                    if (p && p['catch']) p['catch'](function(){});
-                }
-                curIdx = idx;
-            }
-
-            // Init
-            function init() {
-                // Set source on all videos
-                for (var i = 0; i < vids.length; i++) {
-                    if (vids[i]) {
-                        vids[i].src = VIDEO_FILES[i];
-                        vids[i].load();
-                    }
-                }
-                
-                // Show first video after a short buffer
-                setTimeout(function() {
-                    show(0);
-                }, 500);
-                
-                // Cycle every 10 seconds
-                setInterval(function() {
-                    var next = (curIdx + 1) % vids.length;
-                    show(next);
-                }, 10000);
-            }
-
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', init);
-            } else {
-                init();
-            }
-        })();
     </script>
+
+    <script src="wallpaper.js"></script>
 </body>
 </html>
