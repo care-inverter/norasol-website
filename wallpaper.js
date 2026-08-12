@@ -1,19 +1,57 @@
 /**
- * wallpaper.js — Optimized Real-World Solar Background & Adaptive Neural Mesh
+ * wallpaper.js — Smart Dynamic System Benchmark & Vibrant Solar Background
  * 
  * Features:
- * - Single lightweight background video loop (Images/9788714-sd_640_360_30fps.mp4)
- * - Hardware-friendly multi-stop radial gradients (eliminates expensive CPU CSS blur filters)
- * - Dynamic low-power performance engine (adaptive FPS monitoring & auto particle scaling)
- * - Automatic visibility pause on background tab switch
- * - Respects prefers-reduced-motion accessibility settings
+ * - Dynamic Hardware Pre-check (WebGL GPU, CPU cores, software rasterizer detection)
+ * - 3 Adaptive Performance Tiers (High, Mid, and Ultra-Low/Static Fallback)
+ * - Ultra-crisp, vibrant video styling (no blur filters, high saturation & contrast)
+ * - Zero-lag seamless video looping without re-buffering delays
+ * - Automatic CPU saving on tab switch
  */
 (function () {
     'use strict';
 
+    // ===================== DYNAMIC SYSTEM PRE-CHECK =====================
+    function detectSystemTier() {
+        var cores = navigator.hardwareConcurrency || 2;
+        var memory = navigator.deviceMemory || 4;
+        var isSoftwareGPU = false;
+
+        try {
+            var testCanvas = document.createElement('canvas');
+            var gl = testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl');
+            if (gl) {
+                var debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                if (debugInfo) {
+                    var renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || '';
+                    if (/swiftshader|llvmpipe|software|basic render|microsoft basic|canvaskit|gdi/i.test(renderer)) {
+                        isSoftwareGPU = true;
+                    }
+                }
+            } else {
+                isSoftwareGPU = true; // WebGL disabled or unsupported
+            }
+        } catch (e) {
+            isSoftwareGPU = true;
+        }
+
+        var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (prefersReducedMotion || isSoftwareGPU || cores <= 2 || memory < 4) {
+            return 'tier-low';  // Tier 3: Static vibrant wallpaper (0% CPU impact, instant)
+        } else if (cores <= 4 || isMobile) {
+            return 'tier-mid';  // Tier 2: Crisp video + lightweight mesh (30 FPS cap)
+        } else {
+            return 'tier-high'; // Tier 1: Full crisp video + 60 FPS mesh
+        }
+    }
+
+    var systemTier = detectSystemTier();
+
     // ===================== CSS STYLES =====================
     var wallpaperCSS = `
-        /* DEEP SPACE & ATMOSPHERE BACKGROUND */
+        /* DEEP SPACE & VIBRANT ATMOSPHERE BACKGROUND */
         .solar-luxury-bg {
             position: fixed;
             top: 0;
@@ -21,11 +59,20 @@
             width: 100%;
             height: 100%;
             z-index: -3;
-            background: #000201;
+            background: #020b05;
             overflow: hidden;
         }
 
-        /* SINGLE BACKGROUND VIDEO CONTAINER */
+        /* STATIC VIBRANT FALLBACK FOR TIER-LOW (OLD COMPUTERS) */
+        .solar-luxury-bg.tier-low-bg {
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(16, 245, 150, 0.18), transparent 45%),
+                radial-gradient(circle at 20% 80%, rgba(255, 215, 80, 0.15), transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.12), transparent 50%),
+                linear-gradient(135deg, #05180c 0%, #0a2916 50%, #020c06 100%);
+        }
+
+        /* CRISP & VIBRANT BACKGROUND VIDEO */
         .solar-bg-video {
             position: absolute;
             top: 50%;
@@ -36,9 +83,11 @@
             height: auto;
             transform: translate(-50%, -50%);
             object-fit: cover;
-            opacity: 0.75;
+            opacity: 0.95;
+            filter: contrast(1.12) saturate(1.25);
             z-index: -3;
             pointer-events: none;
+            backface-visibility: hidden;
         }
 
         /* DYNAMIC CANVAS LAYER */
@@ -52,7 +101,7 @@
             pointer-events: none;
         }
 
-        /* ATMOSPHERIC GLOW ORBS - OPTIMIZED WITH MULTI-STOP GRADIENTS (NO CPU BLUR) */
+        /* ATMOSPHERIC GLOW ORBS - HARDWARE ACCELERATED MULTI-STOP GRADIENTS */
         .solar-orb {
             position: fixed;
             border-radius: 50%;
@@ -66,7 +115,7 @@
         .orb-sun {
             width: 850px;
             height: 850px;
-            background: radial-gradient(circle, rgba(255, 215, 80, 0.28) 0%, rgba(255, 180, 40, 0.16) 25%, rgba(255, 160, 20, 0.06) 50%, rgba(0,0,0,0) 75%);
+            background: radial-gradient(circle, rgba(255, 215, 80, 0.32) 0%, rgba(255, 180, 40, 0.18) 25%, rgba(255, 160, 20, 0.07) 50%, rgba(0,0,0,0) 75%);
             bottom: -250px;
             right: -150px;
         }
@@ -74,7 +123,7 @@
         .orb-emerald {
             width: 950px;
             height: 950px;
-            background: radial-gradient(circle, rgba(16, 245, 150, 0.22) 0%, rgba(10, 180, 110, 0.12) 30%, rgba(5, 100, 60, 0.04) 60%, rgba(0,0,0,0) 80%);
+            background: radial-gradient(circle, rgba(16, 245, 150, 0.25) 0%, rgba(10, 180, 110, 0.14) 30%, rgba(5, 100, 60, 0.05) 60%, rgba(0,0,0,0) 80%);
             bottom: -350px;
             right: -100px;
             animation-delay: -12s;
@@ -94,7 +143,7 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: radial-gradient(circle at 90% 90%, rgba(0,0,0,0) 40%, rgba(1, 10, 6, 0.65) 100%);
+            background: radial-gradient(circle at 90% 90%, rgba(0,0,0,0) 40%, rgba(1, 10, 6, 0.55) 100%);
             pointer-events: none;
         }
     `;
@@ -111,23 +160,33 @@
         if (!document.body) return;
 
         var container = document.createElement('div');
-        container.className = 'solar-luxury-bg';
+        container.className = 'solar-luxury-bg' + (systemTier === 'tier-low' ? ' tier-low-bg' : '');
 
-        // Single Background Video setup
-        videoEl = document.createElement('video');
-        videoEl.className = 'solar-bg-video';
-        videoEl.src = 'Images/9788714-sd_640_360_30fps.mp4';
-        videoEl.muted = true;
-        videoEl.autoplay = true;
-        videoEl.loop = true;
-        videoEl.playsInline = true;
-        videoEl.preload = 'auto';
+        // If system is low-end/software GPU, display vibrant static CSS mode (0% CPU impact)
+        if (systemTier !== 'tier-low') {
+            videoEl = document.createElement('video');
+            videoEl.className = 'solar-bg-video';
+            videoEl.src = 'Images/9788714-sd_640_360_30fps.mp4';
+            videoEl.muted = true;
+            videoEl.autoplay = true;
+            videoEl.loop = true;
+            videoEl.playsInline = true;
+            videoEl.preload = 'auto';
 
-        videoEl.play().catch(function(err) {
-            console.log("Background video autoplay prevented: ", err);
-        });
+            // Zero-Lag Seamless Loop Handling
+            videoEl.addEventListener('timeupdate', function() {
+                if (videoEl.duration && videoEl.currentTime >= videoEl.duration - 0.3) {
+                    videoEl.currentTime = 0.01;
+                    if (videoEl.paused) videoEl.play().catch(function() {});
+                }
+            });
 
-        container.appendChild(videoEl);
+            videoEl.play().catch(function(err) {
+                console.log("Background video autoplay info: ", err);
+            });
+
+            container.appendChild(videoEl);
+        }
 
         var orb1 = document.createElement('div');
         orb1.className = 'solar-orb orb-sun';
@@ -135,19 +194,21 @@
         var orb2 = document.createElement('div');
         orb2.className = 'solar-orb orb-emerald';
 
-        var canvas = document.createElement('canvas');
-        canvas.id = 'luxurySolarCanvas';
-
         var overlay = document.createElement('div');
         overlay.className = 'luxury-vignette';
 
         container.appendChild(orb1);
         container.appendChild(orb2);
-        container.appendChild(canvas);
+
+        if (systemTier !== 'tier-low') {
+            var canvas = document.createElement('canvas');
+            canvas.id = 'luxurySolarCanvas';
+            container.appendChild(canvas);
+            initNeuralWebEngine(canvas);
+        }
+
         container.appendChild(overlay);
         document.body.insertBefore(container, document.body.firstChild);
-
-        initNeuralWebEngine(canvas);
     }
 
     // ===================== NEURAL WEB & PARTICLES ENGINE =====================
@@ -155,18 +216,15 @@
         var ctx = canvas.getContext('2d', { alpha: true });
         var width, height;
 
-        // Low-end hardware detection & adaptive scaling
-        var cores = navigator.hardwareConcurrency || 4;
-        var isLowPowerMode = (cores <= 4);
+        var isLowPowerMode = (systemTier === 'tier-mid');
         var targetFPS = isLowPowerMode ? 30 : 60;
         var frameInterval = 1000 / targetFPS;
 
-        var maxNodes = isLowPowerMode ? 35 : 120;
-        var maxParticleCount = isLowPowerMode ? 15 : 35;
-        var connectionDist = isLowPowerMode ? 85 : 140;
-        var mouseDist = isLowPowerMode ? 160 : 250;
+        var maxNodes = isLowPowerMode ? 30 : 100;
+        var maxParticleCount = isLowPowerMode ? 12 : 30;
+        var connectionDist = isLowPowerMode ? 85 : 135;
+        var mouseDist = isLowPowerMode ? 150 : 240;
 
-        // Rolling FPS Counter
         var lastFrameTime = performance.now();
         var frameCount = 0;
         var fpsCheckStart = performance.now();
@@ -200,9 +258,9 @@
                 floatingNodes.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 1.2,
-                    vy: (Math.random() - 0.5) * 1.2,
-                    radius: 1.5 + Math.random() * 2.5
+                    vx: (Math.random() - 0.5) * 1.1,
+                    vy: (Math.random() - 0.5) * 1.1,
+                    radius: 1.5 + Math.random() * 2.2
                 });
             }
 
@@ -216,15 +274,12 @@
             }
         }
 
-        // Accessibility preference check
-        var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         var animationFrameId = null;
 
         function render(now) {
             if (!now) now = performance.now();
             var elapsed = now - lastFrameTime;
 
-            // Throttle frame rate on low-power devices
             if (isLowPowerMode && elapsed < frameInterval - 2) {
                 animationFrameId = requestAnimationFrame(render);
                 return;
@@ -232,18 +287,18 @@
 
             lastFrameTime = now;
 
-            // Adaptive FPS Monitor (if performance drops, switch to low power mode automatically)
+            // Rolling FPS Safeguard
             frameCount++;
             if (now - fpsCheckStart > 2000) {
                 var currentFPS = (frameCount * 1000) / (now - fpsCheckStart);
-                if (currentFPS < 35 && !isLowPowerMode) {
+                if (currentFPS < 30 && !isLowPowerMode) {
                     isLowPowerMode = true;
                     targetFPS = 30;
                     frameInterval = 1000 / targetFPS;
-                    maxNodes = 35;
-                    maxParticleCount = 15;
+                    maxNodes = 30;
+                    maxParticleCount = 12;
                     connectionDist = 85;
-                    mouseDist = 160;
+                    mouseDist = 150;
                     buildElements();
                 }
                 frameCount = 0;
@@ -268,8 +323,8 @@
                 var distToMouse = Math.hypot(mouse.x - node.x, mouse.y - node.y);
                 if (distToMouse < mouseDist) {
                     ctx.beginPath();
-                    ctx.strokeStyle = 'rgba(16, 245, 150, ' + (1 - distToMouse / mouseDist) * 0.75 + ')';
-                    ctx.lineWidth = 1.2;
+                    ctx.strokeStyle = 'rgba(16, 245, 150, ' + (1 - distToMouse / mouseDist) * 0.7 + ')';
+                    ctx.lineWidth = 1.1;
                     ctx.moveTo(node.x, node.y);
                     ctx.lineTo(mouse.x, mouse.y);
                     ctx.stroke();
@@ -281,7 +336,7 @@
                     var distNodes = Math.hypot(node.x - node2.x, node.y - node2.y);
                     if (distNodes < connectionDist) {
                         ctx.beginPath();
-                        ctx.strokeStyle = 'rgba(255, 215, 80, ' + (1 - distNodes / connectionDist) * 0.25 + ')';
+                        ctx.strokeStyle = 'rgba(255, 215, 80, ' + (1 - distNodes / connectionDist) * 0.22 + ')';
                         ctx.lineWidth = 0.8;
                         ctx.moveTo(node.x, node.y);
                         ctx.lineTo(node2.x, node2.y);
@@ -302,7 +357,7 @@
                 ctx.fillRect(pt.x, pt.y, pt.radius, pt.radius);
             }
 
-            if (!prefersReducedMotion && !document.hidden) {
+            if (!document.hidden) {
                 animationFrameId = requestAnimationFrame(render);
             }
         }
