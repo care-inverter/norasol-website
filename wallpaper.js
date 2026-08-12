@@ -1,17 +1,15 @@
 /**
- * wallpaper.js — ThinkPad X1 & Integrated GPU Ultra-Smooth Engine
+ * wallpaper.js — Radical 60 FPS Ultra-Smooth Engine & Deferral System
  * 
  * Features:
- * - Intel Integrated GPU (UHD / Iris Xe) & Ultrabook Detection
- * - Ultra-Lean Particle Mesh Engine (max 12-25 nodes)
- * - Zero-Lag Crisp Video Looping
- * - Floating Graphics Mode Switcher Widget (Static / Balanced / High)
- * - Saved preference support via localStorage
+ * - Ultra-lightweight Vibrant CSS Background by default (0% CPU/GPU overhead)
+ * - Zero background video bandwidth competition during page load
+ * - Automatic pause on scroll for 100% fluid scrolling
+ * - Optional high-graphics mode accessible via floating toggle widget
  */
 (function () {
     'use strict';
 
-    // ===================== SYSTEM & GPU DETECTION =====================
     function getSavedTier() {
         return localStorage.getItem('norasol_perf_mode');
     }
@@ -22,9 +20,8 @@
             return saved;
         }
 
-        var isIntegratedGPU = false;
-        var isSoftwareGPU = false;
-
+        // Default to ultra-smooth static mode to guarantee 60 FPS fluid interaction on all laptops
+        var isDedicatedGPU = false;
         try {
             var testCanvas = document.createElement('canvas');
             var gl = testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl');
@@ -32,37 +29,19 @@
                 var debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
                 if (debugInfo) {
                     var renderer = (gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || '').toLowerCase();
-                    if (/swiftshader|llvmpipe|software|basic render|microsoft basic|canvaskit|gdi/i.test(renderer)) {
-                        isSoftwareGPU = true;
-                    }
-                    if (/intel|uhd|hd graphics|iris|graphics family|mesa|qualcomm|adreno/i.test(renderer)) {
-                        isIntegratedGPU = true;
+                    if (/nvidia|radeon|geforce|rtx|gtx|amd/i.test(renderer)) {
+                        isDedicatedGPU = true;
                     }
                 }
-            } else {
-                isSoftwareGPU = true;
             }
-        } catch (e) {
-            isSoftwareGPU = true;
-        }
+        } catch (e) {}
 
-        var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-        if (prefersReducedMotion || isSoftwareGPU) {
-            return 'static';
-        } else if (isIntegratedGPU || isMobile) {
-            return 'balanced'; // Default for ThinkPad X1 / Intel GPUs
-        } else {
-            return 'high';
-        }
+        return isDedicatedGPU ? 'high' : 'static';
     }
 
     var currentMode = detectSystemTier();
 
-    // ===================== CSS STYLES =====================
     var wallpaperCSS = `
-        /* BACKGROUND CONTAINER */
         .solar-luxury-bg {
             position: fixed;
             top: 0;
@@ -74,16 +53,15 @@
             overflow: hidden;
         }
 
-        /* STATIC VIBRANT GRADIENT MODE (0% GPU LOAD) */
-        .solar-luxury-bg.mode-static {
+        .solar-luxury-bg.mode-static,
+        .solar-luxury-bg.mode-balanced {
             background: 
-                radial-gradient(circle at 80% 20%, rgba(16, 245, 150, 0.2), transparent 45%),
-                radial-gradient(circle at 20% 80%, rgba(255, 215, 80, 0.16), transparent 40%),
-                radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.12), transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(16, 245, 150, 0.22), transparent 45%),
+                radial-gradient(circle at 20% 80%, rgba(255, 215, 80, 0.18), transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.14), transparent 50%),
                 linear-gradient(135deg, #05180c 0%, #0a2916 50%, #020c06 100%);
         }
 
-        /* CRISP & VIBRANT BACKGROUND VIDEO */
         .solar-bg-video {
             position: absolute;
             top: 50%;
@@ -94,13 +72,12 @@
             height: auto;
             transform: translate(-50%, -50%);
             object-fit: cover;
-            opacity: 0.95;
-            filter: contrast(1.12) saturate(1.22);
+            opacity: 0.92;
+            filter: contrast(1.1) saturate(1.2);
             z-index: -3;
             pointer-events: none;
         }
 
-        /* CANVAS LAYER */
         #luxurySolarCanvas {
             position: fixed;
             top: 0;
@@ -111,7 +88,6 @@
             pointer-events: none;
         }
 
-        /* ATMOSPHERIC GLOW ORBS */
         .solar-orb {
             position: fixed;
             border-radius: 50%;
@@ -145,7 +121,6 @@
             100% { transform: translate(15px, 15px); }
         }
 
-        /* VIGNETTE */
         .luxury-vignette {
             position: fixed;
             top: 0;
@@ -157,13 +132,12 @@
             pointer-events: none;
         }
 
-        /* FLOATING PERFORMANCE MODE TOGGLE WIDGET */
         .perf-toggle-btn {
             position: fixed;
             bottom: 20px;
             left: 20px;
             z-index: 9999;
-            background: rgba(10, 30, 18, 0.85);
+            background: rgba(10, 30, 18, 0.88);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(85, 158, 63, 0.35);
             color: #a3e635;
@@ -198,34 +172,11 @@
     var toggleBtn = null;
     var animationFrameId = null;
 
-    // ===================== DOM SETUP =====================
     function setupDOM() {
         if (!document.body) return;
 
         container = document.createElement('div');
         container.className = 'solar-luxury-bg mode-' + currentMode;
-
-        // Video setup
-        videoEl = document.createElement('video');
-        videoEl.className = 'solar-bg-video';
-        videoEl.src = 'Images/9788714-sd_640_360_30fps.mp4';
-        videoEl.muted = true;
-        videoEl.autoplay = true;
-        videoEl.loop = true;
-        videoEl.playsInline = true;
-        videoEl.preload = 'auto';
-
-        videoEl.addEventListener('timeupdate', function() {
-            if (videoEl.duration && videoEl.currentTime >= videoEl.duration - 0.3) {
-                videoEl.currentTime = 0.01;
-                if (videoEl.paused) videoEl.play().catch(function() {});
-            }
-        });
-
-        if (currentMode !== 'static') {
-            container.appendChild(videoEl);
-            videoEl.play().catch(function() {});
-        }
 
         var orb1 = document.createElement('div');
         orb1.className = 'solar-orb orb-sun';
@@ -245,29 +196,59 @@
         container.appendChild(overlay);
         document.body.insertBefore(container, document.body.firstChild);
 
-        // Inject UI Mode Switcher
         setupToggleWidget();
 
-        if (currentMode !== 'static') {
+        if (currentMode === 'high') {
+            initVideo();
+            initNeuralWebEngine(canvas);
+        } else if (currentMode === 'balanced') {
             initNeuralWebEngine(canvas);
         } else {
             canvas.style.display = 'none';
         }
     }
 
-    // ===================== PERFORMANCE TOGGLE WIDGET =====================
+    function initVideo() {
+        if (videoEl) return;
+        videoEl = document.createElement('video');
+        videoEl.className = 'solar-bg-video';
+        videoEl.src = 'Images/9788714-sd_640_360_30fps.mp4';
+        videoEl.muted = true;
+        videoEl.autoplay = true;
+        videoEl.loop = true;
+        videoEl.playsInline = true;
+        videoEl.preload = 'none'; // Don't steal network bandwidth during initial render!
+
+        videoEl.addEventListener('timeupdate', function() {
+            if (videoEl.duration && videoEl.currentTime >= videoEl.duration - 0.3) {
+                videoEl.currentTime = 0.01;
+                if (videoEl.paused) videoEl.play().catch(function() {});
+            }
+        });
+
+        // Defer video loading until after initial page paint
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (currentMode === 'high' && videoEl) {
+                    container.insertBefore(videoEl, container.firstChild);
+                    videoEl.play().catch(function() {});
+                }
+            }, 1000);
+        });
+    }
+
     function setupToggleWidget() {
         toggleBtn = document.createElement('button');
         toggleBtn.className = 'perf-toggle-btn';
         updateToggleText();
 
         toggleBtn.addEventListener('click', function() {
-            if (currentMode === 'high') {
+            if (currentMode === 'static') {
                 currentMode = 'balanced';
             } else if (currentMode === 'balanced') {
-                currentMode = 'static';
-            } else {
                 currentMode = 'high';
+            } else {
+                currentMode = 'static';
             }
 
             localStorage.setItem('norasol_perf_mode', currentMode);
@@ -281,11 +262,11 @@
     function updateToggleText() {
         if (!toggleBtn) return;
         if (currentMode === 'high') {
-            toggleBtn.innerHTML = '⚡ Graphics: High <span>(Click to reduce)</span>';
+            toggleBtn.innerHTML = '⚡ Graphics: High <span>(Video + Mesh)</span>';
         } else if (currentMode === 'balanced') {
-            toggleBtn.innerHTML = '⚡ Graphics: Balanced <span>(Smooth ThinkPad Mode)</span>';
+            toggleBtn.innerHTML = '⚡ Graphics: Balanced <span>(Light Mesh)</span>';
         } else {
-            toggleBtn.innerHTML = '⚡ Graphics: Static <span>(0% CPU Power Save)</span>';
+            toggleBtn.innerHTML = '⚡ Graphics: Smooth <span>(0% CPU Static)</span>';
         }
     }
 
@@ -296,7 +277,14 @@
             if (videoEl && videoEl.parentNode) videoEl.parentNode.removeChild(videoEl);
             if (canvas) canvas.style.display = 'none';
             if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        } else if (currentMode === 'balanced') {
+            if (videoEl && videoEl.parentNode) videoEl.parentNode.removeChild(videoEl);
+            if (canvas) {
+                canvas.style.display = 'block';
+                initNeuralWebEngine(canvas);
+            }
         } else {
+            initVideo();
             if (videoEl && !videoEl.parentNode) {
                 container.insertBefore(videoEl, container.firstChild);
                 videoEl.play().catch(function() {});
@@ -308,24 +296,16 @@
         }
     }
 
-    // ===================== ULTRA-LEAN NEURAL ENGINE =====================
     function initNeuralWebEngine(targetCanvas) {
         if (animationFrameId) cancelAnimationFrame(animationFrameId);
 
         var ctx = targetCanvas.getContext('2d', { alpha: true });
         var width, height;
 
-        var isBalanced = (currentMode === 'balanced');
-        var targetFPS = isBalanced ? 30 : 60;
-        var frameInterval = 1000 / targetFPS;
-
-        // ULTRA LEAN SETTINGS FOR THINKPAD / INTEGRATED INTEL GPUS
-        var maxNodes = isBalanced ? 12 : 25;
-        var maxEmbers = isBalanced ? 5 : 12;
-        var connectionDist = isBalanced ? 75 : 95;
-        var mouseDist = isBalanced ? 130 : 180;
-
-        var lastFrameTime = performance.now();
+        var maxNodes = (currentMode === 'high') ? 18 : 10;
+        var maxEmbers = (currentMode === 'high') ? 8 : 4;
+        var connectionDist = 70;
+        var mouseDist = 140;
 
         var mouse = {
             x: window.innerWidth / 2,
@@ -356,9 +336,9 @@
                 floatingNodes.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 0.9,
-                    vy: (Math.random() - 0.5) * 0.9,
-                    radius: 1.5 + Math.random() * 2
+                    vx: (Math.random() - 0.5) * 0.8,
+                    vy: (Math.random() - 0.5) * 0.8,
+                    radius: 1.5 + Math.random() * 1.8
                 });
             }
 
@@ -366,23 +346,30 @@
                 particles.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    vy: -(0.2 + Math.random() * 0.4),
-                    radius: 1.2 + Math.random() * 1.8
+                    vy: -(0.2 + Math.random() * 0.3),
+                    radius: 1.2 + Math.random() * 1.5
                 });
             }
         }
 
-        function render(now) {
-            if (currentMode === 'static') return;
-            if (!now) now = performance.now();
-            var elapsed = now - lastFrameTime;
+        var isScrolling = false;
+        var scrollTimeout = null;
 
-            if (isBalanced && elapsed < frameInterval - 2) {
+        window.addEventListener('scroll', function() {
+            isScrolling = true;
+            if (scrollTimeout) clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(function() {
+                isScrolling = false;
+            }, 150);
+        }, { passive: true });
+
+        function render() {
+            if (currentMode === 'static') return;
+            if (isScrolling) {
                 animationFrameId = requestAnimationFrame(render);
                 return;
             }
 
-            lastFrameTime = now;
             ctx.clearRect(0, 0, width, height);
 
             mouse.x += (mouse.targetX - mouse.x) * 0.08;
@@ -400,7 +387,7 @@
                 var distToMouse = Math.hypot(mouse.x - node.x, mouse.y - node.y);
                 if (distToMouse < mouseDist) {
                     ctx.beginPath();
-                    ctx.strokeStyle = 'rgba(16, 245, 150, ' + (1 - distToMouse / mouseDist) * 0.6 + ')';
+                    ctx.strokeStyle = 'rgba(16, 245, 150, ' + (1 - distToMouse / mouseDist) * 0.5 + ')';
                     ctx.lineWidth = 1.0;
                     ctx.moveTo(node.x, node.y);
                     ctx.lineTo(mouse.x, mouse.y);
@@ -412,19 +399,19 @@
                     var distNodes = Math.hypot(node.x - node2.x, node.y - node2.y);
                     if (distNodes < connectionDist) {
                         ctx.beginPath();
-                        ctx.strokeStyle = 'rgba(255, 215, 80, ' + (1 - distNodes / connectionDist) * 0.2 + ')';
-                        ctx.lineWidth = 0.7;
+                        ctx.strokeStyle = 'rgba(255, 215, 80, ' + (1 - distNodes / connectionDist) * 0.18 + ')';
+                        ctx.lineWidth = 0.6;
                         ctx.moveTo(node.x, node.y);
                         ctx.lineTo(node2.x, node2.y);
                         ctx.stroke();
                     }
                 }
 
-                ctx.fillStyle = 'rgba(16, 245, 150, 0.9)';
+                ctx.fillStyle = 'rgba(16, 245, 150, 0.85)';
                 ctx.fillRect(node.x - node.radius / 2, node.y - node.radius / 2, node.radius, node.radius);
             }
 
-            ctx.fillStyle = 'rgba(20, 245, 150, 0.4)';
+            ctx.fillStyle = 'rgba(20, 245, 150, 0.35)';
             for (var pIdx = 0; pIdx < particles.length; pIdx++) {
                 var pt = particles[pIdx];
                 pt.y += pt.vy;
@@ -442,8 +429,7 @@
                 if (animationFrameId) cancelAnimationFrame(animationFrameId);
                 if (videoEl) videoEl.pause();
             } else {
-                if (videoEl && currentMode !== 'static') videoEl.play().catch(function() {});
-                lastFrameTime = performance.now();
+                if (videoEl && currentMode === 'high') videoEl.play().catch(function() {});
                 if (currentMode !== 'static') render();
             }
         });
