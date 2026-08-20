@@ -11,14 +11,14 @@
     :root {
       color-scheme: light;
       --bg: transparent;
-      --panel: linear-gradient(135deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.35));
-      --border: rgba(255, 255, 255, 0.65);
+      --panel: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+      --border: rgba(85, 158, 63, 0.2);
       --text: #123022;
       --muted: #4d6d56;
       --accent: #559E3F;
       --accent-2: #2bb673;
       --user: linear-gradient(135deg, #559E3F, #2bb673);
-      --assistant: rgba(255, 255, 255, 0.85);
+      --assistant: rgba(255, 255, 255, 0.9);
     }
 
     * { box-sizing: border-box; }
@@ -35,8 +35,6 @@
       display: flex;
       flex-direction: column;
       background: var(--panel);
-      backdrop-filter: blur(20px) saturate(160%);
-      -webkit-backdrop-filter: blur(20px) saturate(160%);
       border: 1px solid var(--border);
       border-radius: 20px;
       overflow: hidden;

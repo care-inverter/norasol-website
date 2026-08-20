@@ -315,18 +315,12 @@
         };
 
         window.addEventListener('mousemove', function(e) {
-            mouse.targetX = e.clientX;
-            mouse.targetY = e.clientY;
+            mouse.x += (e.clientX - mouse.x) * 0.08;
+            mouse.y += (e.clientY - mouse.y) * 0.08;
         }, { passive: true });
 
         var floatingNodes = [];
         var particles = [];
-
-        function resize() {
-            width = targetCanvas.width = window.innerWidth;
-            height = targetCanvas.height = window.innerHeight;
-            buildElements();
-        }
 
         function buildElements() {
             floatingNodes = [];
@@ -372,10 +366,10 @@
 
             ctx.clearRect(0, 0, width, height);
 
-            mouse.x += (mouse.targetX - mouse.x) * 0.08;
-            mouse.y += (mouse.targetY - mouse.y) * 0.08;
-
             var len = floatingNodes.length;
+            var connectionDistSq = connectionDist ** 2;
+            var mouseDistSq = mouseDist ** 2;
+
             for (var fn = 0; fn < len; fn++) {
                 var node = floatingNodes[fn];
                 node.x += node.vx;
@@ -384,10 +378,13 @@
                 if (node.x < 0 || node.x > width) node.vx *= -1;
                 if (node.y < 0 || node.y > height) node.vy *= -1;
 
-                var distToMouse = Math.hypot(mouse.x - node.x, mouse.y - node.y);
-                if (distToMouse < mouseDist) {
+                var dxM = mouse.x - node.x;
+                var dyM = mouse.y - node.y;
+                var distToMouseSq = dxM * dxM + dyM * dyM;
+                if (distToMouseSq < mouseDistSq) {
+                    var dM = Math.sqrt(distToMouseSq);
                     ctx.beginPath();
-                    ctx.strokeStyle = 'rgba(16, 245, 150, ' + (1 - distToMouse / mouseDist) * 0.5 + ')';
+                    ctx.strokeStyle = 'rgba(16, 245, 150, ' + (1 - dM / mouseDist) * 0.5 + ')';
                     ctx.lineWidth = 1.0;
                     ctx.moveTo(node.x, node.y);
                     ctx.lineTo(mouse.x, mouse.y);
@@ -396,10 +393,13 @@
 
                 for (var j = fn + 1; j < len; j++) {
                     var node2 = floatingNodes[j];
-                    var distNodes = Math.hypot(node.x - node2.x, node.y - node2.y);
-                    if (distNodes < connectionDist) {
+                    var dxN = node.x - node2.x;
+                    var dyN = node.y - node2.y;
+                    var distNodesSq = dxN * dxN + dyN * dyN;
+                    if (distNodesSq < connectionDistSq) {
+                        var dN = Math.sqrt(distNodesSq);
                         ctx.beginPath();
-                        ctx.strokeStyle = 'rgba(255, 215, 80, ' + (1 - distNodes / connectionDist) * 0.18 + ')';
+                        ctx.strokeStyle = 'rgba(255, 215, 80, ' + (1 - dN / connectionDist) * 0.18 + ')';
                         ctx.lineWidth = 0.6;
                         ctx.moveTo(node.x, node.y);
                         ctx.lineTo(node2.x, node2.y);
