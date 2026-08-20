@@ -8,7 +8,6 @@ app.use(express.json({ limit: '1mb' }));
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 // Optional model selection.
 // If GROQ_MODEL is not set, we avoid sending a specific model to Groq.
-const GROQ_MODEL = process.env.GROQ_MODEL;
 
 if (!GROQ_API_KEY) {
   console.warn('WARNING: GROQ_API_KEY is not set in environment variables.');
