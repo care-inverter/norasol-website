@@ -32,9 +32,9 @@
                         display: ['Space Grotesk', 'sans-serif'],
                     },
                     colors: {
-                        brandGreen: '#559E3F',
-                        brandDark: '#2C3E26',
-                        luxLeaf: '#1E351A',
+                        brandGreen: '#8ED7A3',
+                        brandDark: '#11181D',
+                        luxLeaf: '#14241D',
                     }
                 }
             }
@@ -42,16 +42,23 @@
     </script>
     <style>
         :root{
-            /* Use padding that always stays within viewport to avoid hidden/blank side gutters */
+            --page-ink: #edf3f6;
+            --page-muted: #a0acb5;
+            --card-ink: #eef4f8;
+            --card-muted: #b6c2ca;
+            --surface-1: rgba(17, 23, 28, 0.78);
+            --surface-2: rgba(12, 18, 22, 0.88);
+            --surface-3: rgba(21, 28, 33, 0.9);
+            --border-soft: rgba(255, 255, 255, 0.1);
+            --accent-soft: #8ed7a3;
+            --accent-strong: #b9f3a6;
             --safe-pad-x: clamp(10px, 2.5vw, 18px);
             --safe-pad-bottom: clamp(16px, 5vh, 26px);
             --header-h: 5rem;
         }
 
-        /* Ensure full-height layout and that fixed elements never extend beyond viewport */
         html, body { height: 100%; }
 
-        /* Keep right/left positioned fixed widgets inside viewport */
         .ai-chat-panel,
         .ai-chat-toggle,
         .whatsapp-float,
@@ -59,21 +66,21 @@
             max-width: 100vw;
         }
         body {
-            background-color: #0a1f12;
-            background-image: radial-gradient(circle at top left, rgba(101, 196, 73, 0.18), transparent 32%),
-                              radial-gradient(circle at 80% 20%, rgba(34, 211, 238, 0.14), transparent 28%),
-                              linear-gradient(135deg, #0d2416 0%, #0f2a1a 45%, #0a1f12 100%);
+            background-color: #05070a;
+            background-image: radial-gradient(circle at top left, rgba(143, 158, 168, 0.12), transparent 32%),
+                              radial-gradient(circle at 82% 18%, rgba(142, 215, 163, 0.06), transparent 24%),
+                              linear-gradient(180deg, #05070a 0%, #0d1217 42%, #05070a 100%);
             font-family: 'Plus Jakarta Sans', sans-serif;
             overflow-x: hidden;
-            color: #f0f4f0;
+            color: var(--page-ink);
         }
 
-        /* PERFORMANCE-OPTIMIZED GLASSMORPHISM (ZERO BACKDROP-FILTER) */
+        /* Lightweight glassmorphism: soft translucency, no expensive global blur */
         .logo-glass {
             position: relative;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(245, 250, 242, 0.88));
-            border: 1px solid rgba(255, 255, 255, 0.68);
-            box-shadow: 0 18px 45px -24px rgba(15, 23, 42, 0.22);
+            background: linear-gradient(135deg, rgba(18, 22, 26, 0.86), rgba(9, 13, 16, 0.78));
+            border: 1px solid var(--border-soft);
+            box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.55);
             isolation: isolate;
         }
 
@@ -81,7 +88,7 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.24), rgba(255,255,255,0.04));
+            background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01));
             pointer-events: none;
             z-index: 0;
         }
@@ -92,16 +99,16 @@
         }
 
         .glass-card-premium {
-            background: linear-gradient(135deg, rgba(255,255,255,0.93), rgba(245,250,242,0.88));
-            border: 1px solid rgba(255, 255, 255, 0.72);
-            box-shadow: 0 14px 32px -18px rgba(15, 23, 42, 0.20);
-            transition: box-shadow 0.3s ease;
+            background: linear-gradient(135deg, rgba(19, 25, 30, 0.82), rgba(12, 16, 19, 0.8));
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            box-shadow: 0 16px 36px -24px rgba(0, 0, 0, 0.42);
+            transition: border-color 0.2s ease, transform 0.2s ease;
         }
 
         .glass-card-premium:hover {
-            border-color: rgba(255, 255, 255, 0.88);
-            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(248,253,245,0.92));
-            box-shadow: 0 16px 36px -18px rgba(15, 23, 42, 0.25);
+            border-color: rgba(255, 255, 255, 0.14);
+            background: linear-gradient(135deg, rgba(21, 29, 35, 0.86), rgba(14, 18, 22, 0.84));
+            box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.52);
         }
 
         .glass-card-premium h1,
@@ -117,6 +124,36 @@
             color: #2e4f3f;
         }
 
+        /* Keep text readable when utility classes are reused on light cards. */
+        .glass-card-premium .text-white,
+        .glass-card-premium .text-gray-200,
+        .glass-card-premium .text-gray-300,
+        .glass-card-premium .text-gray-400 {
+            color: var(--card-muted) !important;
+        }
+
+        .glass-card-premium .text-brandGreen {
+            color: #2f7a2f !important;
+        }
+
+        .page-section > .text-gray-200,
+        .page-section > .text-gray-300,
+        .page-section > .text-gray-400,
+        .page-section > .text-slate-200 {
+            color: var(--page-muted) !important;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #b9d0b7;
+            opacity: 1;
+        }
+
+        select option {
+            background: #123022;
+            color: #f4faef;
+        }
+
         .product-line-card h4 {
             color: #123022;
         }
@@ -127,13 +164,15 @@
         }
 
         .site-header {
-            background: rgba(255, 255, 255, 0.96);
-            border-bottom: 1px solid rgba(85, 158, 63, 0.16);
+            background: rgba(8, 12, 15, 0.72);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
 
         .site-header a,
         .site-header button {
-            color: #123022 !important;
+            color: var(--page-ink) !important;
         }
 
         .font-display {
@@ -166,13 +205,13 @@
         .about-hero-shell {
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(85, 158, 63, 0.22);
+            border: 1px solid rgba(255, 255, 255, 0.09);
             background:
-                radial-gradient(circle at 12% 18%, rgba(85, 158, 63, 0.32), transparent 24%),
-                radial-gradient(circle at 86% 18%, rgba(34, 211, 238, 0.22), transparent 28%),
-                radial-gradient(circle at 50% 100%, rgba(5, 255, 180, 0.16), transparent 48%),
-                linear-gradient(135deg, #020806 0%, #07110b 44%, #0b1612 100%);
-            box-shadow: 0 24px 60px -22px rgba(2, 10, 7, 0.62);
+                radial-gradient(circle at 12% 18%, rgba(142, 215, 163, 0.12), transparent 24%),
+                radial-gradient(circle at 86% 18%, rgba(180, 203, 218, 0.08), transparent 28%),
+                radial-gradient(circle at 50% 100%, rgba(151, 171, 184, 0.08), transparent 48%),
+                linear-gradient(135deg, #04080b 0%, #0b1014 44%, #080d12 100%);
+            box-shadow: 0 24px 60px -22px rgba(0, 0, 0, 0.52);
         }
 
         .about-hero-shell::before {
@@ -210,10 +249,10 @@
         }
 
         .about-card-soft {
-            background: linear-gradient(145deg, rgba(248, 253, 243, 0.98), rgba(235, 246, 226, 0.97));
-            border: 1px solid rgba(85, 158, 63, 0.20);
-            box-shadow: 0 16px 40px rgba(7, 20, 12, 0.08);
-            color: #123022;
+            background: linear-gradient(145deg, rgba(20, 26, 31, 0.9), rgba(12, 17, 20, 0.9));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+            color: var(--card-ink);
         }
 
         .about-card-soft h3,
@@ -311,13 +350,13 @@
             gap: 10px;
             padding: 16px;
             text-align: left;
-            color: #123022;
+            color: var(--card-ink);
             overflow: hidden;
             position: relative;
             border-radius: 24px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(245,252,240,0.93));
-            border: 1px solid rgba(255, 255, 255, 0.72);
-            box-shadow: 0 22px 48px -22px rgba(15, 23, 42, 0.24);
+            background: linear-gradient(135deg, rgba(20, 26, 31, 0.88), rgba(11, 16, 20, 0.82));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 22px 48px -22px rgba(0, 0, 0, 0.48);
         }
 
         .flash-sale-card::before {
@@ -350,13 +389,13 @@
             font-weight: 800;
             margin: 0;
             line-height: 1.3;
-            color: #123022;
+            color: var(--card-ink);
         }
 
         .flash-sale-card p {
             margin: 0;
             line-height: 1.5;
-            color: #35503c;
+            color: var(--card-muted);
             font-size: 0.9rem;
             max-width: 100%;
             word-break: break-word;
@@ -367,8 +406,8 @@
             align-self: flex-start;
             padding: 5px 10px;
             border-radius: 999px;
-            background: rgba(85, 158, 63, 0.12);
-            color: #2f6b2f;
+            background: rgba(142, 215, 163, 0.12);
+            color: #b7ebc1;
             font-size: 0.78rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -549,6 +588,180 @@
             }
         }
 
+        /* Dark theme surface and text overrides for the existing utility classes. */
+        body {
+            color: var(--page-ink);
+        }
+
+        .logo-glass,
+        .glass-card-premium,
+        .glass-card-premium:hover,
+        .about-card-soft,
+        .flash-sale-card {
+            background: linear-gradient(145deg, rgba(20, 43, 30, 0.96), rgba(11, 28, 19, 0.96));
+            border-color: rgba(137, 211, 117, 0.22);
+            color: var(--card-ink);
+        }
+
+        .logo-glass::before,
+        .glass-card-premium:hover::before,
+        .flash-sale-card::before {
+            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.01));
+        }
+
+        .glass-card-premium h1,
+        .glass-card-premium h2,
+        .glass-card-premium h3,
+        .glass-card-premium h4,
+        .glass-card-premium p,
+        .glass-card-premium span,
+        .glass-card-premium .text-white,
+        .glass-card-premium .text-gray-200,
+        .glass-card-premium .text-gray-300,
+        .glass-card-premium .text-gray-400,
+        .product-line-card h4,
+        .product-line-card p,
+        .product-line-card span,
+        .about-card-soft h3,
+        .about-card-soft h4,
+        .about-card-soft p,
+        .about-card-soft span,
+        .about-card-soft li,
+        .about-card-soft .about-card-title,
+        .about-card-soft .about-card-text,
+        .flash-sale-card h2,
+        .flash-sale-card p {
+            color: var(--card-ink) !important;
+        }
+
+        .glass-card-premium p,
+        .glass-card-premium span,
+        .product-line-card p,
+        .product-line-card span,
+        .about-card-soft p,
+        .about-card-soft span,
+        .about-card-soft li,
+        .about-card-soft .about-card-text,
+        .flash-sale-card p {
+            color: var(--card-muted) !important;
+        }
+
+        .site-header,
+        .product-dropdown {
+            background: rgba(7, 11, 14, 0.9);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .logo-mark {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 6px 10px !important;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+        }
+
+        a[class*="bg-gradient-to"],
+        button[class*="bg-gradient-to"] {
+            background: linear-gradient(135deg, #1b4a2d 0%, #123723 52%, #12513d 100%) !important;
+            color: #effff1 !important;
+            border: 1px solid rgba(136, 224, 129, 0.28);
+            box-shadow: 0 10px 26px rgba(4, 35, 19, 0.52), inset 0 1px 0 rgba(197, 255, 190, 0.16);
+        }
+
+        a[class*="bg-gradient-to"]:hover,
+        button[class*="bg-gradient-to"]:hover {
+            background: linear-gradient(135deg, #28663a 0%, #18502e 52%, #176b4c 100%) !important;
+            border-color: rgba(169, 239, 156, 0.45);
+        }
+
+        .site-header a,
+        .site-header button,
+        .product-dropdown a,
+        .flash-sale-close {
+            color: var(--page-ink) !important;
+        }
+
+        .product-dropdown a:hover {
+            background: rgba(85, 158, 63, 0.18);
+            color: #b9f3a6 !important;
+        }
+
+        [class~="bg-white/80"],
+        [class~="bg-white/90"],
+        [class~="bg-white/60"],
+        [class~="bg-[#f7fdf5]"] {
+            background-color: rgba(20, 43, 30, 0.92) !important;
+        }
+
+        [class*="bg-white/"] {
+            background-color: rgba(255, 255, 255, 0.06) !important;
+        }
+
+        [class~="bg-white/90"].text-luxLeaf {
+            background: #b9f3a6 !important;
+            color: #092014 !important;
+        }
+
+        [class~="text-[#123022]"],
+        [class~="text-[#23422f]"],
+        [class~="text-[#4d6d56]"] {
+            color: var(--card-ink) !important;
+        }
+
+        [class~="text-[#23422f]"],
+        [class~="text-[#4d6d56]"] {
+            color: var(--card-muted) !important;
+        }
+
+        input,
+        textarea,
+        select {
+            color: var(--page-ink) !important;
+            background-color: rgba(7, 20, 12, 0.72) !important;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #9db9a4;
+        }
+
+        select option {
+            background: #10261a;
+            color: var(--page-ink);
+        }
+
+        /* Kill the last green-tinted surfaces so the theme remains black/charcoal with subtle glass accents */
+        [class*="bg-white/"],
+        [class*="bg-[#f7fdf5]"],
+        [class*="bg-[#10261a]"],
+        [class*="bg-black/"],
+        [class*="bg-brandGreen/"],
+        [class*="from-brandGreen/"],
+        [class*="via-emerald-500/"],
+        [class*="to-cyan-500/"],
+        [class*="shadow-brandGreen/"] {
+            background-color: rgba(13, 18, 22, 0.78) !important;
+            background-image: none !important;
+            box-shadow: none !important;
+        }
+
+        [class*="text-[#123022]"],
+        [class*="text-[#23422f]"],
+        [class*="text-[#35503c]"],
+        [class*="text-[#4d6d56]"],
+        [class*="text-[#1f3a2a]"] {
+            color: var(--page-ink) !important;
+        }
+
+        [class*="border-brandGreen/"] {
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        [class*="bg-gradient-to-r"],
+        [class*="bg-gradient-to-br"] {
+            background-image: linear-gradient(135deg, rgba(15,20,24,0.96), rgba(10,14,18,0.94)) !important;
+        }
+
     </style>
 </head>
 <body class="antialiased selection:bg-brandGreen selection:text-white">
@@ -557,7 +770,7 @@
     <header class="site-header fixed top-0 left-0 w-full z-50 backdrop-blur-md border-b border-white/10">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <a href="#" onclick="switchPage('home')" class="flex items-center">
-                <img src="Images/norasol%20logo.png" alt="NoraSol logo" class="h-12 w-auto  object-contain bg-white/00 p-1 ">
+                <img src="Images/norasol%20logo.png" alt="NoraSol logo" class="logo-mark h-12 w-auto object-contain p-1">
             </a>
 
             <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-200">
@@ -629,15 +842,13 @@
             </div>
         </div>
     </header>
-        </div>
-    </header>
 
     <!-- MAIN APP WRAPPER -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-28 pb-12">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 pt-28 pb-12">
         <div class="w-full logo-glass rounded-[32px] p-6 sm:p-12 min-h-[80vh] relative overflow-hidden">
 
             <!-- SECTION 0.5: CONSULT WITH NORA Sol AI (FULL PAGE) -->
-            <div id="consultPage" class="page-section">
+            <section id="consultPage" class="page-section" aria-labelledby="consultPageTitle">
                 <div class="flex items-center justify-between gap-4 mb-4">
                     <button onclick="switchPage('home')" class="text-xs text-brandGreen font-bold hover:underline flex items-center gap-1">
                         <i class="fa-solid fa-arrow-left"></i>
@@ -645,7 +856,7 @@
                     </button>
                     <div class="flex items-center gap-2 text-xs text-gray-300">
                         <i class="fa-solid fa-wand-magic-sparkles text-brandGreen"></i>
-                        Consult with NoraSol AI
+                        <span id="consultPageTitle">Consult with NoraSol AI</span>
                     </div>
                 </div>
 
@@ -660,10 +871,10 @@
                 <div class="mt-4 text-xs text-gray-300 leading-relaxed">
                     You can ask NoraSol AI about inverters, batteries, pricing, and specifications.
                 </div>
-            </div>
+            </section>
 
             <!-- SECTION 1: HOME -->
-            <div id="homePage" class="page-section active">
+            <section id="homePage" class="page-section active" aria-labelledby="homePageTitle">
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center pt-6">
                     <div class="lg:col-span-7 space-y-6">
@@ -671,7 +882,7 @@
                             <i class="fa-solid fa-leaf text-brandGreen"></i>
                             <span>Sustainable In-House Engineering</span>
                         </div>
-                        <h1 class="font-display text-4xl sm:text-6xl font-bold tracking-tight text-white leading-tight">
+                        <h1 id="homePageTitle" class="font-display text-4xl sm:text-6xl font-bold tracking-tight text-white leading-tight">
                             Premium Solar Power, <br><span class="text-brandGreen">Engineered Locally</span>
                         </h1>
                         <p class="text-gray-200 text-sm sm:text-base max-w-xl leading-relaxed">
@@ -840,15 +1051,15 @@
                     <p class="mt-3 text-xs text-[#4d6d56]">
                     </p>
                 </div>
-            </div>
+            </section>
 
             <!-- SECTION 2: NORA 3 -->
-            <div id="nora3Page" class="page-section">
+            <section id="nora3Page" class="page-section" aria-labelledby="nora3PageTitle">
                 <button onclick="switchPage('home')" class="text-xs text-brandGreen font-bold mb-6 hover:underline"><i class="fa-solid fa-arrow-left mr-1"></i> Back</button>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     <div class="space-y-5">
                         <p class="text-xs uppercase tracking-[0.3em] text-brandGreen font-bold">Solar Inverters</p>
-                        <h2 class="text-4xl sm:text-5xl font-bold text-white font-display">High-efficiency energy systems engineered for intelligent power conversion.</h2>
+                        <h2 id="nora3PageTitle" class="text-4xl sm:text-5xl font-bold text-white font-display">High-efficiency energy systems engineered for intelligent power conversion.</h2>
                         <p class="text-sm text-gray-300 leading-relaxed">
                             NoraSol hybrid solar inverters deliver advanced energy management by combining solar, grid, and battery power into a single intelligent system. Designed for residential, commercial, and industrial applications, they ensure maximum efficiency, stability, and uninterrupted power delivery.
                         </p>
@@ -908,14 +1119,14 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- SECTION 3: STORE 5 -->
-            <div id="store5Page" class="page-section">
+            <section id="store5Page" class="page-section" aria-labelledby="store5PageTitle">
                 <button onclick="switchPage('home')" class="text-xs text-brandGreen font-bold mb-6 hover:underline"><i class="fa-solid fa-arrow-left mr-1"></i> Back</button>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     <div class="space-y-4">
-                        <h2 class="text-3xl font-bold text-white font-display">NoraStore-5 Lithium Battery</h2>
+                        <h2 id="store5PageTitle" class="text-3xl font-bold text-white font-display">NoraStore-5 Lithium Battery</h2>
                         <p class="text-sm text-gray-300 leading-relaxed">
                             Stores your daytime excess solar generation to run home appliances overnight seamlessly. Uses stable, long-life Lithium Iron Phosphate (LiFePO4) chemistry arrays.
                         </p>
@@ -958,14 +1169,14 @@
                         <div class="flex justify-between"><span class="text-gray-400">Data Connections</span><span class="text-brandGreen font-bold">Standard RS485 & CAN Interfacing</span></div>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- SECTION 4: STORE 12 -->
-            <div id="store12Page" class="page-section">
+            <section id="store12Page" class="page-section" aria-labelledby="store12PageTitle">
                 <button onclick="switchPage('home')" class="text-xs text-brandGreen font-bold mb-6 hover:underline"><i class="fa-solid fa-arrow-left mr-1"></i> Back</button>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     <div class="space-y-4">
-                        <h2 class="text-3xl font-bold text-white font-display">NoraStore-12 High Capacity Module</h2>
+                        <h2 id="store12PageTitle" class="text-3xl font-bold text-white font-display">NoraStore-12 High Capacity Module</h2>
                         <p class="text-sm text-gray-300 leading-relaxed">
                             An intermediate power-dense option crafted to cover extensive backup requirements during long blackouts without import supply dependencies.
                         </p>
@@ -1010,14 +1221,14 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- SECTION 5: STORE 16 -->
-            <div id="store16Page" class="page-section">
+            <section id="store16Page" class="page-section" aria-labelledby="store16PageTitle">
                 <button onclick="switchPage('home')" class="text-xs text-brandGreen font-bold mb-6 hover:underline"><i class="fa-solid fa-arrow-left mr-1"></i> Back</button>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     <div class="space-y-4">
-                        <h2 class="text-3xl font-bold text-white font-display">NoraStore-16 Flagship Storage Tower</h2>
+                        <h2 id="store16PageTitle" class="text-3xl font-bold text-white font-display">NoraStore-16 Storage Tower</h2>
                         <p class="text-sm text-gray-300 leading-relaxed">
                             Our ultimate large-scale storage solution built for high-end luxury homes and small commercial units requiring maximum power reliability.
                         </p>
@@ -1058,14 +1269,14 @@
                         <div class="flex justify-between"><span class="text-gray-400">Network Interfaces</span><span class="text-brandGreen font-bold">CAN / RS485 with built-in Wi-Fi Cloud Server Node</span></div>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- SECTION 6: ABOUT US -->
-            <div id="aboutPage" class="page-section max-w-6xl mx-auto space-y-8 pt-2 sm:pt-6">
+            <section id="aboutPage" class="page-section max-w-6xl mx-auto space-y-8 pt-2 sm:pt-6" aria-labelledby="aboutPageTitle">
                 <div class="about-hero-shell rounded-[36px] p-7 sm:p-10 lg:p-12">
                     <div class="max-w-3xl text-center lg:text-left">
                         <p class="text-xs uppercase tracking-[0.3em] text-brandGreen font-bold">Powering a New Era</p>
-                        <h2 class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold text-[#f5fff2] font-display leading-tight">Powering a New Era of Smart, Accessible Energy</h2>
+                        <h2 id="aboutPageTitle" class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold text-[#f5fff2] font-display leading-tight">Powering a New Era of Smart, Accessible Energy</h2>
                         <p class="mt-4 text-sm sm:text-base text-slate-200 max-w-2xl leading-relaxed">
                             Built on decades of R&D excellence through CARE Pvt. Ltd., NoraSol is transforming Pakistan’s energy landscape with locally engineered solar inverters, advanced battery systems, and intelligent energy solutions,designed for reliability, affordability, and real-world conditions.
                         </p>
@@ -1184,13 +1395,13 @@
                         <a href="#" onclick="switchPage('contact')" class="inline-flex items-center justify-center mt-4 rounded-full bg-gradient-to-r from-brandGreen via-emerald-500 to-cyan-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-brandGreen/25 hover:brightness-110 transition-all">Contact Us</a>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- SECTION 7: TESTIMONIALS -->
-            <div id="testimonialsPage" class="page-section max-w-6xl mx-auto space-y-8 pt-6">
+            <section id="testimonialsPage" class="page-section max-w-6xl mx-auto space-y-8 pt-6" aria-labelledby="testimonialsPageTitle">
                 <div class="text-center space-y-3">
                     <p class="text-xs uppercase tracking-[0.3em] text-brandGreen font-bold">Testimonials</p>
-                    <h2 class="text-3xl sm:text-4xl font-bold text-white font-display">What our customers say about NoraSol</h2>
+                    <h2 id="testimonialsPageTitle" class="text-3xl sm:text-4xl font-bold text-white font-display">What our customers say about NoraSol</h2>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1230,13 +1441,13 @@
                         <p class="mt-3 font-semibold text-[#123022]">-Saima, Karachi</p>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- SECTION 8: CONTACT -->
-            <div id="contactPage" class="page-section max-w-4xl mx-auto space-y-10 pt-6">
+            <section id="contactPage" class="page-section max-w-4xl mx-auto space-y-10 pt-6" aria-labelledby="contactPageTitle">
                 <div class="text-center space-y-4">
                     <p class="text-xs uppercase tracking-[0.3em] text-brandGreen font-bold">Contact Us</p>
-                    <h2 class="text-4xl sm:text-5xl font-bold text-white font-display">We’re here to help with your energy needs.</h2>
+                    <h2 id="contactPageTitle" class="text-4xl sm:text-5xl font-bold text-white font-display">We’re here to help with your energy needs.</h2>
                     <p class="text-sm text-gray-200 max-w-3xl mx-auto leading-relaxed">
                         Whether you're exploring solar for home or industrial scale innovation, our precision team is ready to assist.
                     </p>
@@ -1291,7 +1502,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
 
 
@@ -1309,7 +1520,7 @@
             </div>
 
         </div>
-    </div>
+    </main>
 
     
 
@@ -1448,7 +1659,7 @@
             },
             {
                 tag: 'Featured Product',
-                title: 'NoraStore-16 Flagship Storage',
+                title: 'NoraStore-16 Storage',
                 image: 'Images/norastore16.png',
                 alt: 'NoraStore-16 flagship storage tower',
                 description: 'A premium 16 kWh storage solution suited for high-demand properties and future-ready energy planning.',
