@@ -241,7 +241,7 @@ npx wrangler kv:key put --binding=KV_STORE --path Norasol.html
 
 For issues or questions:
 - Email: info@norasol.net
-- Phone: +92-51-2200000
+- Phone: +92 322 8650402
 - GitHub Issues: [care-inverter/norasol-website/issues](https://github.com/care-inverter/norasol-website/issues)
 
 ---
