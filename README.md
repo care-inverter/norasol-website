@@ -100,9 +100,9 @@ npm run deploy
 ## 📞 Support
 
 - **Email**: info@norasol.net
-- **Phone**: +92-51-2200000
+- **Phone**: +92 322 8650402
 - **Website**: www.norasol.net
-- **Issues**: [GitHub Issues](https://github.com/care-inverter/norasol-website/issues)
+
 
 ## 📝 License
 
