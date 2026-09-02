@@ -23,9 +23,7 @@ npx wrangler login
 1. Go to [Cloudflare Dashboard](https://dash.cloudflare.com)
 2. Select **Workers & Pages** → **norasol-website**
 3. Go to **Settings** → **Environment Variables**
-4. Add these variables:
-   - `GROQ_API_KEY`: Your Groq API key
-   - `GROQ_MODEL`: `mixtral-8x7b-32768`
+
 
 ### 5. Deploy
 ```bash
