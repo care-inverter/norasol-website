@@ -90,6 +90,32 @@
     }
 
     .bubble.assistant {
+      white-space: normal;
+    }
+
+    .bubble.assistant :first-child { margin-top: 0; }
+    .bubble.assistant :last-child { margin-bottom: 0; }
+    .bubble.assistant p { margin: 0.45em 0; }
+    .bubble.assistant ul,
+    .bubble.assistant ol { padding-left: 1.35em; }
+    .bubble.assistant pre {
+      overflow-x: auto;
+      padding: 8px;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.28);
+    }
+    .bubble.assistant code {
+      padding: 1px 3px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.22);
+      font-size: 0.92em;
+    }
+    .bubble.assistant pre code {
+      padding: 0;
+      background: transparent;
+    }
+
+    .bubble.assistant {
       align-self: flex-start;
       background: var(--assistant);
       color: var(--text);
@@ -200,14 +226,15 @@
     </form>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
   <script>
     const messagesContainer = document.getElementById('chatMessages');
     const form = document.getElementById('chatForm');
     const input = document.getElementById('chatInput');
     const sendBtn = document.getElementById('sendBtn');
 
-    // Security: GROQ API key + company prompt must NOT be shipped to the browser.
-    // They live on your backend server at: /api/chat
+  
 
     const conversationHistory = [];
 
@@ -215,7 +242,11 @@
     function addMessageToUI(text, role = 'assistant') {
       const bubble = document.createElement('div');
       bubble.className = `bubble ${role}`;
-      bubble.textContent = text;
+      if (role === 'assistant' && window.marked && window.DOMPurify) {
+        bubble.innerHTML = DOMPurify.sanitize(marked.parse(String(text || '')));
+      } else {
+        bubble.textContent = text;
+      }
       messagesContainer.appendChild(bubble);
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
