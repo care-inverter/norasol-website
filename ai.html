@@ -3,311 +3,325 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NoraSol AI</title>
+  <title>NoraSol AI — Indigenous Energy Assistant</title>
+  <link rel="icon" type="image/jpeg" href="Images/norasol%20icon.jpg">
+  
+  <!-- Early Theme Initializer -->
+  <script>
+    (function() {
+      try {
+        const saved = localStorage.getItem('norasol-theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'dark' || (!saved && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Single Font Family: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: transparent;
-      --panel: linear-gradient(135deg, rgba(20, 43, 30, 0.96), rgba(11, 28, 19, 0.96));
-      --border: rgba(137, 211, 117, 0.22);
-      --text: #edf8ef;
-      --muted: #b9cfbf;
-      --accent: #559E3F;
-      --accent-2: #2bb673;
-      --user: linear-gradient(135deg, #1b4a2d, #12513d);
-      --assistant: rgba(31, 61, 42, 0.96);
-    }
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
 
-    * { box-sizing: border-box; }
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brandGreen: {
+              DEFAULT: '#1E7538',
+              hover: '#165B2B',
+              light: '#EAF4EE',
+              darkAccent: '#34D399',
+            },
+            brandBlack: {
+              DEFAULT: '#0C130F',
+              muted: '#36433C',
+              slate: '#607067',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    .chat-shell {
-      width: 100%;
-      height: 100vh;
+      background: #F4F7F4;
+      color: #0C130F;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 16px 36px -20px rgba(15, 23, 42, 0.24);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .apple-glass {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 16px 36px -12px rgba(12, 19, 15, 0.08), inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
     }
 
-    .chat-header {
-      padding: 12px 14px;
-      background: rgba(7, 20, 12, 0.72);
-      border-bottom: 1px solid rgba(85, 158, 63, 0.16);
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
+    html.dark body {
+      background: #080D0A;
+      color: #F3F6F4;
     }
-
-    .chat-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 700;
-      font-size: 14px;
-      letter-spacing: 0.02em;
+    html.dark .apple-glass {
+      background: rgba(16, 25, 20, 0.82);
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.6), inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
     }
-
-    .chat-title .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: #559E3F;
-      box-shadow: 0 0 0 3px rgba(85, 158, 63, 0.2);
+    html.dark .bg-white {
+      background-color: #121C16 !important;
     }
-
-    .chat-messages {
-      flex: 1;
-      padding: 12px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      background: transparent;
+    html.dark .bg-white\/80,
+    html.dark .bg-white\/70 {
+      background-color: rgba(18, 28, 23, 0.75) !important;
     }
-
-    .bubble {
-      max-width: 88%;
-      padding: 8px 10px;
-      border-radius: 12px;
-      line-height: 1.5;
-      font-size: 13px;
-      white-space: pre-wrap;
-      word-break: break-word;
+    html.dark .bg-white\/40 {
+      background-color: rgba(18, 28, 23, 0.45) !important;
     }
-
-    .bubble.assistant {
-      white-space: normal;
+    html.dark .text-brandBlack {
+      color: #F3F6F4 !important;
     }
-
-    .bubble.assistant :first-child { margin-top: 0; }
-    .bubble.assistant :last-child { margin-bottom: 0; }
-    .bubble.assistant p { margin: 0.45em 0; }
-    .bubble.assistant ul,
-    .bubble.assistant ol { padding-left: 1.35em; }
-    .bubble.assistant pre {
-      overflow-x: auto;
-      padding: 8px;
-      border-radius: 6px;
-      background: rgba(0, 0, 0, 0.28);
+    html.dark .text-brandBlack-slate {
+      color: #8E9F96 !important;
     }
-    .bubble.assistant code {
-      padding: 1px 3px;
-      border-radius: 4px;
-      background: rgba(0, 0, 0, 0.22);
-      font-size: 0.92em;
+    html.dark .border-black\/5,
+    html.dark .border-black\/10 {
+      border-color: rgba(255, 255, 255, 0.1) !important;
     }
-    .bubble.assistant pre code {
-      padding: 0;
-      background: transparent;
+    html.dark input {
+      background-color: #0F1713 !important;
+      color: #F3F6F4 !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
     }
-
-    .bubble.assistant {
-      align-self: flex-start;
-      background: var(--assistant);
-      color: var(--text);
-      border: 1px solid rgba(85, 158, 63, 0.16);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    html.dark input::placeholder {
+      color: #6B7C72 !important;
     }
-
-    .bubble.user {
-      align-self: flex-end;
-      color: white !important;
-      background: var(--user);
-      box-shadow: 0 8px 20px rgba(85, 158, 63, 0.15);
-    }
-
-    .quick-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      padding: 0 12px 8px;
-    }
-
-    .chip {
-      border: 1px solid rgba(85, 158, 63, 0.25);
-      background: rgba(31, 61, 42, 0.9);
-      color: var(--text);
-      padding: 5px 8px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .chip:hover {
-      background: rgba(85, 158, 63, 0.1);
-      color: var(--accent);
-    }
-
-    .chat-form {
-      display: flex;
-      gap: 6px;
-      padding: 10px 12px 12px;
-      border-top: 1px solid rgba(85, 158, 63, 0.12);
-      background: rgba(7, 20, 12, 0.72);
-    }
-
-    .chat-form input {
-      flex: 1;
-      border: 1px solid rgba(85, 158, 63, 0.2);
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-size: 13px;
-      outline: none;
-      color: var(--text);
-      background: rgba(7, 20, 12, 0.9);
-    }
-
-    .chat-form button {
-      border: 0;
-      border-radius: 999px;
-      padding: 8px 14px;
-      background: linear-gradient(135deg, #1b4a2d, #12513d);
-      color: white !important;
-      font-weight: 700;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    .chat-form button:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-
-    .hint {
-      font-size: 11px;
-      color: var(--muted);
-      padding: 0 12px 6px;
-      opacity: 0.8;
-    }
-
-    @media (max-width: 480px) {
-      .chat-shell { border-radius: 0; }
+    html.dark .brand-emblem-box {
+      background-color: #FFFFFF !important;
     }
   </style>
 </head>
-<body>
-  <div class="chat-shell">
-    <div class="chat-header">
-      <div class="chat-title">
-        <span class="dot"></span>
-        <span>NoraSol AI</span>
+<body class="p-3 sm:p-6 flex items-center justify-center">
+
+  <div class="apple-glass w-full max-w-3xl h-[92vh] rounded-3xl flex flex-col overflow-hidden shadow-2xl">
+    
+    <!-- Top Header -->
+    <div class="px-6 py-4 bg-white/70 border-b border-black/5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/" class="brand-emblem-box w-10 h-10 rounded-2xl overflow-hidden p-1 bg-white border border-black/5 flex items-center justify-center">
+          <img src="Images/norasol%20logo.png" alt="NoraSol" class="w-full h-full object-contain">
+        </a>
+        <div>
+          <div class="text-sm font-bold text-brandBlack flex items-center gap-2">
+            <span>NoraSol AI Engineer</span>
+            <span class="w-2 h-2 rounded-full bg-brandGreen"></span>
+          </div>
+          <div class="text-[11px] text-brandBlack-slate">Indigenous Clean Energy Assistant · Islamabad R&D</div>
+        </div>
       </div>
-      <span style="font-size: 11px; opacity: 0.7;">Powered by NoraSol</span>
+      <div class="flex items-center gap-3">
+        <button 
+          onclick="toggleTheme()" 
+          class="theme-toggle-btn px-2.5 py-1.5 rounded-xl bg-white/80 hover:bg-white border border-black/10 flex items-center gap-1.5 text-brandBlack hover:text-brandGreen transition-all active:scale-95 shadow-xs" 
+          title="Toggle Light / Dark Mode"
+        >
+          <i class="theme-toggle-icon fa-solid fa-sun text-xs text-brandGreen"></i>
+          <span class="theme-toggle-label text-[11px] font-semibold">Light Mode</span>
+        </button>
+        <a href="/" class="text-xs font-bold text-brandGreen hover:underline flex items-center gap-1.5">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Return to Website</span>
+        </a>
+      </div>
     </div>
 
-    <div id="chatMessages" class="chat-messages"></div>
+    <!-- Messages Container -->
+    <div id="chatMessages" class="flex-1 p-6 overflow-y-auto space-y-4 text-sm"></div>
 
-    <div class="quick-actions">
-      <button class="chip" data-question="Tell me about the NORA-3 system.">NORA-3 System</button>
-      <button class="chip" data-question="What are the battery choices in the NoraStore series?">NoraStore Series</button>
-      <button class="chip" data-question="What is the price and typical ROI of the system?">Price & ROI</button>
+    <!-- Quick Prompts Chips -->
+    <div class="px-6 py-3 bg-white/40 border-t border-black/5 flex items-center gap-2 overflow-x-auto text-xs whitespace-nowrap">
+      <button class="chip px-3.5 py-1.5 rounded-xl bg-white hover:bg-white/80 border border-black/5 text-brandBlack font-medium transition-colors" data-question="Tell me about the NORA-3 3kW inverter and integrated battery.">
+        NORA-3 System
+      </button>
+      <button class="chip px-3.5 py-1.5 rounded-xl bg-white hover:bg-white/80 border border-black/5 text-brandBlack font-medium transition-colors" data-question="How does the zero-export CT sensor work without a green meter?">
+        Zero-Export CT Sensor
+      </button>
+      <button class="chip px-3.5 py-1.5 rounded-xl bg-white hover:bg-white/80 border border-black/5 text-brandBlack font-medium transition-colors" data-question="What are the battery choices in the NoraStore series?">
+        NoraStore Series
+      </button>
+      <button class="chip px-3.5 py-1.5 rounded-xl bg-white hover:bg-white/80 border border-black/5 text-brandBlack font-medium transition-colors" data-question="What is the estimated electricity savings and ROI?">
+        Price & ROI
+      </button>
     </div>
 
-    <div class="hint">Ask me about NoraSol inverters, batteries, pricing, and specs.</div>
-
-    <form id="chatForm" class="chat-form">
-      <input id="chatInput" type="text" placeholder="Ask about inverters..." autocomplete="off" />
-      <button id="sendBtn" type="submit">Send</button>
+    <!-- Input Form -->
+    <form id="chatForm" class="p-4 bg-white/70 border-t border-black/5 flex items-center gap-2">
+      <input 
+        id="chatInput" 
+        type="text" 
+        placeholder="Ask about inverters, zero-export CT, batteries, or ROI..." 
+        autocomplete="off" 
+        class="flex-1 bg-white border border-black/10 focus:border-brandGreen rounded-xl px-4 py-3 text-sm text-brandBlack focus:outline-none transition-colors"
+      />
+      <button 
+        id="sendBtn" 
+        type="submit" 
+        class="px-6 py-3 rounded-xl bg-brandGreen text-white font-bold text-sm hover:bg-brandGreen-hover active:scale-95 transition-all whitespace-nowrap"
+      >
+        <i class="fa-solid fa-paper-plane mr-1.5"></i>Send
+      </button>
     </form>
+
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
   <script>
     const messagesContainer = document.getElementById('chatMessages');
     const form = document.getElementById('chatForm');
     const input = document.getElementById('chatInput');
     const sendBtn = document.getElementById('sendBtn');
+    const history = [];
 
-  
+    function addMessage(text, role = 'assistant') {
+      const bubbleWrapper = document.createElement('div');
+      bubbleWrapper.className = role === 'user' ? 'flex justify-end' : 'flex gap-3 max-w-[85%]';
 
-    const conversationHistory = [];
-
-
-    function addMessageToUI(text, role = 'assistant') {
-      const bubble = document.createElement('div');
-      bubble.className = `bubble ${role}`;
-      if (role === 'assistant' && window.marked && window.DOMPurify) {
-        bubble.innerHTML = DOMPurify.sanitize(marked.parse(String(text || '')));
+      if (role === 'user') {
+        bubbleWrapper.innerHTML = `
+          <div class="p-4 rounded-2xl bg-brandGreen text-white font-semibold leading-relaxed shadow-sm">
+            ${text}
+          </div>
+        `;
       } else {
-        bubble.textContent = text;
+        const parsed = window.marked && window.DOMPurify 
+          ? DOMPurify.sanitize(marked.parse(String(text || ''))) 
+          : text;
+        bubbleWrapper.innerHTML = `
+          <div class="w-8 h-8 rounded-xl bg-brandGreen-light flex-shrink-0 flex items-center justify-center text-brandGreen text-xs font-bold">
+            <i class="fa-solid fa-microchip"></i>
+          </div>
+          <div class="p-4 rounded-2xl bg-white border border-black/5 text-brandBlack leading-relaxed space-y-2 shadow-sm">
+            ${parsed}
+          </div>
+        `;
       }
-      messagesContainer.appendChild(bubble);
+
+      messagesContainer.appendChild(bubbleWrapper);
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
-    async function handleConversationFlow(userQuestion) {
-      if (!userQuestion) return;
-
-      addMessageToUI(userQuestion, 'user');
-      // Keep chat history minimal on the client; the server keeps the system prompt.
-      conversationHistory.push({ role: "user", content: userQuestion });
+    async function handleSend(userMsg) {
+      if (!userMsg) return;
+      addMessage(userMsg, 'user');
+      history.push({ role: 'user', content: userMsg });
 
       input.disabled = true;
       sendBtn.disabled = true;
-      input.placeholder = "Thinking...";
+      input.placeholder = 'NoraSol AI is thinking...';
 
       try {
-        const response = await fetch("/api/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            message: userQuestion,
-            sessionMessages: conversationHistory
+            message: userMsg,
+            sessionMessages: history
           })
         });
 
-        if (!response.ok) throw new Error(`API Error: ${response.status}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const reply = data.reply || 'Thank you for your question. How can we assist you with NoraSol setups?';
 
-        const data = await response.json();
-        const assistantReply = data.reply;
-
-        addMessageToUI(assistantReply, 'assistant');
-        conversationHistory.push({ role: "assistant", content: assistantReply });
-
-      } catch (error) {
-        console.error(error);
-        addMessageToUI("Sorry, I encountered an issue. Please try again shortly.", 'assistant');
+        addMessage(reply, 'assistant');
+        history.push({ role: 'assistant', content: reply });
+      } catch (err) {
+        console.error(err);
+        addMessage('Our systems achieve full return on investment (ROI) within 2 to 3 years. For pricing quotes and inquiries, please connect with our Islamabad office on WhatsApp at +92 322 8650402.', 'assistant');
       } finally {
         input.disabled = false;
         sendBtn.disabled = false;
-        input.placeholder = "Ask about inverters...";
+        input.placeholder = 'Ask about inverters, zero-export CT, batteries, or ROI...';
         input.focus();
       }
     }
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const value = input.value.trim();
-      if (!value) return;
+      const val = input.value.trim();
+      if (!val) return;
       input.value = '';
-      handleConversationFlow(value);
+      handleSend(val);
     });
 
-    document.querySelectorAll('.chip').forEach(button => {
-      button.addEventListener('click', () => {
-        handleConversationFlow(button.getAttribute('data-question'));
+    document.querySelectorAll('.chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        handleSend(btn.getAttribute('data-question'));
       });
     });
 
-    addMessageToUI('Hello! I am the NoraSol AI Assistant. How can I assist you with our solar or storage setups today?', 'assistant');
+    // Theme Controller
+    function initTheme() {
+      const saved = localStorage.getItem('norasol-theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = saved ? saved : (prefersDark ? 'dark' : 'light');
+      applyTheme(theme);
+    }
+
+    function applyTheme(theme) {
+      const html = document.documentElement;
+      const icons = document.querySelectorAll('.theme-toggle-icon');
+      const labels = document.querySelectorAll('.theme-toggle-label');
+
+      if (theme === 'dark') {
+        html.classList.add('dark');
+        icons.forEach(icon => {
+          icon.className = 'theme-toggle-icon fa-solid fa-moon text-xs text-brandGreen';
+        });
+        labels.forEach(lbl => {
+          lbl.textContent = 'Dark Mode';
+        });
+        try { localStorage.setItem('norasol-theme', 'dark'); } catch (e) {}
+      } else {
+        html.classList.remove('dark');
+        icons.forEach(icon => {
+          icon.className = 'theme-toggle-icon fa-solid fa-sun text-xs text-brandGreen';
+        });
+        labels.forEach(lbl => {
+          lbl.textContent = 'Light Mode';
+        });
+        try { localStorage.setItem('norasol-theme', 'light'); } catch (e) {}
+      }
+    }
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      applyTheme(isDark ? 'light' : 'dark');
+    }
+
+    initTheme();
+
+    addMessage('Hello! I am the official NoraSol AI Assistant. How can I assist you with our indigenous NORA-3 hybrid inverter, 204V LiFePO4 batteries, or solar ROI calculations today?');
   </script>
 </body>
 </html>

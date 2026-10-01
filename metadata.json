@@ -1,0 +1,8 @@
+{
+  "name": "NoraSol — Solar Energy Technology",
+  "description": "Indigenous hybrid inverters and LiFePO4 battery solutions engineered for Pakistan's thermal profile, zero export, and durability.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

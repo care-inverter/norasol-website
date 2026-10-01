@@ -4,7 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "wrangler dev",
-    "deploy": "wrangler deploy"
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "node -e 'console.log(\"Build complete\")'"
+  },
+  "dependencies": {
+    "@google/genai": "^2.25.0",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1"
   }
 }
