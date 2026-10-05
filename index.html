@@ -48,6 +48,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.1.12/Recharts.min.js"></script>
 
+    <!-- Google Model Viewer for high-performance interactive 3D GLB rendering -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -99,11 +102,10 @@
             letter-spacing: -0.015em;
         }
 
-        /* Ambient Video Background Layer (Crisp, Bright, and Clearly Discernible) */
-        .video-backdrop-wrapper {
+        /* Living Atmosphere Layer: Full-Screen Background Architecture */
+        .atmosphere-viewport {
             position: fixed;
-            top: 0;
-            left: 0;
+            inset: 0;
             width: 100vw;
             height: 100vh;
             z-index: -20;
@@ -111,6 +113,7 @@
             pointer-events: none;
         }
 
+        /* Atmosphere Mode 1: High-Definition Video Backdrop */
         .video-backdrop {
             position: absolute;
             top: 50%;
@@ -119,25 +122,60 @@
             min-height: 100%;
             width: auto;
             height: auto;
-            transform: translate(-50%, -50%) scale(1.04);
+            transform: translate(-50%, -50%) scale(1.02);
             object-fit: cover;
-            filter: brightness(1.02) contrast(1.08) saturate(1.05);
-            opacity: 0.72;
-            transition: opacity 0.6s ease;
+            filter: brightness(0.96) contrast(1.06) saturate(1.04);
+            opacity: 0.68;
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+            will-change: opacity;
         }
 
-        /* Luminous Apple-Style Ambient Frost Scrim */
-        .video-overlay-scrim {
+        /* Atmosphere Mode 2 & 3: Living Interactive Canvas */
+        .atmosphere-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity;
+        }
+
+        /* Atmosphere Mode 4: Obsidian Aurora Ambient Shimmer */
+        .atmosphere-aurora {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            background:
+                radial-gradient(ellipse 65% 55% at 20% 25%, rgba(30, 117, 56, 0.16) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 60% at 80% 75%, rgba(46, 139, 76, 0.12) 0%, transparent 65%),
+                radial-gradient(circle 50% at 50% 50%, rgba(54, 67, 60, 0.08) 0%, transparent 70%);
+            animation: luxuryAuroraMotion 22s ease-in-out infinite alternate;
+        }
+
+        @keyframes luxuryAuroraMotion {
+            0% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.06) translate(-2%, 2%); }
+            100% { transform: scale(1.02) translate(2%, -2%); }
+        }
+
+        /* Calibrated Optical Scrim & Radial Vignette: High Clarity Without Muddy 14px Blurs */
+        .atmosphere-optical-scrim {
             position: fixed;
-            top: 0;
-            left: 0;
+            inset: 0;
             width: 100vw;
             height: 100vh;
             z-index: -10;
             pointer-events: none;
-            background: rgba(243, 246, 244, 0.48);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
+            background: radial-gradient(ellipse 85% 75% at 50% 35%, rgba(243, 246, 244, 0.22) 0%, rgba(243, 246, 244, 0.65) 60%, rgba(243, 246, 244, 0.92) 100%);
+            backdrop-filter: blur(1.5px);
+            -webkit-backdrop-filter: blur(1.5px);
+            transition: background 0.5s ease;
         }
 
         /* Apple Glassmorphic Design Specifications */
@@ -218,37 +256,59 @@
             background: #1E7538;
         }
 
-        /* High-Precision Crisp Luminous Energy Flow Conduit Animations */
-        @keyframes energyStreamForward {
-            0% { stroke-dashoffset: 44; }
+        /* Clean Minimal Engineering-Grade Energy Flow Animations (Anti-AI Slop) */
+        @keyframes energyFlowForward {
+            0% { stroke-dashoffset: 24; }
             100% { stroke-dashoffset: 0; }
         }
 
-        @keyframes energyStreamReverse {
+        @keyframes energyFlowReverse {
             0% { stroke-dashoffset: 0; }
-            100% { stroke-dashoffset: 44; }
+            100% { stroke-dashoffset: 24; }
+        }
+
+        .conduit-track {
+            stroke: rgba(0, 0, 0, 0.08);
+            stroke-width: 2;
+            fill: none;
+        }
+        html.dark .conduit-track {
+            stroke: rgba(255, 255, 255, 0.12);
         }
 
         .conduit-flow {
-            animation-name: energyStreamForward;
-            animation-duration: 0.9s;
-            animation-timing-function: linear;
-            animation-iteration-count: infinite;
-            transition: opacity 0.3s ease, stroke-width 0.3s ease, stroke 0.3s ease;
+            stroke: #1E7538;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-dasharray: 6 8;
+            fill: none;
+            animation: energyFlowForward 1.8s linear infinite;
+            transition: opacity 0.25s ease, stroke 0.25s ease;
+        }
+        html.dark .conduit-flow {
+            stroke: #22C55E;
         }
 
         .conduit-flow.flow-reverse {
-            animation-name: energyStreamReverse !important;
+            animation-name: energyFlowReverse !important;
         }
 
         .conduit-flow.is-idle {
             animation-play-state: paused;
-            opacity: 0.12;
-            stroke-dasharray: 2, 10;
+            opacity: 0.15;
+            stroke-dasharray: 4 6;
         }
 
-        .energy-photon {
+        .energy-dot {
             transition: opacity 0.2s ease;
+        }
+
+        /* Scalable Simulator Styles for All Screen Sizes */
+        #simulator {
+            transition: all 0.2s ease;
+        }
+        #schematicContainer {
+            touch-action: pan-y;
         }
 
         /* -------------------------------------------------------------
@@ -289,13 +349,22 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        html.dark .video-overlay-scrim {
-            background: rgba(8, 13, 10, 0.75);
+        html.dark .atmosphere-optical-scrim {
+            background: radial-gradient(ellipse 85% 75% at 50% 35%, rgba(12, 19, 15, 0.30) 0%, rgba(8, 13, 10, 0.72) 65%, rgba(8, 13, 10, 0.96) 100%);
+            backdrop-filter: blur(1.5px);
+            -webkit-backdrop-filter: blur(1.5px);
         }
 
         html.dark .video-backdrop {
-            filter: brightness(0.65) contrast(1.15) saturate(1.1);
-            opacity: 0.45;
+            filter: brightness(0.68) contrast(1.16) saturate(1.1);
+            opacity: 0.54;
+        }
+
+        html.dark .atmosphere-aurora {
+            background:
+                radial-gradient(ellipse 70% 60% at 20% 25%, rgba(46, 139, 76, 0.24) 0%, transparent 60%),
+                radial-gradient(ellipse 65% 65% at 80% 75%, rgba(30, 117, 56, 0.20) 0%, transparent 65%),
+                radial-gradient(circle 50% at 50% 50%, rgba(20, 32, 25, 0.45) 0%, transparent 70%);
         }
 
         html.dark .bg-white {
@@ -396,22 +465,16 @@
 
 <body class="min-h-screen text-brandBlack flex flex-col antialiased selection:bg-brandGreen selection:text-white">
 
-    <!-- Moving Background Video Layer (Bright White & Clean Motion) -->
-    <div class="video-backdrop-wrapper" aria-hidden="true">
-        <video 
-            id="ambientBgVideo" 
-            class="video-backdrop" 
-            autoplay 
-            muted 
-            loop 
-            playsinline 
-            preload="auto"
-        >
-            <source src="Images/2.mp4" type="video/mp4">
-            <source src="Images/9788714-sd_640_360_30fps.mp4" type="video/mp4">
-        </video>
+    <!-- Living Atmosphere Engine (Pure Fluid Generative Waves Canvas) -->
+    <div class="atmosphere-viewport" id="atmosphereViewport" aria-hidden="true">
+        <!-- Pure Living Generative Waves Canvas -->
+        <canvas id="atmosphereCanvas" class="atmosphere-canvas w-full h-full opacity-100"></canvas>
+        <!-- Retained for API compatibility but hidden -->
+        <video id="ambientBgVideo" class="video-backdrop hidden" style="display: none;" muted playsinline></video>
+        <div id="atmosphereAurora" class="atmosphere-aurora hidden" style="display: none;"></div>
     </div>
-    <div class="video-overlay-scrim" aria-hidden="true"></div>
+    <!-- Calibrated Optical Vignette Scrim -->
+    <div class="atmosphere-optical-scrim" id="atmosphereScrim" aria-hidden="true"></div>
 
     <!-- TOP BAR (Full-Width Responsive Real Estate with Concise Clean Titles) -->
     <header class="sticky top-0 z-50 w-full apple-glass-nav">
@@ -500,7 +563,7 @@
 
         <!-- HERO SECTION: Apple-like Luminous Presence (Reveal on load) -->
         <section id="hero" class="relative pt-16 pb-24 md:pt-24 md:pb-32 overflow-hidden reveal-on-scroll is-revealed">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-[1560px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
                 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
                     
@@ -685,7 +748,7 @@
 
         <!-- SECTION 1: THE INDIGENOUS STORY (Reveal on scroll) -->
         <section id="indigenous" class="py-20 md:py-28 relative reveal-on-scroll">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-[1560px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
                 
                 <!-- Section Header -->
                 <div class="max-w-3xl mb-16">
@@ -879,47 +942,94 @@
 
         <!-- SECTION 2: NORA-3 PRODUCT DEEP DIVE (Reveal on scroll) -->
         <section id="nora3" class="py-20 md:py-28 relative reveal-on-scroll">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-[1560px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
                 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                     
                     <!-- Left: Interactive Product Showcase with Controls -->
                     <div class="lg:col-span-6 flex flex-col items-center">
-                        <div class="w-full relative apple-glass rounded-3xl p-6 sm:p-10 flex flex-col items-center">
+                        <div class="w-full relative apple-glass rounded-3xl p-6 sm:p-8 flex flex-col items-center">
                             
-                            <!-- Control Tabs: Rotate / Perspective -->
-                            <div class="w-full flex items-center justify-between mb-6">
-                                <span class="text-xs font-bold text-brandGreen uppercase tracking-wider">Interactive 3D Inspector</span>
-                                <div class="flex items-center gap-1.5 p-1 rounded-xl bg-black/5 text-xs">
-                                    <button onclick="setProductPerspective('front')" id="viewBtnFront" class="px-3 py-1 rounded-lg font-bold bg-brandGreen text-white transition-colors">Front</button>
-                                    <button onclick="setProductPerspective('angled')" id="viewBtnAngled" class="px-3 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack transition-colors">Perspective</button>
-                                    <button onclick="setProductPerspective('pulse')" id="viewBtnPulse" class="px-3 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack transition-colors">Inspection</button>
+                            <!-- Control Header: Dynamic Finish Themes & Perspective -->
+                            <div class="w-full flex flex-wrap items-center justify-between gap-2 mb-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-bold text-brandGreen uppercase tracking-wider">3D Dynamic Hardware</span>
+                                    <span class="px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase bg-brandGreen/10 text-brandGreen border border-brandGreen/25">Interactive CAD</span>
+                                </div>
+                                <!-- Finish Theme Selector -->
+                                <div class="flex items-center gap-1 p-1 rounded-xl bg-black/5 dark:bg-white/5 text-[11px]">
+                                    <button onclick="set3DFinishTheme('titanium')" id="themeBtnTitanium" class="px-2.5 py-1 rounded-lg font-bold bg-brandGreen text-white transition-all shadow-xs">Titanium</button>
+                                    <button onclick="set3DFinishTheme('cad')" id="themeBtnCad" class="px-2.5 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack dark:hover:text-white transition-all">CAD Parts</button>
+                                    <button onclick="set3DFinishTheme('stealth')" id="themeBtnStealth" class="px-2.5 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack dark:hover:text-white transition-all">Stealth</button>
                                 </div>
                             </div>
 
-                            <!-- Showcase Viewport -->
-                            <div class="relative w-full h-80 sm:h-96 flex items-center justify-center overflow-hidden">
+                            <!-- Showcase Viewport with Interactive 3D GLB Inspector & Loading Screen -->
+                            <div class="relative w-full h-80 sm:h-96 md:h-[420px] flex items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-b from-[#0e1611] via-[#080d0a] to-[#040605] border border-black/15 dark:border-white/15 shadow-2xl">
                                 
-                                <!-- Animated Product Image (Background-Free) -->
-                                <img 
-                                    src="Images/Nora3_transparent.png" 
-                                    alt="NORA-3 Hybrid Inverter System" 
-                                    id="nora3InteractiveImg"
-                                    referrerPolicy="no-referrer"
-                                    class="max-h-80 w-auto object-contain z-10 transition-all duration-500 drop-shadow-[0_20px_30px_rgba(12,19,15,0.12)] cursor-grab active:cursor-grabbing"
-                                    title="Click to toggle perspective"
-                                    onclick="cycleProductViews()"
-                                />
+                                <!-- Studio Lighting Vignette for High-Contrast Crisp Visibility of 3D Chassis -->
+                                <div class="absolute inset-0 pointer-events-none rounded-2xl" style="background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(46, 213, 115, 0.22) 0%, rgba(14, 22, 17, 0.65) 55%, #040605 100%);"></div>
 
-                                <!-- Floating Status Overlay -->
-                                <div class="absolute bottom-3 left-3 z-20 px-3 py-1.5 rounded-xl apple-glass text-[11px] text-brandBlack font-semibold">
-                                    <span class="inline-block w-2 h-2 rounded-full bg-brandGreen mr-1.5"></span>
-                                    Zero-Export CT Online
+                                <!-- Google Model Viewer: Hardware-Accelerated 3D GLB Inspector -->
+                                <model-viewer
+                                    id="nora3ModelViewer"
+                                    src="model.glb"
+                                    alt="NORA-3 Indigenous Hybrid Inverter System 3D Model"
+                                    poster="Images/Nora3_transparent.png"
+                                    camera-controls
+                                    auto-rotate
+                                    auto-rotate-delay="1200"
+                                    rotation-per-second="16deg"
+                                    interaction-prompt="none"
+                                    touch-action="pan-y"
+                                    environment-image="neutral"
+                                    tone-mapping="neutral"
+                                    shadow-intensity="2.2"
+                                    shadow-softness="0.25"
+                                    exposure="0.8"
+                                    camera-orbit="0deg 75deg 105%"
+                                    min-camera-orbit="auto auto 60%"
+                                    max-camera-orbit="auto auto 170%"
+                                    class="w-full h-full cursor-grab active:cursor-grabbing outline-none relative z-10"
+                                    style="--poster-color: transparent; filter: contrast(1.15) brightness(1.02) drop-shadow(0 20px 30px rgba(0,0,0,0.7));"
+                                >
+                                    <!-- Elegant Loading Screen for 18MB Model with percentage progress bar -->
+                                    <div slot="poster" id="modelLoadingScreen" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0C130F]/95 backdrop-blur-md rounded-2xl z-30 transition-opacity duration-700">
+                                        <div class="relative w-12 h-12 mb-3 flex items-center justify-center">
+                                            <div class="w-12 h-12 rounded-full border-2 border-brandGreen/20"></div>
+                                            <div class="w-12 h-12 rounded-full border-2 border-brandGreen border-t-transparent animate-spin absolute inset-0"></div>
+                                            <i class="fa-solid fa-cube text-brandGreen text-sm absolute"></i>
+                                        </div>
+                                        <div class="text-xs font-bold text-white tracking-tight">Loading 3D Hardware Model</div>
+                                        <div class="w-44 h-1.5 bg-white/10 rounded-full mt-3 overflow-hidden">
+                                            <div id="modelLoadingBar" class="h-full bg-brandGreen rounded-full transition-all duration-300" style="width: 10%;"></div>
+                                        </div>
+                                        <div id="modelLoadingPercent" class="text-[11px] font-extrabold text-brandGreen tabular-nums mt-1.5">Loading 3D mesh...</div>
+                                        <div class="text-[10px] text-slate-400 mt-1">18MB Indigenous Engineering Architecture</div>
+                                    </div>
+                                </model-viewer>
+
+                                <!-- Floating Status & Interaction Hint Overlay -->
+                                <div class="absolute bottom-3 left-3 z-20 px-3 py-1.5 rounded-xl bg-black/60 backdrop-blur-md border border-white/10 text-[11px] text-white font-semibold flex items-center gap-1.5 shadow-md pointer-events-none">
+                                    <span class="inline-block w-2 h-2 rounded-full bg-brandGreen animate-pulse"></span>
+                                    <span id="modelViewerStatusText">Interactive 3D · Drag to Rotate · Scroll to Zoom</span>
+                                </div>
+                            </div>
+
+                            <!-- Dynamic Component Part Focus Tabs -->
+                            <div class="w-full mt-4 flex items-center justify-between gap-1.5 overflow-x-auto pb-1 text-[11px]">
+                                <span class="text-[10px] font-bold text-brandBlack-slate uppercase flex-shrink-0">Inspect Part:</span>
+                                <div class="flex items-center gap-1 flex-shrink-0">
+                                    <button onclick="set3DComponentFocus('all')" id="partBtnAll" class="px-2 py-1 rounded-lg font-bold bg-brandGreen text-white transition-all shadow-xs">All Parts</button>
+                                    <button onclick="set3DComponentFocus('chassis')" id="partBtnChassis" class="px-2 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack dark:hover:text-white transition-all">Chassis Frame</button>
+                                    <button onclick="set3DComponentFocus('heatsink')" id="partBtnHeatsink" class="px-2 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack dark:hover:text-white transition-all">Heat Sink Fins</button>
+                                    <button onclick="set3DComponentFocus('welds')" id="partBtnWelds" class="px-2 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack dark:hover:text-white transition-all">TIG Welds</button>
+                                    <button onclick="set3DComponentFocus('hardware')" id="partBtnHardware" class="px-2 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack dark:hover:text-white transition-all">Terminals & Screws</button>
                                 </div>
                             </div>
 
                             <!-- Exploded Spec Trigger Bar -->
-                            <div class="w-full mt-6 grid grid-cols-3 gap-3 text-center text-xs">
+                            <div class="w-full mt-4 grid grid-cols-3 gap-3 text-center text-xs">
                                 <div class="p-3 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/10">
                                     <div class="text-[11px] text-brandBlack-slate">Power Rating</div>
                                     <div class="font-bold text-brandBlack text-sm mt-0.5 tabular-nums">3.0 kW Rated</div>
@@ -1020,137 +1130,357 @@
         </section>
 
         <!-- SECTION 3: THE ZERO-EXPORT MECHANISM SIMULATOR (Max 3.0 kW Solar Generation) -->
-        <section id="zero-export" class="py-20 md:py-28 relative reveal-on-scroll">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="zero-export" class="py-16 md:py-24 relative reveal-on-scroll">
+            <div class="max-w-[1560px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
                 
-                <div class="max-w-3xl mb-12">
-                    <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brandGreen mb-3">
+                <div class="max-w-3xl mb-8">
+                    <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brandGreen mb-2">
                         <i class="fa-solid fa-arrows-split-up-and-left"></i>
-                        <span>Zero Export Architecture</span>
+                        <span>Zero-Export Architecture</span>
                     </div>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold text-brandBlack tracking-tight leading-tight">
-                        Power Flow Logic & Real-Time CT Regulation.
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-brandBlack tracking-tight leading-tight">
+                        Real-Time CT Regulation & Power Flow
                     </h2>
-                    <p class="mt-3 text-brandBlack-muted text-sm sm:text-base leading-relaxed">
-                        NORA-3 uses a hardware Current Transformer sensor on your service entrance. 
-                        It continuously modulates inverter production (up to 3.0 kW max generation) so you never export unauthorized solar electricity to the utility, eliminating DISCO penalties.
+                    <p class="mt-2 text-brandBlack-muted text-xs sm:text-sm leading-relaxed">
+                        Hardware Current Transformer (CT) metering actively matches solar generation to household consumption, preventing unauthorized grid export without utility penalties.
                     </p>
                 </div>
 
                 <!-- Interactive Energy Flow Simulator -->
-                <div id="simulator" class="apple-glass rounded-3xl p-6 sm:p-10">
+                <div id="simulator" class="apple-glass rounded-3xl p-4 sm:p-6 md:p-8 lg:p-10">
                     
                     <!-- Operating Mode Selector Bar -->
-                    <div class="mb-8 pb-5 border-b border-black/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="mb-6 pb-4 border-b border-black/5 dark:border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-3">
                         <div>
                             <div class="flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-brandGreen animate-pulse"></span>
-                                <span class="text-xs font-bold uppercase tracking-wider text-brandGreen">Operating Architecture</span>
+                                <span class="w-2 h-2 rounded-full bg-brandGreen"></span>
+                                <span class="text-xs font-bold uppercase tracking-wider text-brandGreen">Operating Dispatch</span>
                             </div>
-                            <h3 class="text-base sm:text-lg font-extrabold text-brandBlack tracking-tight mt-0.5">Real-Time Dispatch Simulator</h3>
+                            <h3 class="text-base sm:text-lg font-extrabold text-brandBlack tracking-tight mt-0.5">Energy Simulator</h3>
                         </div>
 
                         <!-- 4-Way Mode Selector Switch -->
-                        <div class="inline-flex p-1 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 flex-wrap sm:flex-nowrap gap-1">
+                        <div class="inline-flex p-1 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 flex-wrap sm:flex-nowrap gap-1">
                             <button id="modeBtnHybrid" onclick="setSimMode('hybrid')" class="mode-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-brandGreen text-white shadow-xs">
                                 <i class="fa-solid fa-arrows-split-up-and-left mr-1"></i>Hybrid Core
                             </button>
                             <button id="modeBtnUps" onclick="setSimMode('ups')" class="mode-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-brandBlack hover:text-brandGreen">
-                                <i class="fa-solid fa-battery-three-quarters mr-1"></i>UPS (No Solar)
+                                <i class="fa-solid fa-battery-three-quarters mr-1"></i>UPS
                             </button>
                             <button id="modeBtnIslanded" onclick="setSimMode('islanded')" class="mode-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-brandBlack hover:text-brandGreen">
-                                <i class="fa-solid fa-plug-circle-xmark mr-1"></i>Islanded (No Grid)
+                                <i class="fa-solid fa-plug-circle-xmark mr-1"></i>Off-Grid
                             </button>
                             <button id="modeBtnExport" onclick="setSimMode('export')" class="mode-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-brandBlack hover:text-brandGreen">
-                                <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>Export to Grid
+                                <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>Net-Meter
                             </button>
                         </div>
                     </div>
 
-                    <!-- Dynamic Mode Description Banner -->
-                    <div id="modeDescriptionBanner" class="mb-4 px-4 py-2.5 rounded-xl bg-brandGreen/5 border border-brandGreen/15 text-xs text-brandBlack flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <!-- Dynamic Mode Description Banner (Reduced Word Count) -->
+                    <div id="modeDescriptionBanner" class="mb-4 px-3.5 py-2 rounded-xl bg-brandGreen/5 border border-brandGreen/15 text-xs text-brandBlack flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <span id="modeDescriptionText" class="font-medium">
-                            <strong class="font-bold text-brandGreen">Hybrid Core:</strong> Solar supplies load, excess charges 204V battery. CT holds 0 kW grid export. Battery delivers up to 3.0 kW max; if demand exceeds 3.0 kW (e.g. 3.1 kW), WAPDA Grid imports the difference.
+                            <strong class="font-bold text-brandGreen">Hybrid Mode:</strong> Solar powers home load; surplus charges 204V battery; CT holds 0 kW grid export.
                         </span>
-                        <span id="modeActiveBadge" class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-brandGreen text-white self-start sm:self-auto flex-shrink-0">Hybrid Active</span>
+                        <span id="modeActiveBadge" class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-brandGreen text-white self-start sm:self-auto flex-shrink-0">Hybrid Active</span>
                     </div>
 
-                    <!-- Full Battery NORA-3 Auto-Curtailment Banner -->
-                    <div id="curtailmentNotice" class="mb-6 px-4 py-2.5 rounded-xl bg-brandGreen/10 border border-brandGreen/25 text-xs text-brandGreen font-medium flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-2xs">
+                    <!-- Full Battery NORA-3 Auto-Curtailment Banner (Reduced Word Count) -->
+                    <div id="curtailmentNotice" class="mb-4 px-3.5 py-2 rounded-xl bg-brandGreen/10 border border-brandGreen/25 text-xs text-brandGreen font-medium flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <div class="flex items-center gap-2">
                             <i class="fa-solid fa-circle-check text-sm flex-shrink-0 text-brandGreen"></i>
-                            <span><strong class="font-bold">Battery 100% Charged &bull; 0.00 kW Inflow:</strong> NORA-3 automatically throttles Solar PV MPPT to generate exactly what the home demands (<strong id="curtailLoadKw" class="underline">1.6 kW</strong>). Zero power pushed into full battery.</span>
+                            <span><strong class="font-bold">Battery 100% Full:</strong> Solar generation throttled to match home demand (<strong id="curtailLoadKw" class="underline">1.6 kW</strong>). Zero battery overcharge.</span>
                         </div>
-                        <span class="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-brandGreen text-white self-start sm:self-auto flex-shrink-0">Load-Matched MPPT</span>
+                        <span class="text-[9px] font-bold uppercase px-2 py-0.5 rounded-full bg-brandGreen text-white self-start sm:self-auto flex-shrink-0">Load-Matched MPPT</span>
+                    </div>
+
+                    <!-- Critical Battery Depleted Alert (<15% SoC Cutoff & Grid Shift) -->
+                    <div id="batteryDepletedAlert" class="hidden mb-4 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-xs text-rose-700 dark:text-rose-300 font-medium flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-rose-500/20 flex items-center justify-center text-rose-600 dark:text-rose-400 flex-shrink-0 animate-pulse">
+                                <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-rose-800 dark:text-rose-200">Alert: Battery Depleted (&lt;15% SoC Cutoff)</div>
+                                <div class="text-[11px] text-rose-600 dark:text-rose-400 mt-0.5">Battery output has stopped to protect cell health. Home load is seamlessly powered by WAPDA Grid.</div>
+                            </div>
+                        </div>
+                        <span class="text-[9px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-rose-500 text-white self-start sm:self-auto flex-shrink-0 animate-pulse">
+                            Grid Fallback Active
+                        </span>
+                    </div>
+
+                    <!-- Peak Hours & Time-of-Use Dispatch Timing Selector -->
+                    <div class="mb-6 p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 shadow-xs">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-black/5 dark:border-white/5">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-clock text-brandGreen"></i>
+                                    <span class="text-xs font-bold text-brandBlack uppercase tracking-wider">Peak Hours &amp; Time-of-Use Dispatch</span>
+                                </div>
+                                <div class="text-[11px] text-brandBlack-slate mt-0.5">
+                                    Configurable Peak Tariff Window (Grid Rate: ~Rs 65/unit vs Off-Peak ~Rs 35/unit)
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button 
+                                    id="togglePeakModeBtn" 
+                                    onclick="togglePeakHourMode()" 
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer bg-black/5 dark:bg-white/10 text-brandBlack hover:border-brandGreen border border-black/10 dark:border-white/10"
+                                    title="Toggle forced peak hour simulation"
+                                >
+                                    <i class="fa-solid fa-bolt text-amber-500"></i>
+                                    <span id="togglePeakModeText">Peak Mode: Auto Clock</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Peak Hour Timing Selectors & Simulated Clock -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3">
+                            <!-- Peak Start Hour -->
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase tracking-wider text-brandBlack-slate mb-1">Peak Start Hour</label>
+                                <select id="peakStartSelect" onchange="updatePeakTiming()" class="w-full px-2.5 py-1.5 rounded-xl bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/10 text-xs font-bold text-brandBlack cursor-pointer">
+                                    <option value="17">17:00 (5:00 PM)</option>
+                                    <option value="18" selected>18:00 (6:00 PM) - NEPRA Standard</option>
+                                    <option value="19">19:00 (7:00 PM)</option>
+                                    <option value="20">20:00 (8:00 PM)</option>
+                                </select>
+                            </div>
+
+                            <!-- Peak End Hour -->
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase tracking-wider text-brandBlack-slate mb-1">Peak End Hour</label>
+                                <select id="peakEndSelect" onchange="updatePeakTiming()" class="w-full px-2.5 py-1.5 rounded-xl bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/10 text-xs font-bold text-brandBlack cursor-pointer">
+                                    <option value="21">21:00 (9:00 PM)</option>
+                                    <option value="22" selected>22:00 (10:00 PM) - NEPRA Standard</option>
+                                    <option value="23">23:00 (11:00 PM)</option>
+                                    <option value="24">24:00 (12:00 AM)</option>
+                                </select>
+                            </div>
+
+                            <!-- Simulated Clock Time Slider -->
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <label class="text-[10px] font-bold uppercase tracking-wider text-brandBlack-slate">Simulated Hour</label>
+                                    <span id="simClockDisplay" class="text-xs font-extrabold text-amber-600 dark:text-amber-400 tabular-nums">19:00 (⚡ Peak)</span>
+                                </div>
+                                <input 
+                                    type="range" 
+                                    id="simTimeSlider" 
+                                    min="0" 
+                                    max="23" 
+                                    step="1" 
+                                    value="19" 
+                                    class="w-full accent-amber-500 h-2 bg-black/10 dark:bg-white/10 rounded-lg cursor-pointer" 
+                                    oninput="onSimTimeSliderChange(this.value)"
+                                />
+                                <div class="flex justify-between text-[9px] text-brandBlack-slate mt-0.5">
+                                    <span>00:00</span>
+                                    <span>12:00 (Noon)</span>
+                                    <span>23:00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Peak Dispatch Banner -->
+                        <div id="peakStatusBanner" class="mt-3 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-between gap-2 text-xs">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                                <span id="peakStatusText" class="font-bold text-amber-800 dark:text-amber-200">
+                                    ⚡ PEAK HOURS ACTIVE: Battery prioritized. Grid used only if load &gt; 3.0 kW or battery &lt; 15%.
+                                </span>
+                            </div>
+                            <span id="peakStatusBadge" class="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-500 text-white flex-shrink-0 animate-pulse">
+                                Peak Rate Active
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- LOCATION DETECTION & CITY SOLAR WATTAGE TELEMETRY -->
+                    <div class="mb-6 p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 shadow-xs">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-black/5 dark:border-white/5">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-location-dot text-brandGreen"></i>
+                                    <span class="text-xs font-bold text-brandBlack uppercase tracking-wider">Location & Solar Wattage Telemetry</span>
+                                </div>
+                                <div id="currentLocationDisplay" class="text-xs text-brandBlack-slate mt-0.5">
+                                    Islamabad, Pakistan &bull; 33.68° N, 73.05° E &bull; 5.5 Peak Sun Hours
+                                </div>
+                            </div>
+
+                            <div class="flex items-center flex-wrap gap-2">
+                                <button 
+                                    id="btnDetectLocation" 
+                                    onclick="requestLocationAndCalculate()" 
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brandGreen text-white text-xs font-bold shadow-xs hover:bg-brandGreen/90 active:scale-95 transition-all cursor-pointer"
+                                    title="Ask browser for location to calculate live city wattages"
+                                >
+                                    <i class="fa-solid fa-location-crosshairs text-xs"></i>
+                                    <span id="btnDetectLocationText">Detect My Location</span>
+                                </button>
+
+                                <select 
+                                    id="citySelectDropdown" 
+                                    onchange="selectCityProfile(this.value)" 
+                                    class="px-2.5 py-1.5 rounded-xl bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/10 text-xs font-bold text-brandBlack cursor-pointer"
+                                >
+                                    <option value="islamabad">Islamabad</option>
+                                    <option value="rawalpindi">Rawalpindi</option>
+                                    <option value="lahore">Lahore</option>
+                                    <option value="karachi">Karachi</option>
+                                    <option value="peshawar">Peshawar</option>
+                                    <option value="multan">Multan</option>
+                                    <option value="faisalabad">Faisalabad</option>
+                                    <option value="quetta">Quetta</option>
+                                    <option value="gujranwala">Gujranwala</option>
+                                    <option value="sialkot">Sialkot</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 4-Card Calculated Wattages Matrix -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-3">
+                            <div class="p-2.5 rounded-xl bg-black/[0.02] dark:bg-white/[0.03]">
+                                <span class="text-[9px] uppercase tracking-wider font-semibold text-brandBlack-slate block">Solar Peak Cap</span>
+                                <span id="wattPeakOutput" class="text-xs sm:text-sm font-extrabold text-brandGreen tabular-nums">3,000 W (3.0 kW)</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-black/[0.02] dark:bg-white/[0.03]">
+                                <span class="text-[9px] uppercase tracking-wider font-semibold text-brandBlack-slate block">Est. Daily Yield</span>
+                                <span id="wattDailyYield" class="text-xs sm:text-sm font-extrabold text-brandBlack tabular-nums">14.2 kWh / 425 U</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-black/[0.02] dark:bg-white/[0.03]">
+                                <span class="text-[9px] uppercase tracking-wider font-semibold text-brandBlack-slate block">Battery Storage</span>
+                                <span id="wattBatteryCapacity" class="text-xs sm:text-sm font-extrabold text-brandGreen tabular-nums">2,700 Wh (204V)</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-black/[0.02] dark:bg-white/[0.03]">
+                                <span class="text-[9px] uppercase tracking-wider font-semibold text-brandBlack-slate block">Base / Heavy Load</span>
+                                <span id="wattLoadProfiles" class="text-xs sm:text-sm font-extrabold text-brandBlack tabular-nums">550 W / 2,500 W</span>
+                            </div>
+                        </div>
+
+                        <!-- Collapsible Full Wattages Matrix Table -->
+                        <div class="mt-2.5 pt-2 border-t border-black/5 dark:border-white/5 flex items-center justify-between">
+                            <button 
+                                onclick="toggleWattageMatrix()" 
+                                class="text-[11px] font-bold text-brandGreen hover:underline inline-flex items-center gap-1 cursor-pointer"
+                            >
+                                <i id="wattMatrixToggleIcon" class="fa-solid fa-chevron-down text-[9px] transition-transform"></i>
+                                <span id="wattMatrixToggleLabel">View All Possible Wattage Scenarios</span>
+                            </button>
+                            <span class="text-[10px] text-brandBlack-slate">Calibrated for NORA-3 single-phase</span>
+                        </div>
+
+                        <div id="wattageMatrixDetails" class="hidden mt-3 pt-2 text-xs overflow-x-auto">
+                            <table class="w-full text-left border-collapse min-w-[480px]">
+                                <thead>
+                                    <tr class="border-b border-black/10 dark:border-white/10 text-[10px] uppercase text-brandBlack-slate font-bold">
+                                        <th class="py-1">Condition / Scenario</th>
+                                        <th class="py-1 text-center">Solar Output</th>
+                                        <th class="py-1 text-center">Battery Power</th>
+                                        <th class="py-1 text-right">Supported Appliances</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="wattageTableBody" class="divide-y divide-black/5 dark:divide-white/5 text-[11px]">
+                                    <tr>
+                                        <td class="py-1.5 font-semibold text-brandBlack">Clear Midday Sun</td>
+                                        <td class="py-1.5 text-center font-bold text-brandGreen">2,800 W</td>
+                                        <td class="py-1.5 text-center text-brandBlack-slate">+1,200 W (Charge)</td>
+                                        <td class="py-1.5 text-right text-brandBlack-muted">1 Ton AC + Fridge + Fans + Lights</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-1.5 font-semibold text-brandBlack">Partly Cloudy</td>
+                                        <td class="py-1.5 text-center font-bold text-brandGreen">2,100 W</td>
+                                        <td class="py-1.5 text-center text-brandBlack-slate">+500 W (Charge)</td>
+                                        <td class="py-1.5 text-right text-brandBlack-muted">Fans + Fridge + TV + PC</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-1.5 font-semibold text-brandBlack">Overcast / Monsoon</td>
+                                        <td class="py-1.5 text-center font-bold text-brandGreen">950 W</td>
+                                        <td class="py-1.5 text-center text-brandBlack-slate">0 W (Buffer)</td>
+                                        <td class="py-1.5 text-right text-brandBlack-muted">Ceiling Fans + LED Lights + Wi-Fi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-1.5 font-semibold text-brandBlack">Heavy Storm / Rain</td>
+                                        <td class="py-1.5 text-center font-bold text-brandGreen">330 W</td>
+                                        <td class="py-1.5 text-center text-brandBlack">-220 W (Discharge)</td>
+                                        <td class="py-1.5 text-right text-brandBlack-muted">Emergency Lighting + Router</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-1.5 font-semibold text-brandBlack">Night Standby</td>
+                                        <td class="py-1.5 text-center font-bold text-brandBlack-slate">0 W</td>
+                                        <td class="py-1.5 text-center text-brandBlack">-550 W (Discharge)</td>
+                                        <td class="py-1.5 text-right text-brandBlack-muted">Overnight Fans + Fridge + Wi-Fi (~5h)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-1.5 font-semibold text-brandBlack">Inverter Surge Peak</td>
+                                        <td class="py-1.5 text-center font-bold text-brandGreen">3,000 W</td>
+                                        <td class="py-1.5 text-center font-bold text-brandGreen">6,000 W (5s)</td>
+                                        <td class="py-1.5 text-right text-brandBlack-muted">Motor &amp; Compressor Starting Inrush</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                         
-                        <!-- Left: Controls Sliders (Solar generation calibrated strictly to 3.0 kW max) -->
-                        <div class="lg:col-span-5 space-y-6">
+                        <!-- Left: Controls Sliders -->
+                        <div class="lg:col-span-5 space-y-5">
                             
-                            <!-- Islamabad Mock Weather API Telemetry Card -->
-                            <div class="p-3.5 rounded-2xl bg-white dark:bg-white/5 border border-black/5 space-y-2.5 shadow-xs">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-6 h-6 rounded-lg bg-brandGreen/10 flex items-center justify-center text-brandGreen">
-                                            <i class="fa-solid fa-location-dot text-xs"></i>
-                                        </div>
-                                        <div>
-                                            <span class="text-xs font-bold text-brandBlack">Islamabad Weather Feed</span>
-                                            <span class="text-[10px] text-brandBlack-slate block -mt-0.5">Mock Telemetry API &bull; 33.68° N, 73.05° E</span>
-                                        </div>
-                                    </div>
-                                    <div id="weatherLiveBadge" class="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-brandGreen/10 text-brandGreen border border-brandGreen/20">
-                                        <i id="weatherIcon" class="fa-solid fa-sun text-brandGreen"></i>
+                            <!-- Weather Presets -->
+                            <div class="p-3.5 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 space-y-2 shadow-xs">
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="font-bold text-brandBlack">Solar Conditions</span>
+                                    <div id="weatherLiveBadge" class="flex items-center gap-1.5 text-[10px] font-bold text-brandGreen">
+                                        <i id="weatherIcon" class="fa-solid fa-sun"></i>
                                         <span id="weatherName">Clear Sunny</span>
                                     </div>
                                 </div>
 
-                                <!-- Weather Condition Quick Presets -->
                                 <div class="grid grid-cols-5 gap-1 pt-1">
-                                    <button onclick="applyWeatherCondition('sunny')" id="wBtn_sunny" class="weather-btn px-1 py-1.5 rounded-xl text-[10px] font-bold border border-brandGreen bg-brandGreen text-white flex flex-col items-center gap-0.5 transition-all shadow-2xs" title="Clear Sunny (3.0 kW Max)">
+                                    <button onclick="applyWeatherCondition('sunny')" id="wBtn_sunny" class="weather-btn px-1 py-1.5 rounded-xl text-[10px] font-bold border border-brandGreen bg-brandGreen text-white flex flex-col items-center gap-0.5 transition-all shadow-2xs">
                                         <i class="fa-solid fa-sun text-xs"></i>
                                         <span>Sunny</span>
                                         <span class="text-[8px] opacity-85">3.0 kW</span>
                                     </button>
-                                    <button onclick="applyWeatherCondition('partly_cloudy')" id="wBtn_partly_cloudy" class="weather-btn px-1 py-1.5 rounded-xl text-[10px] font-bold border border-black/10 text-brandBlack hover:border-brandGreen flex flex-col items-center gap-0.5 transition-all" title="Partly Cloudy (2.2 kW Max)">
+                                    <button onclick="applyWeatherCondition('partly_cloudy')" id="wBtn_partly_cloudy" class="weather-btn px-1 py-1.5 rounded-xl text-[10px] font-bold border border-black/10 text-brandBlack hover:border-brandGreen flex flex-col items-center gap-0.5 transition-all">
                                         <i class="fa-solid fa-cloud-sun text-xs text-brandGreen"></i>
                                         <span>Cloudy</span>
                                         <span class="text-[8px] text-brandBlack-slate">2.2 kW</span>
                                     </button>
-                                    <button onclick="applyWeatherCondition('cloudy')" id="wBtn_cloudy" class="weather-btn px-1 py-1.5 rounded-xl text-[10px] font-bold border border-black/10 text-brandBlack hover:border-brandGreen flex flex-col items-center gap-0.5 transition-all" title="Overcast / Cloudy (1.1 kW Max)">
+                                    <button onclick="applyWeatherCondition('cloudy')" id="wBtn_cloudy" class="weather-btn px-1 py-1.5 rounded-xl text-[10px] font-bold border border-black/10 text-brandBlack hover:border-brandGreen flex flex-col items-center gap-0.5 transition-all">
                                         <i class="fa-solid fa-cloud text-xs text-brandBlack-slate"></i>
                                         <span>Overcast</span>
                                         <span class="text-[8px] text-brandBlack-slate">1.1 kW</span>
                                     </button>
-                                    <button onclick="applyWeatherCondition('stormy')" id="wBtn_stormy" class="weather-btn px-1 py-1.5 rounded-xl text-[10px] font-bold border border-black/10 text-brandBlack hover:border-brandGreen flex flex-col items-center gap-0.5 transition-all" title="Stormy / Monsoon Rain (0.4 kW Max)">
+                                    <button onclick="applyWeatherCondition('stormy')" id="wBtn_stormy" class="weather-btn px-1 py-1.5 rounded-xl text-[10px] font-bold border border-black/10 text-brandBlack hover:border-brandGreen flex flex-col items-center gap-0.5 transition-all">
                                         <i class="fa-solid fa-cloud-bolt text-xs text-brandBlack-slate"></i>
-                                        <span>Stormy</span>
+                                        <span>Storm</span>
                                         <span class="text-[8px] text-brandBlack-slate">0.4 kW</span>
                                     </button>
-                                    <button onclick="applyWeatherCondition('night')" id="wBtn_night" class="weather-btn px-1 py-1.5 rounded-xl text-[10px] font-bold border border-black/10 text-brandBlack hover:border-brandGreen flex flex-col items-center gap-0.5 transition-all" title="Dusk / Night (0.0 kW Max)">
+                                    <button onclick="applyWeatherCondition('night')" id="wBtn_night" class="weather-btn px-1 py-1.5 rounded-xl text-[10px] font-bold border border-black/10 text-brandBlack hover:border-brandGreen flex flex-col items-center gap-0.5 transition-all">
                                         <i class="fa-solid fa-moon text-xs text-brandBlack-slate"></i>
                                         <span>Night</span>
                                         <span class="text-[8px] text-brandBlack-slate">0.0 kW</span>
                                     </button>
                                 </div>
 
-                                <!-- Live Telemetry Readout -->
-                                <div id="weatherTelemetryStrip" class="pt-1.5 border-t border-black/5 flex items-center justify-between text-[10px] text-brandBlack-slate">
+                                <div id="weatherTelemetryStrip" class="pt-1.5 border-t border-black/5 dark:border-white/5 flex items-center justify-between text-[10px] text-brandBlack-slate">
                                     <span>Irradiance: <strong id="weatherIrradiance" class="text-brandBlack font-semibold">980 W/m²</strong></span>
                                     <span>Temp: <strong id="weatherTemp" class="text-brandBlack font-semibold">32°C</strong></span>
-                                    <span>Peak Cap: <strong id="weatherMaxKw" class="text-brandGreen font-bold">Max 3.0 kW</strong></span>
+                                    <span>Capacity: <strong id="weatherMaxKw" class="text-brandGreen font-bold">Max 3.0 kW</strong></span>
                                 </div>
                             </div>
 
+                            <!-- Solar PV Slider -->
                             <div>
-                                <div class="flex items-center justify-between text-sm mb-2">
-                                    <span class="font-bold text-brandBlack flex items-center gap-2">
+                                <div class="flex items-center justify-between text-sm mb-1.5">
+                                    <span class="font-bold text-brandBlack text-xs sm:text-sm flex items-center gap-2">
                                         <i class="fa-solid fa-sun text-brandGreen"></i>
-                                        Solar PV Generation <span id="weatherAutoPill" class="text-[9px] px-1.5 py-0.5 rounded-full bg-brandGreen/10 text-brandGreen font-bold">Auto-Calibrated</span>
+                                        Solar Generation
                                     </span>
-                                    <span id="sliderSolarVal" class="font-extrabold text-brandGreen tabular-nums text-base">2.8 kW</span>
+                                    <span id="sliderSolarVal" class="font-extrabold text-brandGreen tabular-nums text-sm sm:text-base">2.8 kW</span>
                                 </div>
                                 <input 
                                     type="range" 
@@ -1159,23 +1489,24 @@
                                     max="3.0" 
                                     step="0.1" 
                                     value="2.8" 
-                                    class="w-full accent-brandGreen h-2 bg-black/10 rounded-lg cursor-pointer transition-all"
+                                    class="w-full accent-brandGreen h-2 bg-black/10 dark:bg-white/10 rounded-lg cursor-pointer"
                                     oninput="updateSimulator()"
                                 />
-                                <div class="flex justify-between text-[11px] text-brandBlack-slate mt-1">
+                                <div class="flex justify-between text-[10px] text-brandBlack-slate mt-1">
                                     <span>0 kW (Night)</span>
-                                    <span id="sliderMidLabel">1.5 kW (Ambient)</span>
-                                    <span id="sliderMaxLabel">3.0 kW (Weather Peak)</span>
+                                    <span id="sliderMidLabel">1.5 kW</span>
+                                    <span id="sliderMaxLabel">3.0 kW (Max)</span>
                                 </div>
                             </div>
 
+                            <!-- Household Load Slider -->
                             <div>
-                                <div class="flex items-center justify-between text-sm mb-2">
-                                    <span class="font-bold text-brandBlack flex items-center gap-2">
+                                <div class="flex items-center justify-between text-sm mb-1.5">
+                                    <span class="font-bold text-brandBlack text-xs sm:text-sm flex items-center gap-2">
                                         <i class="fa-solid fa-house text-brandBlack"></i>
-                                        Household Electric Load
+                                        Household Load
                                     </span>
-                                    <span id="sliderLoadVal" class="font-extrabold text-brandGreen tabular-nums text-base">1.6 kW</span>
+                                    <span id="sliderLoadVal" class="font-extrabold text-brandGreen tabular-nums text-sm sm:text-base">1.6 kW</span>
                                 </div>
                                 <input 
                                     type="range" 
@@ -1184,230 +1515,167 @@
                                     max="3.5" 
                                     step="0.1" 
                                     value="1.6" 
-                                    class="w-full accent-brandGreen h-2 bg-black/10 rounded-lg cursor-pointer"
+                                    class="w-full accent-brandGreen h-2 bg-black/10 dark:bg-white/10 rounded-lg cursor-pointer"
                                     oninput="updateSimulator()"
                                 />
-                                <div class="flex justify-between text-[11px] text-brandBlack-slate mt-1">
+                                <div class="flex justify-between text-[10px] text-brandBlack-slate mt-1">
                                     <span>0.3 kW (Base)</span>
-                                    <span>1.6 kW (Fans + Lights)</span>
-                                    <span>3.5 kW (Full Home)</span>
+                                    <span>1.6 kW (Typical)</span>
+                                    <span>3.5 kW (Peak)</span>
                                 </div>
                             </div>
 
-                            <!-- Real-Time Battery Charge Percentage Chart (Recharts) -->
-                            <div class="p-4 rounded-2xl bg-white border border-black/5 space-y-3 text-xs shadow-xs">
+                            <!-- Battery SoC Box -->
+                            <div class="p-3.5 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 space-y-2.5 text-xs shadow-xs">
                                 <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-6 h-6 rounded-lg bg-brandGreen-light flex items-center justify-center text-brandGreen">
-                                            <i class="fa-solid fa-car-battery text-xs"></i>
-                                        </div>
-                                        <span class="font-bold text-brandBlack text-xs">Battery Charge vs. Time</span>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <!-- Quick SoC State Selectors -->
-                                        <div class="flex items-center gap-1">
-                                            <button onclick="setBatterySoCPreset(100)" id="socBtn100" class="px-1.5 py-0.5 rounded-md text-[9px] font-bold border border-brandGreen bg-brandGreen/10 text-brandGreen transition-all" title="Simulate 100% Full Battery">100% Full</button>
-                                            <button onclick="setBatterySoCPreset(75)" id="socBtn75" class="px-1.5 py-0.5 rounded-md text-[9px] font-bold border border-black/10 text-brandBlack hover:border-brandGreen transition-all" title="Simulate 75% Charging">75%</button>
-                                            <button onclick="setBatterySoCPreset(30)" id="socBtn30" class="px-1.5 py-0.5 rounded-md text-[9px] font-bold border border-black/10 text-brandBlack hover:border-brandGreen transition-all" title="Simulate 30% Low Battery">30%</button>
-                                        </div>
-                                        <div class="flex items-center gap-1.5 pl-1 border-l border-black/10">
-                                            <span class="inline-block w-2 h-2 rounded-full bg-brandGreen animate-pulse"></span>
-                                            <span id="batterySoCLabel" class="font-extrabold text-brandGreen text-sm tabular-nums">100% (Full)</span>
-                                        </div>
+                                    <span class="font-bold text-brandBlack text-xs">Battery Charge vs. Time</span>
+                                    <div class="flex items-center gap-1.5">
+                                        <button onclick="setBatterySoCPreset(100)" id="socBtn100" class="px-1.5 py-0.5 rounded text-[9px] font-bold border border-brandGreen bg-brandGreen/10 text-brandGreen cursor-pointer">100%</button>
+                                        <button onclick="setBatterySoCPreset(75)" id="socBtn75" class="px-1.5 py-0.5 rounded text-[9px] font-bold border border-black/10 text-brandBlack hover:border-brandGreen cursor-pointer">75%</button>
+                                        <button onclick="setBatterySoCPreset(30)" id="socBtn30" class="px-1.5 py-0.5 rounded text-[9px] font-bold border border-black/10 text-brandBlack hover:border-brandGreen cursor-pointer">30%</button>
+                                        <button onclick="setBatterySoCPreset(14)" id="socBtn14" class="px-1.5 py-0.5 rounded text-[9px] font-bold border border-rose-500/40 text-rose-500 hover:bg-rose-500/10 cursor-pointer" title="Test &lt;15% SoC cutoff protection">&lt;15% Cutoff</button>
+                                        <span id="batterySoCLabel" class="font-extrabold text-brandGreen text-xs tabular-nums ml-1">100%</span>
                                     </div>
                                 </div>
 
-                                <!-- Small Real-Time Line Chart (Recharts) -->
-                                <div id="batteryChartContainer" class="w-full h-36 relative"></div>
+                                <div id="batteryChartContainer" class="w-full h-28 relative"></div>
 
-                                <!-- Live Metrics Strip Reflecting Solar Gen & Household Load -->
-                                <div class="pt-2 border-t border-black/5 grid grid-cols-3 gap-2 text-center text-[10px]">
-                                    <div class="p-1.5 rounded-xl bg-black/[0.02] dark:bg-white/[0.04]">
-                                        <span class="text-brandBlack-slate block text-[9px] uppercase tracking-wider font-semibold">Battery Flow</span>
-                                        <span id="simBatteryStatus" class="font-bold text-brandGreen truncate block">0.00 kW (Float)</span>
+                                <div class="pt-2 border-t border-black/5 dark:border-white/5 grid grid-cols-3 gap-1.5 text-center text-[10px]">
+                                    <div class="p-1 rounded-lg bg-black/[0.02] dark:bg-white/[0.04]">
+                                        <span class="text-brandBlack-slate block text-[8px] uppercase">Battery</span>
+                                        <span id="simBatteryStatus" class="font-bold text-brandGreen truncate block">0.00 kW</span>
                                     </div>
-                                    <div class="p-1.5 rounded-xl bg-black/[0.02] dark:bg-white/[0.04]">
-                                        <span class="text-brandBlack-slate block text-[9px] uppercase tracking-wider font-semibold">Grid Export</span>
-                                        <span id="simGridExport" class="font-bold text-brandGreen truncate block">0.00 kW (Zero)</span>
+                                    <div class="p-1 rounded-lg bg-black/[0.02] dark:bg-white/[0.04]">
+                                        <span class="text-brandBlack-slate block text-[8px] uppercase">Grid Export</span>
+                                        <span id="simGridExport" class="font-bold text-brandGreen truncate block">0.00 kW</span>
                                     </div>
-                                    <div class="p-1.5 rounded-xl bg-black/[0.02] dark:bg-white/[0.04]">
-                                        <span class="text-brandBlack-slate block text-[9px] uppercase tracking-wider font-semibold">Grid Import</span>
-                                        <span id="simGridImport" class="font-bold text-brandBlack truncate block">0.00 kW (Solar)</span>
+                                    <div class="p-1 rounded-lg bg-black/[0.02] dark:bg-white/[0.04]">
+                                        <span class="text-brandBlack-slate block text-[8px] uppercase">Grid Import</span>
+                                        <span id="simGridImport" class="font-bold text-brandBlack truncate block">0.00 kW</span>
                                     </div>
                                 </div>
                             </div>
 
                         </div>
 
-                        <!-- Right: Visual Schematic Diagram -->
-                        <div class="lg:col-span-7 flex flex-col items-center justify-center p-4">
+                        <!-- Right: Visual Schematic Diagram (Straight Lines & Minimal Animation) -->
+                        <div class="lg:col-span-7 flex flex-col items-center justify-center p-2 sm:p-4">
                             
-                            <div id="schematicContainer" class="w-full max-w-lg relative py-6 px-4 flex flex-col items-center select-none min-h-[530px]">
+                            <div id="schematicContainer" class="w-full max-w-sm sm:max-w-md md:max-w-lg relative py-5 sm:py-6 px-2 sm:px-4 flex flex-col items-center justify-between select-none min-h-[460px] sm:min-h-[500px]">
                                 
-                                <!-- SVG Real-Time Energy Flow Conduits & Glowing Photons Layer -->
+                                <!-- Clean Minimal SVG Architectural Energy Layer -->
                                 <svg id="schematicCanvas" class="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible" aria-hidden="true">
-                                    <defs>
-                                        <!-- Unified Green Energy Flow Gradients -->
-                                        <linearGradient id="solarFlowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                            <stop offset="0%" stop-color="#1E7538" stop-opacity="0.8" />
-                                            <stop offset="100%" stop-color="#22C55E" stop-opacity="1" />
-                                        </linearGradient>
+                                    <!-- 1. Background Tracks (1.5px subtle architectural line) -->
+                                    <path id="trackSolarInv" class="conduit-track" />
+                                    <path id="trackGridInv" class="conduit-track" />
+                                    <path id="trackInvHome" class="conduit-track" />
+                                    <path id="trackInvBat" class="conduit-track" />
 
-                                        <linearGradient id="gridFlowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                            <stop offset="0%" stop-color="#1E7538" stop-opacity="0.7" />
-                                            <stop offset="100%" stop-color="#22C55E" stop-opacity="1" />
-                                        </linearGradient>
+                                    <!-- 2. Minimal Energy Flow Paths (Strictly Straight Horizontal & Vertical Lines) -->
+                                    <path id="flowSolarInv" class="conduit-flow" />
+                                    <path id="flowGridInv" class="conduit-flow is-idle" />
+                                    <path id="flowInvHome" class="conduit-flow" />
+                                    <path id="flowBatInv" class="conduit-flow" />
 
-                                        <linearGradient id="homeFlowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                            <stop offset="0%" stop-color="#1E7538" stop-opacity="0.9" />
-                                            <stop offset="100%" stop-color="#22C55E" stop-opacity="1" />
-                                        </linearGradient>
-
-                                        <!-- Battery charging gradient (flowing down into battery) -->
-                                        <linearGradient id="batChargeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                            <stop offset="0%" stop-color="#1E7538" stop-opacity="0.9" />
-                                            <stop offset="100%" stop-color="#22C55E" stop-opacity="1" />
-                                        </linearGradient>
-
-                                        <!-- Battery discharging gradient (flowing up into NORA-3) -->
-                                        <linearGradient id="batDischargeGrad" x1="0%" y1="100%" x2="0%" y2="0%">
-                                            <stop offset="0%" stop-color="#1E7538" stop-opacity="0.8" />
-                                            <stop offset="100%" stop-color="#22C55E" stop-opacity="1" />
-                                        </linearGradient>
-
-                                        <!-- Crisp Subtle Photon Glow Filter (Lightened blur) -->
-                                        <filter id="photonGlow" x="-20%" y="-20%" width="140%" height="140%">
-                                            <feGaussianBlur in="SourceGraphic" stdDeviation="1.0" result="blur" />
-                                            <feMerge>
-                                                <feMergeNode in="blur" />
-                                                <feMergeNode in="SourceGraphic" />
-                                            </feMerge>
-                                        </filter>
-
-                                        <!-- Conduit Beam Glow (Crisp subtle glow) -->
-                                        <filter id="conduitGlow" x="-20%" y="-20%" width="140%" height="140%">
-                                            <feGaussianBlur in="SourceGraphic" stdDeviation="1.2" result="blur" />
-                                            <feMerge>
-                                                <feMergeNode in="blur" />
-                                                <feMergeNode in="SourceGraphic" />
-                                            </feMerge>
-                                        </filter>
-                                    </defs>
-
-                                    <!-- 1. Base Glass Conduit Sleeves (Visible architectural conduits) -->
-                                    <path id="guideSolarInv" stroke="currentColor" stroke-opacity="0.08" stroke-width="8" stroke-linecap="round" fill="none" />
-                                    <path id="guideGridInv" stroke="currentColor" stroke-opacity="0.08" stroke-width="8" stroke-linecap="round" fill="none" />
-                                    <path id="guideInvHome" stroke="currentColor" stroke-opacity="0.08" stroke-width="8" stroke-linecap="round" fill="none" />
-                                    <path id="guideInvBat" stroke="currentColor" stroke-opacity="0.08" stroke-width="8" stroke-linecap="round" fill="none" />
-
-                                    <!-- 2. Translucent Inner Core Pipelines -->
-                                    <path id="coreSolarInv" stroke="#1E7538" stroke-opacity="0.25" stroke-width="3" stroke-linecap="round" fill="none" />
-                                    <path id="coreGridInv" stroke="#1E7538" stroke-opacity="0.25" stroke-width="3" stroke-linecap="round" fill="none" />
-                                    <path id="coreInvHome" stroke="#1E7538" stroke-opacity="0.25" stroke-width="3" stroke-linecap="round" fill="none" />
-                                    <path id="coreInvBat" stroke="#1E7538" stroke-opacity="0.25" stroke-width="3.5" stroke-linecap="round" fill="none" />
-
-                                    <!-- 3. Dynamic Animated Glowing Energy Streams -->
-                                    <!-- Solar Input (Downwards into NORA-3) -->
-                                    <path id="flowSolarInv" class="conduit-flow" stroke="url(#solarFlowGrad)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="16 28" fill="none" filter="url(#conduitGlow)" />
-
-                                    <!-- Grid Input/Output -->
-                                    <path id="flowGridInv" class="conduit-flow is-idle" stroke="url(#gridFlowGrad)" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="14 26" fill="none" />
-
-                                    <!-- Home Output (Rightwards into Home Demand) -->
-                                    <path id="flowInvHome" class="conduit-flow" stroke="url(#homeFlowGrad)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="16 28" fill="none" filter="url(#conduitGlow)" />
-
-                                    <!-- Battery Bidirectional (Charging: Inv -> Bat; Discharging: Bat -> Inv) -->
-                                    <path id="flowBatInv" class="conduit-flow" stroke="url(#batChargeGrad)" stroke-width="5" stroke-linecap="round" stroke-dasharray="16 26" fill="none" filter="url(#conduitGlow)" />
-
-                                    <!-- 4. Real-Time Traveling Luminous Photon Particles (All Unified Green #22C55E) -->
-                                    <!-- Solar Photons (2 photons flowing down into NORA-3) -->
-                                    <circle id="solarPhoton0" r="4" fill="#22C55E" class="energy-photon" filter="url(#photonGlow)" />
-                                    <circle id="solarPhoton1" r="3.5" fill="#22C55E" class="energy-photon" filter="url(#photonGlow)" />
-
-                                    <!-- Grid Photons (2 photons flowing into or out of NORA-3) -->
-                                    <circle id="gridPhoton0" r="4" fill="#22C55E" class="energy-photon" filter="url(#photonGlow)" opacity="0" />
-                                    <circle id="gridPhoton1" r="3.5" fill="#22C55E" class="energy-photon" filter="url(#photonGlow)" opacity="0" />
-
-                                    <!-- Home Photons (2 photons flowing right into Home Demand) -->
-                                    <circle id="homePhoton0" r="4" fill="#22C55E" class="energy-photon" filter="url(#photonGlow)" />
-                                    <circle id="homePhoton1" r="3.5" fill="#22C55E" class="energy-photon" filter="url(#photonGlow)" />
-
-                                    <!-- Battery Photons (3 photons: moving DOWN into Battery or UP into NORA-3) -->
-                                    <circle id="batPhoton0" r="4.5" fill="#22C55E" class="energy-photon" filter="url(#photonGlow)" />
-                                    <circle id="batPhoton1" r="4" fill="#22C55E" class="energy-photon" filter="url(#photonGlow)" />
-                                    <circle id="batPhoton2" r="3.5" fill="#22C55E" class="energy-photon" filter="url(#photonGlow)" />
+                                    <!-- 3. Minimal Flow Indicator Dots (Clean & Quiet) -->
+                                    <circle id="dotSolarInv" r="3" fill="#1E7538" opacity="0.9" class="energy-dot" />
+                                    <circle id="dotGridInv" r="3" fill="#1E7538" opacity="0" class="energy-dot" />
+                                    <circle id="dotInvHome" r="3" fill="#1E7538" opacity="0.9" class="energy-dot" />
+                                    <circle id="dotInvBat" r="3" fill="#1E7538" opacity="0.9" class="energy-dot" />
                                 </svg>
 
-                                <!-- Top Node: Solar PV Array (Input to NORA-3) -->
-                                <div id="solarGroup" class="flex flex-col items-center relative z-10">
-                                    <div id="nodeSolarBox" class="w-16 h-16 rounded-2xl bg-brandGreen-light border border-brandGreen/25 flex items-center justify-center text-brandGreen shadow-sm transition-all duration-300">
-                                        <i class="fa-solid fa-solar-panel text-2xl"></i>
+                                <!-- Top Node: Solar PV Array -->
+                                <div id="solarGroup" class="flex flex-col items-center relative z-10 text-center">
+                                    <div class="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-brandBlack dark:text-white mb-2 whitespace-nowrap">
+                                        <span>Solar PV</span>
+                                        <span class="text-[9px] px-1 rounded bg-brandGreen-light text-brandGreen font-bold">In</span>
+                                        <span id="diagSolarKw" class="text-xs font-extrabold text-brandGreen tabular-nums">2.8 kW</span>
                                     </div>
-                                    <span class="text-xs font-bold text-brandBlack mt-1 flex items-center gap-1">
-                                        Solar PV Array <span class="text-[9px] px-1.5 py-0.5 rounded bg-brandGreen-light text-brandGreen font-bold">Input</span>
-                                    </span>
-                                    <span id="diagSolarKw" class="text-xs font-extrabold text-brandGreen tabular-nums">2.4 kW</span>
-                                    <!-- Explicit bottom exit port -->
-                                    <div id="solarBottomPort" class="w-2 h-1"></div>
+                                    <div id="nodeSolarBox" class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-brandGreen-light border border-brandGreen/25 flex items-center justify-center text-brandGreen shadow-xs">
+                                        <i class="fa-solid fa-solar-panel text-lg sm:text-xl"></i>
+                                    </div>
                                 </div>
 
-                                <!-- Center Row: Grid (Left), NORA-3 (Hub), Home Demand (Right) -->
-                                <div class="w-full my-8 flex items-center justify-between relative">
-                                    
-                                    <!-- Left Node: WAPDA / Grid (Input Only - Zero Export Maintained) -->
-                                    <div id="gridGroup" class="flex flex-col items-center w-28 text-center relative z-10">
-                                        <div id="nodeGridBox" class="w-14 h-14 rounded-2xl bg-white border border-black/10 flex items-center justify-center text-brandBlack shadow-sm transition-all duration-300">
-                                            <i class="fa-solid fa-tower-broadcast text-xl"></i>
+                                <!-- Center Row: Grid (Left), NORA-3 (Center Hub), Home Demand (Right) -->
+                                <!-- Perfectly centered in the animation both horizontally and vertically -->
+                                <div class="w-full my-auto relative px-1 sm:px-2 z-10">
+                                    <!-- Boxes Row: Guaranteed Identical Horizontal Centerline -->
+                                    <div class="grid grid-cols-3 items-center">
+                                        <!-- Left Box: Grid (Utility Pole & Transformer) -->
+                                        <div class="flex justify-center">
+                                            <div id="nodeGridBox" class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/35 flex items-center justify-center text-amber-600 dark:text-amber-400 shadow-xs relative z-10 transition-all">
+                                                <!-- Distinguishable Utility Pole & Transformer SVG Symbol -->
+                                                <svg id="nodeGridIcon" class="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                                                    <!-- Main Utility Pole -->
+                                                    <line x1="12" y1="2" x2="12" y2="22" stroke-width="2.2" />
+                                                    <!-- High-Voltage Crossarm -->
+                                                    <line x1="3" y1="6" x2="21" y2="6" stroke-width="2" />
+                                                    <!-- Ceramic Insulators -->
+                                                    <line x1="4" y1="3.5" x2="4" y2="6" />
+                                                    <line x1="12" y1="3.5" x2="12" y2="6" />
+                                                    <line x1="20" y1="3.5" x2="20" y2="6" />
+                                                    <!-- Diagonal Support Struts -->
+                                                    <line x1="6" y1="9" x2="18" y2="9" stroke-width="1.5" />
+                                                    <line x1="8" y1="6" x2="12" y2="9" />
+                                                    <line x1="16" y1="6" x2="12" y2="9" />
+                                                    <!-- Pole-Mounted Distribution Step-Down Transformer Cylinder -->
+                                                    <rect x="13.5" y="10" width="5.5" height="7.5" rx="1.2" fill="currentColor" fill-opacity="0.22" stroke-width="1.6" />
+                                                    <line x1="14.8" y1="12.5" x2="17.8" y2="12.5" stroke-width="1" />
+                                                    <line x1="14.8" y1="14.5" x2="17.8" y2="14.5" stroke-width="1" />
+                                                    <!-- Power Lines -->
+                                                    <path d="M1 6c2 1.5 4 0 4 0" stroke-width="1.2" />
+                                                    <path d="M19 6c2 1.5 4 0 4 0" stroke-width="1.2" />
+                                                </svg>
+                                            </div>
                                         </div>
-                                        <span class="text-xs font-bold text-brandBlack mt-1 flex items-center justify-center gap-1">
-                                            WAPDA / Grid <span id="diagGridRoleBadge" class="text-[9px] px-1.5 py-0.5 rounded bg-brandGreen-light text-brandGreen font-bold">Input Only</span>
-                                        </span>
-                                        <span id="diagGridFlow" class="text-[11px] font-bold text-brandBlack-slate">0.0 kW (Neutral)</span>
+                                        <!-- Center Box: Inverter Hub (Center of Animation) -->
+                                        <div class="flex justify-center">
+                                            <div id="nodeInvBox" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-3xl bg-white dark:bg-white/10 border-2 border-brandGreen flex flex-col items-center justify-center shadow-md p-1.5 relative z-20">
+                                                <img src="Images/norasol%20icon.jpg" alt="NoraSol" class="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-lg object-contain" referrerPolicy="no-referrer">
+                                                <span class="text-[9px] sm:text-[10px] font-extrabold text-brandBlack dark:text-white leading-tight mt-0.5">NORA-3</span>
+                                                <span id="invCurtailPill" class="text-[8px] font-bold text-brandGreen leading-none">CT Active</span>
+                                            </div>
+                                        </div>
+                                        <!-- Right Box: Home Load -->
+                                        <div class="flex justify-center">
+                                            <div id="nodeHomeBox" class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-brandGreen-light border border-brandGreen/25 flex items-center justify-center text-brandGreen shadow-xs relative z-10">
+                                                <i class="fa-solid fa-house-chimney text-base sm:text-lg"></i>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <!-- Central Node: NORA-3 Core Inverter (Central Hub) -->
-                                    <div id="invGroup" class="flex flex-col items-center relative z-20">
-                                        <div id="invTopPort" class="w-2 h-1"></div>
-                                        <div id="nodeInvBox" class="w-20 h-20 rounded-3xl bg-white border-2 border-brandGreen flex items-center justify-center shadow-lg transition-transform duration-300">
-                                            <img src="Images/norasol%20icon.jpg" alt="NoraSol" class="w-12 h-12 rounded-xl object-contain" referrerPolicy="no-referrer">
+                                    <!-- Aligned Labels Row: Uniform height and alignment beneath boxes (Off lines) -->
+                                    <div class="grid grid-cols-3 text-center mt-2.5">
+                                        <div class="flex flex-col items-center whitespace-nowrap">
+                                            <span class="text-[10px] sm:text-xs font-bold text-brandBlack dark:text-white">Grid (Pole Transformer)</span>
+                                            <span id="diagGridFlow" class="text-[10px] sm:text-[11px] font-bold text-brandBlack-slate">0.0 kW</span>
                                         </div>
-                                        <span class="text-xs font-extrabold text-brandBlack mt-1 tracking-tight">NORA-3 Core</span>
-                                        <span id="invCurtailPill" class="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-brandGreen/10 text-brandGreen mt-0.5 border border-brandGreen/25 inline-block">MPPT: Auto Load-Match</span>
-                                        <!-- Explicit bottom exit port towards battery -->
-                                        <div id="invBottomPort" class="w-2 h-1"></div>
-                                    </div>
-
-                                    <!-- Right Node: Home Demand (Output Only) -->
-                                    <div id="homeGroup" class="flex flex-col items-center w-28 text-center relative z-10">
-                                        <div id="nodeHomeBox" class="w-14 h-14 rounded-2xl bg-brandGreen-light border border-brandGreen/25 flex items-center justify-center text-brandGreen shadow-sm transition-all duration-300">
-                                            <i class="fa-solid fa-house-chimney text-xl"></i>
+                                        <div class="flex flex-col items-center whitespace-nowrap">
+                                            <span class="text-[9px] sm:text-[10px] font-semibold text-brandBlack-slate">Core Inverter</span>
                                         </div>
-                                        <span class="text-xs font-bold text-brandBlack mt-1 flex items-center justify-center gap-1">
-                                            Home Demand <span class="text-[9px] px-1.5 py-0.5 rounded bg-brandGreen-light text-brandGreen font-bold">Output</span>
-                                        </span>
-                                        <span id="diagHomeKw" class="text-xs font-extrabold text-brandGreen tabular-nums">1.6 kW</span>
+                                        <div class="flex flex-col items-center whitespace-nowrap">
+                                            <span class="text-[10px] sm:text-xs font-bold text-brandBlack dark:text-white">Home Load</span>
+                                            <span id="diagHomeKw" class="text-xs font-extrabold text-brandGreen tabular-nums">1.6 kW</span>
+                                        </div>
                                     </div>
-
                                 </div>
 
-                                <!-- Floating Battery Energy Direction Indicator Badge (Center of vertical corridor) -->
-                                <div id="batConduitBadge" class="my-2 px-3 py-1 rounded-full text-[10px] font-extrabold flex items-center gap-1.5 transition-all shadow-sm z-20 bg-brandGreen/10 text-brandGreen border border-brandGreen/25">
+                                <!-- Battery Flow Badge: Positioned cleanly off the conduit line without disrupting center alignment -->
+                                <div id="batConduitBadge" class="absolute left-[calc(50%+30px)] sm:left-[calc(50%+38px)] bottom-[82px] sm:bottom-[92px] -translate-y-1/2 px-2.5 py-1 rounded-full text-[9px] sm:text-[10px] font-bold flex items-center gap-1.5 transition-all shadow-xs bg-white dark:bg-[#0c140f] text-brandGreen border border-brandGreen/30 z-20 pointer-events-auto whitespace-nowrap">
                                     <i id="batConduitIcon" class="fa-solid fa-circle-check text-brandGreen"></i>
-                                    <span id="batConduitText">Battery 100% Charged &bull; Float Standby (0.00 kW Inflow)</span>
+                                    <span id="batConduitText">Float Standby</span>
                                 </div>
 
-                                <!-- Bottom Node: 204V LiFePO4 Battery (Bidirectional: Input & Output) -->
-                                <div id="batGroup" class="flex flex-col items-center relative z-10 mt-1">
-                                    <!-- Explicit top entry port -->
-                                    <div id="batTopPort" class="w-2 h-1"></div>
-                                    <div id="nodeBatBox" class="w-16 h-16 rounded-2xl bg-white border border-brandGreen flex flex-col items-center justify-center text-brandBlack shadow-sm transition-all duration-300">
-                                        <i id="nodeBatIcon" class="fa-solid fa-battery-full text-xl text-brandGreen"></i>
-                                        <span id="nodeBatSoCPill" class="text-[8px] font-extrabold text-brandGreen tracking-tight mt-0.5">100% Full</span>
+                                <!-- Bottom Node: 204V LiFePO4 Battery -->
+                                <div id="batGroup" class="flex flex-col items-center relative z-10 text-center">
+                                    <div id="nodeBatBox" class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white dark:bg-white/10 border border-brandGreen flex flex-col items-center justify-center text-brandBlack shadow-xs">
+                                        <i id="nodeBatIcon" class="fa-solid fa-battery-full text-lg sm:text-xl text-brandGreen"></i>
+                                        <span id="nodeBatSoCPill" class="text-[8px] font-bold text-brandGreen">100%</span>
                                     </div>
-                                    <span class="text-xs font-bold text-brandBlack mt-1 flex items-center gap-1">
-                                        204V LiFePO4 Pack <span id="diagBatDirBadge" class="text-[9px] px-1.5 py-0.5 rounded-full bg-brandGreen-light text-brandGreen font-bold">✔ 100% Full</span>
-                                    </span>
-                                    <span id="diagBatteryKw" class="text-xs font-extrabold text-brandGreen tabular-nums">0.00 kW (100% Full / Float)</span>
+                                    <div class="flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-brandBlack dark:text-white mt-2 whitespace-nowrap">
+                                        <span>204V Battery</span>
+                                        <span id="diagBatteryKw" class="text-xs font-extrabold text-brandGreen tabular-nums">0.00 kW</span>
+                                    </div>
                                 </div>
 
                             </div>
@@ -1423,7 +1691,7 @@
 
         <!-- SECTION 4: NORASTORE SCALABLE STORAGE SERIES (Reveal on scroll) -->
         <section id="norastore" class="py-20 md:py-28 relative reveal-on-scroll">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-[1560px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
                 
                 <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
                     <div class="max-w-2xl">
@@ -1583,7 +1851,7 @@
 
         <!-- SECTION 5: FINANCIALS & PAKISTAN ROI CALCULATOR (Reveal on scroll) -->
         <section id="roi-calculator" class="py-20 md:py-28 relative reveal-on-scroll">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-[1560px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
                 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                     
@@ -1702,7 +1970,7 @@
 
         <!-- SECTION 6: TESTIMONIALS CAROUSEL (Reveal on scroll) -->
         <section id="testimonials" class="py-20 md:py-28 relative reveal-on-scroll">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-[1560px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
                 
                 <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
                     <div class="max-w-2xl">
@@ -1885,7 +2153,7 @@
 
         <!-- SECTION 7: FREQUENTLY ASKED QUESTIONS (FAQ) (Reveal on scroll) -->
         <section id="faq" class="py-20 md:py-28 relative reveal-on-scroll">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-[1560px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
                 
                 <div class="max-w-3xl mb-12">
                     <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brandGreen mb-3">
@@ -1994,7 +2262,7 @@
 
         <!-- SECTION 8: CONSULT WITH NORASOL AI (Reveal on scroll) -->
         <section id="ai-section" class="py-20 md:py-28 relative reveal-on-scroll">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-[1560px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
                 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                     
@@ -2104,7 +2372,7 @@
 
     <!-- FOOTER: Apple Minimal Solid Layout -->
     <footer class="bg-white border-t border-black/5 pt-16 pb-12 text-xs text-brandBlack-slate">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-[1560px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
                 
@@ -2359,7 +2627,7 @@
             <div class="px-6 py-4 bg-white/80 border-b border-black/5 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <img src="Images/norasol%20logo.png" alt="NoraSol AI" class="h-6 w-auto">
-                    <span class="text-sm font-bold text-brandBlack">Assistant</span>
+                    <span class="text-sm font-bold text-brandBlack">NoraSol AI Assistant</span>
                 </div>
                 <button onclick="closeAiAssistantModal()" class="text-brandBlack-slate hover:text-brandBlack text-lg">
                     <i class="fa-solid fa-xmark"></i>
@@ -2536,48 +2804,218 @@
             revealObserver.observe(section);
         });
 
-        // 2. Ambient Background Video Controller
-        const videoEl = document.getElementById('ambientBgVideo');
-        const toggleVideoBtn = document.getElementById('toggleVideoBtn');
-        const videoIcon = document.getElementById('videoIcon');
-        const videoLabel = document.getElementById('videoLabel');
-        const switchVideoBtn = document.getElementById('switchVideoSourceBtn');
-        const sceneNum = document.getElementById('sceneNum');
+        // -------------------------------------------------------------
+        // 2. LUXURY LIVING ATMOSPHERE ENGINE (Pure Fluid Generative Waves)
+        // -------------------------------------------------------------
+        const AtmosphereEngine = (function() {
+            const canvas = document.getElementById('atmosphereCanvas');
+            const videoEl = document.getElementById('ambientBgVideo');
+            const auroraEl = document.getElementById('atmosphereAurora');
 
-        let isVideoPlaying = true;
-        let currentScene = 1;
-        const videoScenes = ['Images/2.mp4', 'Images/9788714-sd_640_360_30fps.mp4'];
+            let rafId = null;
+            let ctx = null;
+            let width = 0;
+            let height = 0;
+            let time = 0;
 
-        if (toggleVideoBtn) {
-            toggleVideoBtn.addEventListener('click', () => {
-                if (isVideoPlaying) {
-                    videoEl?.pause();
-                    isVideoPlaying = false;
-                    if (videoIcon) videoIcon.className = 'fa-solid fa-play text-[10px] text-brandGreen';
-                    if (videoLabel) videoLabel.textContent = 'Ambient: Paused';
-                } else {
-                    videoEl?.play();
-                    isVideoPlaying = true;
-                    if (videoIcon) videoIcon.className = 'fa-solid fa-pause text-[10px] text-brandGreen';
-                    if (videoLabel) videoLabel.textContent = 'Ambient Mode';
+            // Pointer lerping for smooth, natural interactive response
+            let mouse = { x: -1000, y: -1000, targetX: -1000, targetY: -1000, active: false };
+
+            function init() {
+                if (canvas) {
+                    ctx = canvas.getContext('2d');
+                    resizeCanvas();
+                    window.addEventListener('resize', debounce(resizeCanvas, 150));
+                    canvas.style.opacity = '1';
                 }
-            });
-        }
 
-        if (switchVideoBtn) {
-            switchVideoBtn.addEventListener('click', () => {
-                currentScene = currentScene === 1 ? 2 : 1;
-                if (sceneNum) sceneNum.textContent = currentScene;
+                // Strictly disable video & aurora to keep only fluid generative waves in background
                 if (videoEl) {
-                    videoEl.style.opacity = '0';
-                    setTimeout(() => {
-                        videoEl.src = videoScenes[currentScene - 1];
-                        videoEl.play();
-                        videoEl.style.opacity = '0.72';
-                    }, 300);
+                    videoEl.style.display = 'none';
+                    videoEl.pause();
                 }
-            });
-        }
+                if (auroraEl) {
+                    auroraEl.style.display = 'none';
+                }
+
+                // Mouse interaction listeners for fluid caustics ripples
+                window.addEventListener('mousemove', (e) => {
+                    mouse.targetX = e.clientX;
+                    mouse.targetY = e.clientY;
+                    mouse.active = true;
+                });
+                window.addEventListener('mouseleave', () => {
+                    mouse.targetX = -1000;
+                    mouse.targetY = -1000;
+                    mouse.active = false;
+                });
+
+                startLoop();
+            }
+
+            function debounce(fn, ms) {
+                let timer;
+                return function() {
+                    clearTimeout(timer);
+                    timer = setTimeout(fn, ms);
+                };
+            }
+
+            function resizeCanvas() {
+                if (!canvas) return;
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+
+            function startLoop() {
+                function frame() {
+                    const speed = 1.0;
+                    time += 0.012 * speed;
+
+                    // Smooth pointer interpolation
+                    if (mouse.active) {
+                        mouse.x += (mouse.targetX - mouse.x) * 0.08;
+                        mouse.y += (mouse.targetY - mouse.y) * 0.08;
+                    }
+
+                    if (ctx) {
+                        ctx.clearRect(0, 0, width, height);
+                        const isDark = document.documentElement.classList.contains('dark');
+                        renderLivingWaveform(isDark, speed);
+                    }
+
+                    rafId = requestAnimationFrame(frame);
+                }
+                rafId = requestAnimationFrame(frame);
+            }
+
+            // Rich Multi-Layered Generative Harmonic Fluid Caustics (8 Waves)
+            function renderLivingWaveform(isDark, speed) {
+                const emerald = isDark ? 'rgba(52, 211, 153, ' : 'rgba(30, 117, 56, ';
+                const mint = isDark ? 'rgba(110, 231, 183, ' : 'rgba(46, 139, 76, ';
+                const slate = isDark ? 'rgba(148, 163, 184, ' : 'rgba(71, 85, 105, ';
+                const deepGreen = isDark ? 'rgba(16, 185, 129, ' : 'rgba(21, 128, 61, ';
+
+                // Wave 1: Deep Ground Swell (Near Bottom)
+                drawWaveRibbon(
+                    height * 0.88,
+                    46,
+                    0.0020,
+                    time * 0.65,
+                    slate + (isDark ? '0.10)' : '0.06)'),
+                    2.0
+                );
+
+                // Wave 2: Sub-Oceanic Undulation
+                drawWaveRibbon(
+                    height * 0.76,
+                    58,
+                    0.0028,
+                    time * 0.85 + 1.2,
+                    deepGreen + (isDark ? '0.15)' : '0.08)'),
+                    3.0
+                );
+
+                // Wave 3: Lower-Mid Harmonic Wave
+                drawWaveRibbon(
+                    height * 0.64,
+                    52,
+                    0.0032,
+                    time * 0.95 + 2.4,
+                    emerald + (isDark ? '0.18)' : '0.10)'),
+                    2.5
+                );
+
+                // Wave 4: Central NoraSol Signature Emerald Energy Crest
+                drawWaveRibbon(
+                    height * 0.52,
+                    68,
+                    0.0038,
+                    time * 1.15 + 3.8,
+                    emerald + (isDark ? '0.24)' : '0.14)'),
+                    4.0
+                );
+
+                // Wave 5: Mid-Upper Harmonic Caustic
+                drawWaveRibbon(
+                    height * 0.40,
+                    48,
+                    0.0044,
+                    time * 1.30 + 5.0,
+                    mint + (isDark ? '0.20)' : '0.11)'),
+                    3.0
+                );
+
+                // Wave 6: High Caustic Shimmer
+                drawWaveRibbon(
+                    height * 0.28,
+                    38,
+                    0.0050,
+                    time * 1.45 + 6.2,
+                    mint + (isDark ? '0.16)' : '0.09)'),
+                    2.2
+                );
+
+                // Wave 7: Upper Atmosphere Ripple
+                drawWaveRibbon(
+                    height * 0.18,
+                    30,
+                    0.0056,
+                    time * 1.60 + 7.4,
+                    emerald + (isDark ? '0.12)' : '0.07)'),
+                    1.8
+                );
+
+                // Wave 8: Stratospheric Horizon Swell
+                drawWaveRibbon(
+                    height * 0.08,
+                    24,
+                    0.0062,
+                    time * 1.75 + 8.6,
+                    slate + (isDark ? '0.08)' : '0.05)'),
+                    1.5
+                );
+            }
+
+            function drawWaveRibbon(baseY, amplitude, freq, phase, color, lineWidth) {
+                ctx.beginPath();
+                ctx.lineWidth = lineWidth;
+                ctx.strokeStyle = color;
+
+                for (let x = 0; x <= width; x += 6) {
+                    let y = baseY 
+                        + Math.sin(x * freq + phase) * amplitude 
+                        + Math.cos(x * freq * 0.55 + phase * 0.75) * (amplitude * 0.38)
+                        + Math.sin(x * freq * 0.25 + phase * 0.4) * (amplitude * 0.2);
+
+                    // Responsive pointer ripple
+                    if (mouse.active) {
+                        const dx = x - mouse.x;
+                        const distY = y - mouse.y;
+                        const dist = Math.sqrt(dx * dx + distY * distY);
+                        if (dist < 260) {
+                            const ripple = Math.sin((dist / 260) * Math.PI) * 32;
+                            y += (mouse.y > y ? -ripple : ripple) * 0.35;
+                        }
+                    }
+
+                    if (x === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            }
+
+            return {
+                init,
+                setMode: () => {},
+                setScene: () => {}
+            };
+        })();
+
+        // Initialize Atmosphere Engine automatically
+        window.addEventListener('DOMContentLoaded', () => {
+            AtmosphereEngine.init();
+        });
 
         // 3. Hero Professional One-Sided Architecture Selector
         const heroFeatures = {
@@ -2626,22 +3064,181 @@
             img.style.transform = heroRotated ? 'rotateY(16deg) scale(1.05)' : 'rotateY(0deg) scale(1)';
         }
 
-        // 4. Section 2 NORA-3 3D Perspectives
+        // 4. Section 2 NORA-3 Interactive 3D Model Inspector Controller
+        const nora3Viewer = document.getElementById('nora3ModelViewer');
+        const modelLoadingScreen = document.getElementById('modelLoadingScreen');
+        const modelLoadingBar = document.getElementById('modelLoadingBar');
+        const modelLoadingPercent = document.getElementById('modelLoadingPercent');
+
+        let current3DTheme = 'titanium';
+        let current3DPartFocus = 'all';
+
+        function apply3DMaterialColors(theme) {
+            if (!nora3Viewer || !nora3Viewer.model || !nora3Viewer.model.materials) return;
+            const mats = nora3Viewer.model.materials;
+
+            const palettes = {
+                titanium: {
+                    chassis: [0.18, 0.20, 0.22, 1.0],
+                    bezel: [0.10, 0.11, 0.13, 1.0],
+                    green: [0.0, 0.85, 0.42, 1.0],
+                    heatsink: [0.05, 0.06, 0.07, 1.0],
+                    welds: [0.65, 0.68, 0.72, 1.0],
+                    fasteners: [0.80, 0.82, 0.86, 1.0],
+                    terminals: [0.85, 0.55, 0.28, 1.0]
+                },
+                cad: {
+                    chassis: [0.14, 0.26, 0.52, 1.0],
+                    bezel: [0.22, 0.24, 0.28, 1.0],
+                    green: [0.0, 1.0, 0.45, 1.0],
+                    heatsink: [0.92, 0.58, 0.12, 1.0],
+                    welds: [0.35, 0.85, 0.95, 1.0],
+                    fasteners: [0.95, 0.95, 0.98, 1.0],
+                    terminals: [1.0, 0.38, 0.0, 1.0]
+                },
+                stealth: {
+                    chassis: [0.06, 0.06, 0.07, 1.0],
+                    bezel: [0.04, 0.04, 0.05, 1.0],
+                    green: [0.0, 0.70, 0.35, 1.0],
+                    heatsink: [0.08, 0.08, 0.09, 1.0],
+                    welds: [0.32, 0.34, 0.36, 1.0],
+                    fasteners: [0.28, 0.30, 0.32, 1.0],
+                    terminals: [0.65, 0.45, 0.25, 1.0]
+                }
+            };
+
+            const p = palettes[theme] || palettes.titanium;
+
+            mats.forEach(mat => {
+                const name = (mat.name || '').toLowerCase();
+                if (name.includes('chassis')) mat.pbrMetallicRoughness.setBaseColorFactor(p.chassis);
+                else if (name.includes('bezel')) mat.pbrMetallicRoughness.setBaseColorFactor(p.bezel);
+                else if (name.includes('green')) mat.pbrMetallicRoughness.setBaseColorFactor(p.green);
+                else if (name.includes('heatsink')) mat.pbrMetallicRoughness.setBaseColorFactor(p.heatsink);
+                else if (name.includes('weld')) mat.pbrMetallicRoughness.setBaseColorFactor(p.welds);
+                else if (name.includes('fastener')) mat.pbrMetallicRoughness.setBaseColorFactor(p.fasteners);
+                else if (name.includes('terminal')) mat.pbrMetallicRoughness.setBaseColorFactor(p.terminals);
+            });
+        }
+
+        function set3DFinishTheme(theme) {
+            current3DTheme = theme;
+            ['titanium', 'cad', 'stealth'].forEach(t => {
+                const btn = document.getElementById(`themeBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
+                if (btn) {
+                    btn.className = (t === theme)
+                        ? 'px-2.5 py-1 rounded-lg font-bold bg-brandGreen text-white transition-all shadow-xs'
+                        : 'px-2.5 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack dark:hover:text-white transition-all';
+                }
+            });
+            apply3DMaterialColors(theme);
+        }
+
+        function set3DComponentFocus(part) {
+            current3DPartFocus = part;
+            ['all', 'chassis', 'heatsink', 'welds', 'hardware'].forEach(p => {
+                const btn = document.getElementById(`partBtn${p.charAt(0).toUpperCase() + p.slice(1)}`);
+                if (btn) {
+                    btn.className = (p === part)
+                        ? 'px-2 py-1 rounded-lg font-bold bg-brandGreen text-white transition-all shadow-xs'
+                        : 'px-2 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack dark:hover:text-white transition-all';
+                }
+            });
+
+            if (!nora3Viewer) return;
+
+            const statusText = document.getElementById('modelViewerStatusText');
+
+            if (part === 'all') {
+                nora3Viewer.cameraOrbit = '0deg 75deg 105%';
+                nora3Viewer.autoRotate = true;
+                nora3Viewer.rotationPerSecond = '16deg';
+                if (statusText) statusText.textContent = 'Full Assembly · Dynamic CAD Interactive Model';
+                apply3DMaterialColors(current3DTheme);
+            } else if (part === 'chassis') {
+                nora3Viewer.cameraOrbit = '25deg 70deg 92%';
+                nora3Viewer.autoRotate = false;
+                if (statusText) statusText.textContent = 'Enclosure & Frame · High-Tensile Anti-Corrosive Architecture';
+            } else if (part === 'heatsink') {
+                nora3Viewer.cameraOrbit = '145deg 72deg 88%';
+                nora3Viewer.autoRotate = false;
+                if (statusText) statusText.textContent = 'Rear Heat Sink · Fanless High-Thermal-Conductivity Extrusion';
+            } else if (part === 'welds') {
+                nora3Viewer.cameraOrbit = '-40deg 78deg 76%';
+                nora3Viewer.autoRotate = false;
+                if (statusText) statusText.textContent = 'Structural Welds · Precision Robotic TIG Aerospace Seams';
+            } else if (part === 'hardware') {
+                nora3Viewer.cameraOrbit = '0deg 98deg 82%';
+                nora3Viewer.autoRotate = false;
+                if (statusText) statusText.textContent = 'Terminal Block & Screws · Industrial Fasteners & Copper Lugs';
+            }
+        }
+
+        if (nora3Viewer) {
+            nora3Viewer.addEventListener('progress', (e) => {
+                const raw = e.detail && typeof e.detail.totalProgress === 'number' ? e.detail.totalProgress : 0;
+                const progress = Math.min(100, Math.round(raw * 100));
+                if (modelLoadingPercent) modelLoadingPercent.textContent = `${progress}% Loaded`;
+                if (modelLoadingBar) modelLoadingBar.style.width = `${Math.max(8, progress)}%`;
+            });
+
+            nora3Viewer.addEventListener('load', () => {
+                if (modelLoadingPercent) modelLoadingPercent.textContent = '100% Ready';
+                if (modelLoadingBar) modelLoadingBar.style.width = '100%';
+                
+                // Initialize high-contrast material palette
+                setTimeout(() => {
+                    apply3DMaterialColors(current3DTheme);
+                }, 100);
+
+                setTimeout(() => {
+                    if (modelLoadingScreen) {
+                        modelLoadingScreen.style.opacity = '0';
+                        modelLoadingScreen.style.pointerEvents = 'none';
+                        setTimeout(() => {
+                            modelLoadingScreen.style.display = 'none';
+                        }, 700);
+                    }
+                }, 350);
+            });
+
+            nora3Viewer.addEventListener('error', (err) => {
+                console.warn('3D Model Viewer load note:', err);
+                if (modelLoadingPercent) modelLoadingPercent.textContent = 'Hardware Mesh Ready';
+                setTimeout(() => {
+                    if (modelLoadingScreen) {
+                        modelLoadingScreen.style.opacity = '0';
+                        modelLoadingScreen.style.pointerEvents = 'none';
+                        setTimeout(() => { modelLoadingScreen.style.display = 'none'; }, 700);
+                    }
+                }, 1000);
+            });
+        }
+
         let currentPerspective = 'front';
         function setProductPerspective(mode) {
             currentPerspective = mode;
-            const img = document.getElementById('nora3InteractiveImg');
-            
-            document.getElementById('viewBtnFront').className = mode === 'front' ? 'px-3 py-1 rounded-lg font-bold bg-brandGreen text-white' : 'px-3 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack';
-            document.getElementById('viewBtnAngled').className = mode === 'angled' ? 'px-3 py-1 rounded-lg font-bold bg-brandGreen text-white' : 'px-3 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack';
-            document.getElementById('viewBtnPulse').className = mode === 'pulse' ? 'px-3 py-1 rounded-lg font-bold bg-brandGreen text-white' : 'px-3 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack';
+            const btnFront = document.getElementById('viewBtnFront');
+            const btnAngled = document.getElementById('viewBtnAngled');
+            const btnPulse = document.getElementById('viewBtnPulse');
 
-            if (mode === 'front') {
-                img.style.transform = 'perspective(1000px) rotateY(0deg) scale(1)';
-            } else if (mode === 'angled') {
-                img.style.transform = 'perspective(1000px) rotateY(-22deg) rotateX(6deg) scale(1.06)';
-            } else if (mode === 'pulse') {
-                img.style.transform = 'perspective(1000px) rotateY(15deg) scale(1.1)';
+            if (btnFront) btnFront.className = mode === 'front' ? 'px-3 py-1 rounded-lg font-bold bg-brandGreen text-white transition-colors' : 'px-3 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack transition-colors';
+            if (btnAngled) btnAngled.className = mode === 'angled' ? 'px-3 py-1 rounded-lg font-bold bg-brandGreen text-white transition-colors' : 'px-3 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack transition-colors';
+            if (btnPulse) btnPulse.className = mode === 'pulse' ? 'px-3 py-1 rounded-lg font-bold bg-brandGreen text-white transition-colors' : 'px-3 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack transition-colors';
+
+            if (nora3Viewer) {
+                if (mode === 'front') {
+                    nora3Viewer.cameraOrbit = '0deg 75deg 105%';
+                    nora3Viewer.autoRotate = false;
+                } else if (mode === 'angled') {
+                    nora3Viewer.cameraOrbit = '45deg 70deg 115%';
+                    nora3Viewer.autoRotate = true;
+                    nora3Viewer.rotationPerSecond = '14deg';
+                } else if (mode === 'pulse') {
+                    nora3Viewer.cameraOrbit = '-35deg 65deg 95%';
+                    nora3Viewer.autoRotate = true;
+                    nora3Viewer.rotationPerSecond = '26deg';
+                }
             }
         }
 
@@ -2792,7 +3389,7 @@
             renderBatterySvgFallback(container, data);
         }
 
-        // Real-Time SVG Conduit Geometric Layout (Computes exact node port coordinates)
+        // High-Precision SVG Conduit Geometric Layout (Guarantees 100% Mathematically Straight Lines)
         function updateSchematicPaths() {
             const container = document.getElementById('schematicContainer');
             const svg = document.getElementById('schematicCanvas');
@@ -2803,72 +3400,202 @@
 
             svg.setAttribute('viewBox', `0 0 ${cRect.width} ${cRect.height}`);
 
-            const solarPort = document.getElementById('solarBottomPort') || document.getElementById('nodeSolarBox');
-            const invTopPort = document.getElementById('invTopPort') || document.getElementById('nodeInvBox');
-            const invBottomPort = document.getElementById('invBottomPort') || document.getElementById('nodeInvBox');
-            const batTopPort = document.getElementById('batTopPort') || document.getElementById('nodeBatBox');
-            
-            const gridEl = document.getElementById('nodeGridBox');
+            const solarEl = document.getElementById('nodeSolarBox');
             const invEl = document.getElementById('nodeInvBox');
+            const batEl = document.getElementById('nodeBatBox');
+            const gridEl = document.getElementById('nodeGridBox');
             const homeEl = document.getElementById('nodeHomeBox');
+            const badgeEl = document.getElementById('batConduitBadge');
 
-            if (!solarPort || !invTopPort || !invBottomPort || !batTopPort || !gridEl || !invEl || !homeEl) return;
+            if (!solarEl || !invEl || !batEl || !gridEl || !homeEl) return;
 
-            const spRect = solarPort.getBoundingClientRect();
-            const itRect = invTopPort.getBoundingClientRect();
-            const ibRect = invBottomPort.getBoundingClientRect();
-            const btRect = batTopPort.getBoundingClientRect();
-
-            const gRect = gridEl.getBoundingClientRect();
+            const sRect = solarEl.getBoundingClientRect();
             const iRect = invEl.getBoundingClientRect();
+            const bRect = batEl.getBoundingClientRect();
+            const gRect = gridEl.getBoundingClientRect();
             const hRect = homeEl.getBoundingClientRect();
 
-            // 1. Solar bottom port -> Inv top port (Input downwards into NORA-3)
-            const sX = spRect.left + spRect.width / 2 - cRect.left;
-            const sY = spRect.bottom - cRect.top;
-            const iTopX = itRect.left + itRect.width / 2 - cRect.left;
-            const iTopY = itRect.top - cRect.top;
+            // 1. HORIZONTAL AXIS LOCK: Compute exact center Y of the central inverter box
+            // Both Grid and Home connect along this identical horizontal line! (Zero tilt!)
+            const commonY = Math.round(iRect.top + iRect.height / 2 - cRect.top);
+            const gX = Math.round(gRect.right - cRect.left);
+            const iLeftX = Math.round(iRect.left - cRect.left);
+            const iRightX = Math.round(iRect.right - cRect.left);
+            const hX = Math.round(hRect.left - cRect.left);
 
-            // 2. Grid right edge -> Inv left edge (Input rightwards into NORA-3)
-            const gX = gRect.right - cRect.left;
-            const gY = gRect.top + gRect.height / 2 - cRect.top;
-            const iLeftX = iRect.left - cRect.left;
-            const iLeftY = iRect.top + iRect.height / 2 - cRect.top;
+            // 2. VERTICAL AXIS LOCK: Compute exact center X of the central inverter box
+            // Both Solar and Battery connect along this identical vertical line! (Zero tilt!)
+            const commonX = Math.round(iRect.left + iRect.width / 2 - cRect.left);
+            const sY = Math.round(sRect.bottom - cRect.top);
+            const iTopY = Math.round(iRect.top - cRect.top);
+            const iBotY = Math.round(iRect.bottom - cRect.top);
+            const bTopY = Math.round(bRect.top - cRect.top);
 
-            // 3. Inv right edge -> Home left edge (Output rightwards into Home Demand)
-            const iRightX = iRect.right - cRect.left;
-            const iRightY = iRect.top + iRect.height / 2 - cRect.top;
-            const hX = hRect.left - cRect.left;
-            const hY = hRect.top + hRect.height / 2 - cRect.top;
-
-            // 4. Inv bottom port -> Bat top port (Bidirectional energy corridor)
-            const iBotX = ibRect.left + ibRect.width / 2 - cRect.left;
-            const iBotY = ibRect.bottom - cRect.top;
-            const bTopX = btRect.left + btRect.width / 2 - cRect.left;
-            const bTopY = btRect.top - cRect.top;
-
-            const pSolar = `M ${sX.toFixed(1)} ${sY.toFixed(1)} L ${iTopX.toFixed(1)} ${iTopY.toFixed(1)}`;
-            const pGrid = `M ${gX.toFixed(1)} ${gY.toFixed(1)} L ${iLeftX.toFixed(1)} ${iLeftY.toFixed(1)}`;
-            const pHome = `M ${iRightX.toFixed(1)} ${iRightY.toFixed(1)} L ${hX.toFixed(1)} ${hY.toFixed(1)}`;
-            const pBat = `M ${iBotX.toFixed(1)} ${iBotY.toFixed(1)} L ${bTopX.toFixed(1)} ${bTopY.toFixed(1)}`;
+            const pSolar = `M ${commonX} ${sY} L ${commonX} ${iTopY}`;
+            const pGrid = `M ${gX} ${commonY} L ${iLeftX} ${commonY}`;
+            const pHome = `M ${iRightX} ${commonY} L ${hX} ${commonY}`;
+            const pBat = `M ${commonX} ${iBotY} L ${commonX} ${bTopY}`;
 
             // Set guide tracks
-            document.getElementById('guideSolarInv')?.setAttribute('d', pSolar);
-            document.getElementById('guideGridInv')?.setAttribute('d', pGrid);
-            document.getElementById('guideInvHome')?.setAttribute('d', pHome);
-            document.getElementById('guideInvBat')?.setAttribute('d', pBat);
+            document.getElementById('trackSolarInv')?.setAttribute('d', pSolar);
+            document.getElementById('trackGridInv')?.setAttribute('d', pGrid);
+            document.getElementById('trackInvHome')?.setAttribute('d', pHome);
+            document.getElementById('trackInvBat')?.setAttribute('d', pBat);
 
-            // Set core pipes
-            document.getElementById('coreSolarInv')?.setAttribute('d', pSolar);
-            document.getElementById('coreGridInv')?.setAttribute('d', pGrid);
-            document.getElementById('coreInvHome')?.setAttribute('d', pHome);
-            document.getElementById('coreInvBat')?.setAttribute('d', pBat);
-
-            // Set flow lines
+            // Set active flow lines
             document.getElementById('flowSolarInv')?.setAttribute('d', pSolar);
             document.getElementById('flowGridInv')?.setAttribute('d', pGrid);
             document.getElementById('flowInvHome')?.setAttribute('d', pHome);
             document.getElementById('flowBatInv')?.setAttribute('d', pBat);
+        }
+
+        // Location & City Solar Wattages Telemetry Engine
+        async function requestLocationAndCalculate() {
+            const btn = document.getElementById('btnDetectLocation');
+            const btnText = document.getElementById('btnDetectLocationText');
+
+            if (!navigator.geolocation) {
+                alert('Geolocation is not supported by your browser.');
+                return;
+            }
+
+            if (btnText) btnText.textContent = 'Locating...';
+            if (btn) btn.disabled = true;
+
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    try {
+                        if (btnText) btnText.textContent = 'Calculating...';
+                        const res = await fetch(`/api/location?lat=${lat}&lon=${lon}`);
+                        if (res.ok) {
+                            const data = await res.json();
+                            applyLocationData(data);
+                        } else {
+                            fallbackLocationCalc(lat, lon);
+                        }
+                    } catch (e) {
+                        fallbackLocationCalc(lat, lon);
+                    } finally {
+                        if (btnText) btnText.textContent = 'Location Updated';
+                        if (btn) btn.disabled = false;
+                        setTimeout(() => {
+                            if (btnText) btnText.textContent = 'Detect My Location';
+                        }, 2500);
+                    }
+                },
+                (error) => {
+                    console.warn('Geolocation denied or timeout:', error);
+                    if (btnText) btnText.textContent = 'Manual Select';
+                    if (btn) btn.disabled = false;
+                    selectCityProfile('islamabad');
+                    setTimeout(() => {
+                        if (btnText) btnText.textContent = 'Detect My Location';
+                    }, 2500);
+                },
+                { timeout: 8000, enableHighAccuracy: true }
+            );
+        }
+
+        async function selectCityProfile(cityKey) {
+            try {
+                const res = await fetch(`/api/location?city=${encodeURIComponent(cityKey)}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    applyLocationData(data);
+                }
+            } catch (err) {
+                console.warn('City fetch error:', err);
+            }
+        }
+
+        function fallbackLocationCalc(lat, lon) {
+            const psh = Math.max(4.0, Math.min(6.5, 6.5 - (Math.abs(lat) - 20) * 0.08));
+            const data = {
+                city: `Location (${lat.toFixed(2)}°, ${lon.toFixed(2)}°)`,
+                coordinates: { lat, lon },
+                peakSunHours: +psh.toFixed(1),
+                temperatureC: 28,
+                ghi: 950,
+                systemRatedWatts: 3000,
+                estimatedDailyKwh: +(psh * 3.0 * 0.86).toFixed(1),
+                estimatedMonthlyUnits: Math.round(psh * 3.0 * 0.86 * 30),
+                wattages: {
+                    peakCapacity: 3000,
+                    clearSunNow: 2800,
+                    partlyCloudy: 2100,
+                    overcast: 950,
+                    stormy: 330,
+                    night: 0,
+                    batteryDischargeWatts: 3000,
+                    batteryUsableWh: 2700,
+                    loadBaseWatts: 550,
+                    loadHeavyWatts: 2500
+                }
+            };
+            applyLocationData(data);
+        }
+
+        function applyLocationData(data) {
+            if (!data) return;
+
+            // Update Location Display
+            const locDisp = document.getElementById('currentLocationDisplay');
+            if (locDisp) {
+                locDisp.innerHTML = `${data.city} &bull; ${data.coordinates.lat.toFixed(2)}° N, ${data.coordinates.lon.toFixed(2)}° E &bull; ${data.peakSunHours} Peak Sun Hours`;
+            }
+
+            // Update Dropdown selection if matched
+            const dropdown = document.getElementById('citySelectDropdown');
+            if (dropdown && data.city) {
+                const opt = Array.from(dropdown.options).find(o => data.city.toLowerCase().includes(o.value));
+                if (opt) dropdown.value = opt.value;
+            }
+
+            // Update 4 Summary Wattage Metrics
+            const wPeak = document.getElementById('wattPeakOutput');
+            const wYield = document.getElementById('wattDailyYield');
+            const wBat = document.getElementById('wattBatteryCapacity');
+            const wLoad = document.getElementById('wattLoadProfiles');
+
+            if (wPeak) wPeak.textContent = `${(data.systemRatedWatts || 3000).toLocaleString()} W (${((data.systemRatedWatts || 3000)/1000).toFixed(1)} kW)`;
+            if (wYield) wYield.textContent = `${data.estimatedDailyKwh} kWh / ${data.estimatedMonthlyUnits} U`;
+            if (wBat) wBat.textContent = `${(data.wattages?.batteryUsableWh || 2700).toLocaleString()} Wh (204V)`;
+            if (wLoad) wLoad.textContent = `${data.wattages?.loadBaseWatts || 550} W / ${(data.wattages?.loadHeavyWatts || 2500).toLocaleString()} W`;
+
+            // Update live telemetry in weather card
+            const weatherIrradiance = document.getElementById('weatherIrradiance');
+            const weatherTemp = document.getElementById('weatherTemp');
+            if (weatherIrradiance && data.ghi) weatherIrradiance.textContent = `${data.ghi} W/m²`;
+            if (weatherTemp && data.temperatureC) weatherTemp.textContent = `${data.temperatureC}°C`;
+
+            // Auto-calibrate slider to current midday sun wattage
+            const currentWatts = data.wattages?.clearSunNow || 2800;
+            const currentKw = +(currentWatts / 1000).toFixed(1);
+            const solarSlider = document.getElementById('solarSlider');
+            if (solarSlider) {
+                solarSlider.value = currentKw;
+            }
+
+            updateSimulator();
+        }
+
+        function toggleWattageMatrix() {
+            const details = document.getElementById('wattageMatrixDetails');
+            const icon = document.getElementById('wattMatrixToggleIcon');
+            const label = document.getElementById('wattMatrixToggleLabel');
+            if (!details) return;
+
+            if (details.classList.contains('hidden')) {
+                details.classList.remove('hidden');
+                if (icon) icon.className = 'fa-solid fa-chevron-up text-[9px] transition-transform';
+                if (label) label.textContent = 'Hide Wattage Scenarios';
+            } else {
+                details.classList.add('hidden');
+                if (icon) icon.className = 'fa-solid fa-chevron-down text-[9px] transition-transform';
+                if (label) label.textContent = 'View All Possible Wattage Scenarios';
+            }
         }
 
         // Mock Weather API for Islamabad, Pakistan
@@ -2883,7 +3610,7 @@
                     irradiance: '980 W/m²',
                     maxKw: 3.0,
                     recommendedKw: 2.8,
-                    desc: 'Peak GHI irradiance over Islamabad. Solar MPPT operating at full theoretical capacity.'
+                    desc: 'Peak irradiance. MPPT operating at full capacity.'
                 },
                 partly_cloudy: {
                     name: 'Partly Cloudy',
@@ -2892,7 +3619,7 @@
                     irradiance: '680 W/m²',
                     maxKw: 2.2,
                     recommendedKw: 1.9,
-                    desc: 'Scattered cumulus clouds over Margalla Hills. Intermittent diffuse shading.'
+                    desc: 'Scattered clouds with intermittent shading.'
                 },
                 cloudy: {
                     name: 'Overcast / Cloudy',
@@ -2901,7 +3628,7 @@
                     irradiance: '320 W/m²',
                     maxKw: 1.1,
                     recommendedKw: 0.9,
-                    desc: 'Dense tropospheric cloud deck across Islamabad. Diffuse daylight generation.'
+                    desc: 'Dense cloud cover. Diffuse daylight generation.'
                 },
                 stormy: {
                     name: 'Stormy / Monsoon Rain',
@@ -2910,7 +3637,7 @@
                     irradiance: '110 W/m²',
                     maxKw: 0.4,
                     recommendedKw: 0.3,
-                    desc: 'Monsoon squall across Islamabad. Heavy rain and minimal solar penetration.'
+                    desc: 'Monsoon squall. Low light penetration.'
                 },
                 night: {
                     name: 'Dusk / Night',
@@ -2919,7 +3646,7 @@
                     irradiance: '0 W/m²',
                     maxKw: 0.0,
                     recommendedKw: 0.0,
-                    desc: 'Zero solar irradiance. NORA-3 automatically switches load to 204V LiFePO4 storage.'
+                    desc: 'Zero solar. Load powered by 204V LiFePO4 battery.'
                 }
             },
             currentCondition: 'sunny'
@@ -2961,20 +3688,17 @@
             const sliderMidLabel = document.getElementById('sliderMidLabel');
 
             if (solarSlider) {
-                // Dynamically constrain the slider's maximum ceiling
                 solarSlider.max = Math.max(0.1, data.maxKw).toFixed(1);
-                // Set the slider value automatically to the weather condition's output
                 solarSlider.value = data.recommendedKw.toFixed(1);
 
                 if (sliderMaxLabel) {
-                    sliderMaxLabel.textContent = `${data.maxKw.toFixed(1)} kW (${data.name.split(' ')[0]})`;
+                    sliderMaxLabel.textContent = `${data.maxKw.toFixed(1)} kW (Max)`;
                 }
                 if (sliderMidLabel) {
-                    sliderMidLabel.textContent = `${(data.maxKw / 2).toFixed(1)} kW (Mid)`;
+                    sliderMidLabel.textContent = `${(data.maxKw / 2).toFixed(1)} kW`;
                 }
             }
 
-            // Recalculate full simulator energy balance
             updateSimulator();
         }
 
@@ -3003,143 +3727,193 @@
 
             if (mode === 'hybrid') {
                 if (solarSlider) solarSlider.disabled = false;
-                if (bannerText) bannerText.innerHTML = '<strong class="font-bold text-brandGreen">Hybrid Core:</strong> Solar supplies load, excess charges 204V battery. CT holds 0 kW grid export. Battery delivers up to 3.0 kW max; if demand exceeds 3.0 kW (e.g. 3.1 kW), WAPDA Grid imports the difference.';
-                if (badge) { badge.textContent = 'Hybrid Active'; badge.className = 'text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-brandGreen text-white'; }
+                if (bannerText) bannerText.innerHTML = '<strong class="font-bold text-brandGreen">Hybrid Mode:</strong> Solar powers home load; surplus charges 204V battery; CT holds 0 kW grid export.';
+                if (badge) { badge.textContent = 'Hybrid Active'; badge.className = 'text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-brandGreen text-white'; }
             } else if (mode === 'ups') {
-                if (bannerText) bannerText.innerHTML = '<strong class="font-bold text-brandGreen">UPS Mode:</strong> Zero solar PV input (0.0 kW). Home runs on 204V Battery (max 3.0 kW). If demand exceeds 3.0 kW (e.g. 3.1 kW), WAPDA Grid imports the remaining difference.';
-                if (badge) { badge.textContent = 'UPS Active (No Solar)'; badge.className = 'text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-brandBlack text-white'; }
+                if (bannerText) bannerText.innerHTML = '<strong class="font-bold text-brandGreen">UPS Mode:</strong> No solar input (0.0 kW); battery powers home; grid covers deficit.';
+                if (badge) { badge.textContent = 'UPS Active'; badge.className = 'text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-brandBlack text-white'; }
             } else if (mode === 'islanded') {
                 if (solarSlider) solarSlider.disabled = false;
-                if (bannerText) bannerText.innerHTML = '<strong class="font-bold text-brandGreen">Islanded (Off-Grid):</strong> WAPDA Grid is completely isolated (0.0 kW). Home is powered purely by Solar + 204V Battery (max 3.0 kW discharge).';
-                if (badge) { badge.textContent = 'Islanded (Grid Disconnected)'; badge.className = 'text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-brandBlack text-white'; }
+                if (bannerText) bannerText.innerHTML = '<strong class="font-bold text-brandGreen">Off-Grid Mode:</strong> Grid completely isolated (0.0 kW); powered entirely by solar and battery.';
+                if (badge) { badge.textContent = 'Off-Grid Active'; badge.className = 'text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-brandBlack text-white'; }
             } else if (mode === 'export') {
                 if (solarSlider) solarSlider.disabled = false;
-                if (bannerText) bannerText.innerHTML = '<strong class="font-bold text-brandGreen">Export to Grid:</strong> Net-Metering active. Surplus solar above home load is exported directly into the WAPDA Grid.';
-                if (badge) { badge.textContent = 'Export to Grid Active'; badge.className = 'text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-brandGreen text-white'; }
+                if (bannerText) bannerText.innerHTML = '<strong class="font-bold text-brandGreen">Net-Meter Mode:</strong> Surplus solar above home load is exported to the grid.';
+                if (badge) { badge.textContent = 'Net-Meter Active'; badge.className = 'text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-brandGreen text-white'; }
             }
 
             updateSimulator();
         }
 
-        // Continuous Real-Time Luminous Photon Particle Animation Loop (Unified Green #22C55E)
-        let _photonSolarT = [0.1, 0.6];
-        let _photonGridT = [0.1, 0.6];
-        let _photonHomeT = [0.1, 0.6];
-        let _photonBatT = [0.05, 0.45, 0.85];
-
+        // Clean Minimal Flow Animation Loop (Anti-AI Slop: Single Clean Dot per Path)
+        let _simFlowT = 0;
         window._simSolarSpeed = 0.012;
         window._simHomeSpeed = 0.012;
         window._simGridSpeed = 0;
-        window._simGridDir = 1; // 1 = import into NORA-3, -1 = export to Grid
+        window._simGridDir = 1;
         window._simBatSpeed = 0.014;
-        window._simBatDir = 1; // 1 = charging (downward into battery), -1 = discharging (upward into NORA-3)
+        window._simBatDir = 1;
 
-        function tickPhotons() {
+        function tickMinimalFlow() {
+            _simFlowT = (_simFlowT + 0.007) % 1;
+
+            // 1. Solar Indicator Dot (Flows downwards into Inverter)
             const pSolar = document.getElementById('flowSolarInv');
-            const pGrid = document.getElementById('flowGridInv');
-            const pHome = document.getElementById('flowInvHome');
-            const pBat = document.getElementById('flowBatInv');
-
-            // 1. Solar Photons (flow DOWN into NORA-3)
-            if (pSolar && pSolar.getTotalLength) {
+            const dotSolar = document.getElementById('dotSolarInv');
+            if (pSolar && dotSolar && window._simSolarSpeed > 0 && pSolar.getTotalLength) {
                 const len = pSolar.getTotalLength();
                 if (len > 0) {
-                    const spd = window._simSolarSpeed;
-                    _photonSolarT = _photonSolarT.map((t, idx) => {
-                        const nextT = (t + spd) % 1;
-                        const pt = pSolar.getPointAtLength(nextT * len);
-                        const dot = document.getElementById(`solarPhoton${idx}`);
-                        if (dot) {
-                            dot.setAttribute('cx', pt.x.toFixed(1));
-                            dot.setAttribute('cy', pt.y.toFixed(1));
-                            dot.setAttribute('fill', '#22C55E');
-                            dot.style.opacity = spd > 0.001 ? '1' : '0.05';
-                        }
-                        return nextT;
-                    });
+                    const pt = pSolar.getPointAtLength((_simFlowT * len) % len);
+                    dotSolar.setAttribute('cx', pt.x.toFixed(1));
+                    dotSolar.setAttribute('cy', pt.y.toFixed(1));
+                    dotSolar.style.opacity = '0.9';
                 }
+            } else if (dotSolar) {
+                dotSolar.style.opacity = '0';
             }
 
-            // 2. Home Photons (flow RIGHT into Home Demand)
-            if (pHome && pHome.getTotalLength) {
+            // 2. Home Indicator Dot (Flows rightwards into Home Load)
+            const pHome = document.getElementById('flowInvHome');
+            const dotHome = document.getElementById('dotInvHome');
+            if (pHome && dotHome && window._simHomeSpeed > 0 && pHome.getTotalLength) {
                 const len = pHome.getTotalLength();
                 if (len > 0) {
-                    const spd = window._simHomeSpeed;
-                    _photonHomeT = _photonHomeT.map((t, idx) => {
-                        const nextT = (t + spd) % 1;
-                        const pt = pHome.getPointAtLength(nextT * len);
-                        const dot = document.getElementById(`homePhoton${idx}`);
-                        if (dot) {
-                            dot.setAttribute('cx', pt.x.toFixed(1));
-                            dot.setAttribute('cy', pt.y.toFixed(1));
-                            dot.setAttribute('fill', '#22C55E');
-                        }
-                        return nextT;
-                    });
+                    const pt = pHome.getPointAtLength((_simFlowT * len) % len);
+                    dotHome.setAttribute('cx', pt.x.toFixed(1));
+                    dotHome.setAttribute('cy', pt.y.toFixed(1));
+                    dotHome.style.opacity = '0.9';
                 }
+            } else if (dotHome) {
+                dotHome.style.opacity = '0';
             }
 
-            // 3. Grid Photons (flow RIGHT into NORA-3 on import, or LEFT to Grid on export)
-            if (pGrid && pGrid.getTotalLength) {
+            // 3. Grid Indicator Dot (Import vs Export vs Idle)
+            const pGrid = document.getElementById('flowGridInv');
+            const dotGrid = document.getElementById('dotGridInv');
+            if (pGrid && dotGrid && window._simGridSpeed > 0 && pGrid.getTotalLength) {
                 const len = pGrid.getTotalLength();
                 if (len > 0) {
-                    const spd = window._simGridSpeed;
-                    const dir = window._simGridDir || 1;
-                    _photonGridT = _photonGridT.map((t, idx) => {
-                        let nextT = (t + dir * spd) % 1;
-                        if (nextT < 0) nextT += 1;
-                        const pt = pGrid.getPointAtLength(nextT * len);
-                        const dot = document.getElementById(`gridPhoton${idx}`);
-                        if (dot) {
-                            dot.setAttribute('cx', pt.x.toFixed(1));
-                            dot.setAttribute('cy', pt.y.toFixed(1));
-                            dot.setAttribute('fill', '#22C55E');
-                            dot.style.opacity = spd > 0 ? '1' : '0';
-                        }
-                        return nextT;
-                    });
+                    const t = window._simGridDir === -1 ? (1 - _simFlowT) : _simFlowT;
+                    const pt = pGrid.getPointAtLength((t * len) % len);
+                    dotGrid.setAttribute('cx', pt.x.toFixed(1));
+                    dotGrid.setAttribute('cy', pt.y.toFixed(1));
+                    dotGrid.style.opacity = '0.9';
                 }
+            } else if (dotGrid) {
+                dotGrid.style.opacity = '0';
             }
 
-            // 4. Battery Photons (CHARGING: move DOWN into battery; DISCHARGING: move UP into inverter!)
-            if (pBat && pBat.getTotalLength) {
+            // 4. Battery Indicator Dot (Charge downwards vs Discharge upwards)
+            const pBat = document.getElementById('flowBatInv');
+            const dotBat = document.getElementById('dotInvBat');
+            if (pBat && dotBat && window._simBatSpeed > 0 && pBat.getTotalLength) {
                 const len = pBat.getTotalLength();
                 if (len > 0) {
-                    const dir = window._simBatDir;
-                    const spd = window._simBatSpeed;
-                    _photonBatT = _photonBatT.map((t, idx) => {
-                        let nextT = (t + dir * spd) % 1;
-                        if (nextT < 0) nextT += 1;
-                        const pt = pBat.getPointAtLength(nextT * len);
-                        const dot = document.getElementById(`batPhoton${idx}`);
-                        if (dot) {
-                            dot.setAttribute('cx', pt.x.toFixed(1));
-                            dot.setAttribute('cy', pt.y.toFixed(1));
-                            dot.setAttribute('fill', '#22C55E');
-                            dot.style.opacity = spd > 0.001 ? '1' : '0';
-                        }
-                        return nextT;
-                    });
+                    const t = window._simBatDir === -1 ? (1 - _simFlowT) : _simFlowT;
+                    const pt = pBat.getPointAtLength((t * len) % len);
+                    dotBat.setAttribute('cx', pt.x.toFixed(1));
+                    dotBat.setAttribute('cy', pt.y.toFixed(1));
+                    dotBat.style.opacity = '0.9';
                 }
+            } else if (dotBat) {
+                dotBat.style.opacity = '0';
             }
 
-            requestAnimationFrame(tickPhotons);
+            requestAnimationFrame(tickMinimalFlow);
         }
 
-        // Launch photon particle engine
-        requestAnimationFrame(tickPhotons);
+        requestAnimationFrame(tickMinimalFlow);
+
+        // Peak Hours Timing & Tariff Configuration
+        let isPeakModeForced = false;
+        let simHour = 19; // Default 19:00 (7 PM, in NEPRA peak hours)
+        let peakStartHour = 18; // Default 18:00 (6 PM)
+        let peakEndHour = 22; // Default 22:00 (10 PM)
+
+        function checkIsPeakHour() {
+            if (isPeakModeForced) return true;
+            return (simHour >= peakStartHour && simHour < peakEndHour);
+        }
+
+        function updatePeakTiming() {
+            peakStartHour = parseInt(document.getElementById('peakStartSelect')?.value || 18, 10);
+            peakEndHour = parseInt(document.getElementById('peakEndSelect')?.value || 22, 10);
+            updatePeakUI();
+            updateSimulator();
+        }
+
+        function onSimTimeSliderChange(val) {
+            simHour = parseInt(val, 10);
+            updatePeakUI();
+            updateSimulator();
+        }
+
+        function togglePeakHourMode() {
+            isPeakModeForced = !isPeakModeForced;
+            const btn = document.getElementById('togglePeakModeBtn');
+            const text = document.getElementById('togglePeakModeText');
+            if (isPeakModeForced) {
+                if (btn) btn.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer bg-amber-500 text-white shadow-xs border border-amber-600';
+                if (text) text.textContent = 'Peak Mode: FORCED ON';
+            } else {
+                if (btn) btn.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer bg-black/5 dark:bg-white/10 text-brandBlack hover:border-brandGreen border border-black/10 dark:border-white/10';
+                if (text) text.textContent = 'Peak Mode: Auto Clock';
+            }
+            updatePeakUI();
+            updateSimulator();
+        }
+
+        function updatePeakUI() {
+            const isPeak = checkIsPeakHour();
+            const clockDisp = document.getElementById('simClockDisplay');
+            const banner = document.getElementById('peakStatusBanner');
+            const statusText = document.getElementById('peakStatusText');
+            const statusBadge = document.getElementById('peakStatusBadge');
+
+            const formattedTime = (simHour < 10 ? '0' : '') + simHour + ':00';
+            if (clockDisp) {
+                clockDisp.textContent = `${formattedTime} (${isPeak ? '⚡ Peak Tariff' : 'Off-Peak'})`;
+                clockDisp.className = isPeak 
+                    ? 'text-xs font-extrabold text-amber-600 dark:text-amber-400 tabular-nums'
+                    : 'text-xs font-extrabold text-brandGreen tabular-nums';
+            }
+
+            if (banner && statusText && statusBadge) {
+                if (isPeak) {
+                    banner.className = 'mt-3 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between gap-2 text-xs transition-all';
+                    statusText.className = 'font-bold text-amber-800 dark:text-amber-200';
+                    statusText.textContent = `⚡ PEAK TARIFF HOURS (${peakStartHour}:00 - ${peakEndHour}:00): Battery prioritized to eliminate grid peak rates (~Rs 65/kWh). Grid used only if load > 3.0 kW or battery < 15%.`;
+                    statusBadge.className = 'text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-500 text-white flex-shrink-0 animate-pulse';
+                    statusBadge.textContent = 'Peak Rate Active';
+                } else {
+                    banner.className = 'mt-3 p-2.5 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/5 dark:border-white/10 flex items-center justify-between gap-2 text-xs transition-all';
+                    statusText.className = 'font-medium text-brandBlack-slate';
+                    statusText.textContent = `Standard Off-Peak Hours (Grid rate ~Rs 35/kWh). Normal solar & battery dispatch.`;
+                    statusBadge.className = 'text-[9px] font-bold uppercase px-2 py-0.5 rounded-full bg-black/10 dark:bg-white/10 text-brandBlack-slate flex-shrink-0';
+                    statusBadge.textContent = 'Off-Peak';
+                }
+            }
+        }
 
         function setBatterySoCPreset(soc) {
             batteryCurrentSoC = soc;
             
             // Update preset buttons styling
-            [100, 75, 30].forEach(val => {
+            [100, 75, 30, 14].forEach(val => {
                 const btn = document.getElementById(`socBtn${val}`);
                 if (btn) {
                     if (val === soc) {
-                        btn.className = 'px-1.5 py-0.5 rounded-md text-[9px] font-bold border border-brandGreen bg-brandGreen/10 text-brandGreen transition-all';
+                        if (val <= 15) {
+                            btn.className = 'px-1.5 py-0.5 rounded text-[9px] font-bold border border-rose-500 bg-rose-500 text-white transition-all';
+                        } else {
+                            btn.className = 'px-1.5 py-0.5 rounded text-[9px] font-bold border border-brandGreen bg-brandGreen/10 text-brandGreen transition-all';
+                        }
                     } else {
-                        btn.className = 'px-1.5 py-0.5 rounded-md text-[9px] font-bold border border-black/10 text-brandBlack hover:border-brandGreen transition-all';
+                        if (val <= 15) {
+                            btn.className = 'px-1.5 py-0.5 rounded text-[9px] font-bold border border-rose-500/40 text-rose-500 hover:bg-rose-500/10 transition-all';
+                        } else {
+                            btn.className = 'px-1.5 py-0.5 rounded text-[9px] font-bold border border-black/10 text-brandBlack hover:border-brandGreen transition-all';
+                        }
                     }
                 }
             });
@@ -3166,6 +3940,8 @@
             const potentialSolarKw = (currentSimMode === 'ups') ? 0.0 : Math.min(weatherMax, rawSolar);
             const loadKw = parseFloat(document.getElementById('loadSlider')?.value || 1.6);
 
+            const isPeakHour = checkIsPeakHour();
+            const isBatteryLow = (batteryCurrentSoC < 15.0);
             const isBatteryFull = (batteryCurrentSoC >= 99.0);
             const MAX_BATTERY_POWER = 3.0; // kW
 
@@ -3175,69 +3951,120 @@
             let actualGridExport = 0;
             let isSolarCurtailed = false;
 
-            if (potentialSolarKw >= loadKw) {
-                // Solar potential meets or exceeds home load
-                const surplus = potentialSolarKw - loadKw;
+            const isGridActive = (currentSimMode !== 'islanded');
 
-                if (isBatteryFull) {
-                    // BATTERY IS 100% COMPLETELY CHARGED!
-                    // Crucial: 0.00 kW going into battery!
-                    batteryFlow = 0.0;
+            // 1. Cutoff Protection: When battery is under 15%, stop taking battery, turn it OFF, and take grid power
+            if (isBatteryLow) {
+                batteryFlow = 0.0;
+                const solarToHome = Math.min(loadKw, potentialSolarKw);
+                actualSolarKw = (currentSimMode === 'export') ? potentialSolarKw : solarToHome;
+                const deficit = Math.max(0, loadKw - solarToHome);
 
-                    if (currentSimMode === 'export') {
-                        // In Net-Metering Export Mode: full surplus exports to WAPDA Grid
-                        actualSolarKw = potentialSolarKw;
-                        actualGridExport = surplus;
-                        actualGridImport = 0.0;
+                if (isGridActive) {
+                    actualGridImport = deficit;
+                    actualGridExport = (currentSimMode === 'export' && potentialSolarKw > loadKw) ? (potentialSolarKw - loadKw) : 0.0;
+                } else {
+                    actualGridImport = 0.0;
+                    actualGridExport = 0.0;
+                }
+            } else if (isPeakHour && isGridActive) {
+                // 2. Peak Hours Tariff Elimination Mode:
+                // Battery is prioritized to discharge and eliminate expensive peak tariff (~Rs 65/kWh).
+                // Use grid ONLY if load > battery max capacity (3.0 kW) or if battery < 15%.
+                const solarToHome = Math.min(loadKw, potentialSolarKw);
+                actualSolarKw = potentialSolarKw;
+                const remainingDeficit = Math.max(0, loadKw - solarToHome);
+
+                const batteryDischarge = Math.min(MAX_BATTERY_POWER, remainingDeficit);
+                batteryFlow = -batteryDischarge;
+                batteryCurrentSoC = Math.max(10, batteryCurrentSoC - batteryDischarge * 0.4);
+
+                if (remainingDeficit > MAX_BATTERY_POWER) {
+                    actualGridImport = remainingDeficit - MAX_BATTERY_POWER;
+                } else {
+                    actualGridImport = 0.0;
+                }
+                actualGridExport = 0.0;
+            } else if (isGridActive) {
+                // 3. User Requirement:
+                // "when the grid is active, the battery is not discharged, rather the solar first charges the battery and provides load to the home load, if the pv is insufficient only the extra load is carried by the grid"
+                
+                if (potentialSolarKw > 0) {
+                    if (isBatteryFull) {
+                        // Battery is 100% full (float standby)
+                        batteryFlow = 0.0;
+                        const solarToHome = Math.min(loadKw, potentialSolarKw);
+                        const extraLoad = Math.max(0, loadKw - solarToHome);
+                        actualGridImport = extraLoad;
+
+                        if (potentialSolarKw > loadKw) {
+                            if (currentSimMode === 'export') {
+                                actualSolarKw = potentialSolarKw;
+                                actualGridExport = potentialSolarKw - loadKw;
+                            } else {
+                                actualSolarKw = loadKw; // Curtailed to load
+                                isSolarCurtailed = true;
+                                actualGridExport = 0.0;
+                            }
+                        } else {
+                            actualSolarKw = potentialSolarKw;
+                            actualGridExport = 0.0;
+                        }
                     } else {
-                        // In Hybrid, UPS, or Islanded (Zero-Export):
-                        // NORA-3 AUTOMATICALLY THROTTLES MPPT TO GENERATE EXACTLY WHAT THE HOME DEMANDS!
-                        actualSolarKw = loadKw; // Curtailed to match home load exactly!
-                        isSolarCurtailed = (potentialSolarKw > loadKw);
-                        actualGridExport = 0.0;
-                        actualGridImport = 0.0;
+                        // Solar FIRST charges the battery and provides load to the home load
+                        const targetBatCharge = Math.min(2.0, (100 - batteryCurrentSoC) * 0.1);
+                        const batCharge = Math.min(targetBatCharge, potentialSolarKw);
+                        batteryFlow = batCharge;
+                        batteryCurrentSoC = Math.min(100, batteryCurrentSoC + batteryFlow * 0.4);
+
+                        const remainingSolar = potentialSolarKw - batCharge;
+                        const solarToHome = Math.min(loadKw, remainingSolar);
+                        actualSolarKw = potentialSolarKw;
+
+                        // If PV is insufficient for home load, ONLY the extra load is carried by the grid
+                        const extraLoad = Math.max(0, loadKw - solarToHome);
+                        actualGridImport = extraLoad;
+
+                        if (currentSimMode === 'export' && remainingSolar > loadKw) {
+                            actualGridExport = remainingSolar - loadKw;
+                        } else {
+                            actualGridExport = 0.0;
+                        }
                     }
                 } else {
-                    // Battery is NOT full: accepts charging current from surplus
-                    if (currentSimMode === 'export') {
-                        const batCharge = Math.min(1.0, surplus);
-                        batteryFlow = batCharge;
-                        actualGridExport = surplus - batCharge;
-                        actualGridImport = 0.0;
-                    } else {
-                        // Zero export priority: surplus charges battery up to 3.0 kW
-                        batteryFlow = Math.min(MAX_BATTERY_POWER, surplus);
-                        actualGridExport = 0.0;
-                        actualGridImport = 0.0;
-                    }
-                    batteryCurrentSoC = Math.min(100, batteryCurrentSoC + batteryFlow * 0.4);
+                    // No solar (night / dark):
+                    // Battery is NOT discharged while grid is active!
+                    batteryFlow = 0.0;
+                    actualSolarKw = 0.0;
+                    actualGridImport = loadKw; // All load carried by grid
+                    actualGridExport = 0.0;
                 }
             } else {
-                // Household load exceeds solar generation. Battery supplements up to 3.0 kW max!
-                const deficit = loadKw - potentialSolarKw;
-                const batteryDischarge = Math.min(MAX_BATTERY_POWER, deficit);
-                batteryFlow = -batteryDischarge;
-
-                const remainingDeficit = deficit - batteryDischarge;
-
-                if (currentSimMode === 'islanded') {
+                // 4. Islanded / Off-Grid Mode (Grid inactive):
+                // Battery discharges to supply load deficit
+                if (potentialSolarKw >= loadKw) {
+                    actualSolarKw = loadKw;
+                    batteryFlow = 0.0;
                     actualGridImport = 0.0;
                     actualGridExport = 0.0;
                 } else {
-                    actualGridImport = remainingDeficit;
+                    const deficit = loadKw - potentialSolarKw;
+                    const batteryDischarge = Math.min(MAX_BATTERY_POWER, deficit);
+                    batteryFlow = -batteryDischarge;
+                    batteryCurrentSoC = Math.max(10, batteryCurrentSoC - batteryDischarge * 0.4);
+                    actualSolarKw = potentialSolarKw;
+                    actualGridImport = 0.0;
                     actualGridExport = 0.0;
                 }
-
-                batteryCurrentSoC = Math.max(15, batteryCurrentSoC - batteryDischarge * 0.4);
             }
 
-            // Update Solar Value Label (Reflects automatic load-matching when battery full)
+            // Update Solar Value Label
             const sliderSolarVal = document.getElementById('sliderSolarVal');
             if (sliderSolarVal) {
                 if (currentSimMode === 'ups') {
                     sliderSolarVal.textContent = '0.0 kW (UPS Mode)';
                 } else if (isSolarCurtailed) {
-                    sliderSolarVal.innerHTML = `${actualSolarKw.toFixed(1)} kW <span class="text-xs font-semibold text-brandGreen">(Auto-Curtailed to Home Load &bull; 100% Full)</span>`;
+                    sliderSolarVal.innerHTML = `${actualSolarKw.toFixed(1)} kW <span class="text-xs font-semibold text-brandGreen">(Auto-Curtailed)</span>`;
                 } else {
                     sliderSolarVal.textContent = `${actualSolarKw.toFixed(1)} kW (${weatherShort})`;
                 }
@@ -3248,7 +4075,7 @@
             const diagSolarKw = document.getElementById('diagSolarKw');
             if (diagSolarKw) {
                 diagSolarKw.textContent = isSolarCurtailed 
-                    ? `${actualSolarKw.toFixed(1)} kW (Auto-Curtailed)` 
+                    ? `${actualSolarKw.toFixed(1)} kW (Curtailed)` 
                     : `${actualSolarKw.toFixed(1)} kW`;
             }
             document.getElementById('diagHomeKw').textContent = loadKw.toFixed(1) + ' kW';
@@ -3257,7 +4084,6 @@
             const gridExport = document.getElementById('simGridExport');
             const gridImport = document.getElementById('simGridImport');
             const diagGridFlow = document.getElementById('diagGridFlow');
-            const diagGridRoleBadge = document.getElementById('diagGridRoleBadge');
             const diagBatteryKw = document.getElementById('diagBatteryKw');
             const batterySoCLabel = document.getElementById('batterySoCLabel');
             const curtailmentNotice = document.getElementById('curtailmentNotice');
@@ -3265,8 +4091,18 @@
             const invCurtailPill = document.getElementById('invCurtailPill');
             const nodeBatIcon = document.getElementById('nodeBatIcon');
             const nodeBatSoCPill = document.getElementById('nodeBatSoCPill');
+            const batteryDepletedAlert = document.getElementById('batteryDepletedAlert');
 
-            // Dynamic NORA-3 Curtailment Banner & Status Pill
+            // Battery Depletion Alert Banner (<15% SoC)
+            if (batteryDepletedAlert) {
+                if (batteryCurrentSoC < 15.0) {
+                    batteryDepletedAlert.classList.remove('hidden');
+                } else {
+                    batteryDepletedAlert.classList.add('hidden');
+                }
+            }
+
+            // Dynamic NORA-3 Curtailment Banner
             if (curtailmentNotice) {
                 if (isBatteryFull && isSolarCurtailed) {
                     curtailmentNotice.classList.remove('hidden');
@@ -3278,88 +4114,71 @@
 
             if (invCurtailPill) {
                 if (isBatteryFull && isSolarCurtailed) {
-                    invCurtailPill.textContent = `Auto Load-Match (${actualSolarKw.toFixed(1)} kW)`;
-                    invCurtailPill.className = 'text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-brandGreen/10 text-brandGreen mt-0.5 border border-brandGreen/25 inline-block';
+                    invCurtailPill.textContent = `Auto Match (${actualSolarKw.toFixed(1)} kW)`;
+                } else if (batteryCurrentSoC < 15.0) {
+                    invCurtailPill.textContent = 'Grid Fallback (<15%)';
+                } else if (isPeakHour && isGridActive) {
+                    invCurtailPill.textContent = 'Peak Battery Mode';
+                } else if (isGridActive && batteryFlow > 0) {
+                    invCurtailPill.textContent = 'PV Priority Charge';
+                } else if (isGridActive && actualGridImport > 0) {
+                    invCurtailPill.textContent = 'Grid Extra Load';
                 } else {
-                    invCurtailPill.textContent = 'Max 3.0 kW CT';
-                    invCurtailPill.className = 'text-[10px] text-brandGreen font-bold';
+                    invCurtailPill.textContent = 'CT Active';
                 }
             }
 
-            // Update Battery Metric & Badge
-            if (isBatteryFull && batteryFlow === 0) {
-                // 100% Full Float State (ZERO CURRENT ENTERING BATTERY)
-                batteryStatus.textContent = '0.00 kW (100% Full / Float)';
+            // Update Battery Metric & Indicators
+            if (batteryCurrentSoC < 15.0) {
+                batteryStatus.textContent = '0.00 kW (Off: <15%)';
+                batteryStatus.className = 'font-bold text-rose-500 truncate block';
+                diagBatteryKw.textContent = '0.00 kW (Cutoff Off)';
+                diagBatteryKw.className = 'text-xs font-extrabold text-rose-500 tabular-nums';
+            } else if (isBatteryFull && batteryFlow === 0) {
+                batteryStatus.textContent = '0.00 kW (Float)';
                 batteryStatus.className = 'font-bold text-brandGreen truncate block';
-                diagBatteryKw.textContent = '0.00 kW (100% Full / Float)';
+                diagBatteryKw.textContent = '0.00 kW (Float)';
                 diagBatteryKw.className = 'text-xs font-extrabold text-brandGreen tabular-nums';
             } else if (batteryFlow > 0) {
-                batteryStatus.textContent = `+${batteryFlow.toFixed(2)} kW (Charging)`;
+                batteryStatus.textContent = `+${batteryFlow.toFixed(2)} kW`;
                 batteryStatus.className = 'font-bold text-brandGreen truncate block';
-                diagBatteryKw.textContent = `+${batteryFlow.toFixed(2)} kW (Charging)`;
+                diagBatteryKw.textContent = `+${batteryFlow.toFixed(2)} kW (PV Charge)`;
                 diagBatteryKw.className = 'text-xs font-extrabold text-brandGreen tabular-nums';
             } else if (batteryFlow < 0) {
                 const absBat = Math.abs(batteryFlow);
-                batteryStatus.textContent = `-${absBat.toFixed(2)} kW (Discharge)`;
-                batteryStatus.className = 'font-bold text-brandBlack truncate block';
+                batteryStatus.textContent = `-${absBat.toFixed(2)} kW`;
+                batteryStatus.className = 'font-bold text-brandBlack dark:text-white truncate block';
                 diagBatteryKw.textContent = `-${absBat.toFixed(2)} kW (Discharge)`;
-                diagBatteryKw.className = 'text-xs font-extrabold text-brandBlack tabular-nums';
+                diagBatteryKw.className = 'text-xs font-extrabold text-brandBlack dark:text-white tabular-nums';
             } else {
-                batteryStatus.textContent = `0.00 kW (Standby)`;
+                batteryStatus.textContent = '0.00 kW (Standby)';
                 batteryStatus.className = 'font-bold text-brandBlack-slate truncate block';
-                diagBatteryKw.textContent = `0.00 kW (Standby)`;
+                diagBatteryKw.textContent = '0.00 kW (Preserved)';
                 diagBatteryKw.className = 'text-xs font-extrabold text-brandBlack-slate tabular-nums';
             }
 
-            // Update Grid Export & Import Metrics & Badges
+            // Update Grid Export & Import Metrics
             if (currentSimMode === 'islanded') {
-                gridExport.textContent = '0.00 kW (Off-Grid)';
-                gridExport.className = 'font-bold text-brandBlack-slate truncate block';
-                gridImport.textContent = '0.00 kW (Disconnected)';
-                gridImport.className = 'font-bold text-brandBlack-slate truncate block';
-                diagGridFlow.textContent = '0.0 kW (Off-Grid Isolated)';
-                diagGridFlow.className = 'text-[11px] font-bold text-brandBlack-slate';
-                if (diagGridRoleBadge) {
-                    diagGridRoleBadge.textContent = 'Isolated (Off-Grid)';
-                    diagGridRoleBadge.className = 'text-[9px] px-1 py-0.2 rounded bg-black/5 dark:bg-white/5 text-brandBlack font-bold';
-                }
+                gridExport.textContent = '0.00 kW';
+                gridImport.textContent = '0.00 kW (Off-Grid)';
+                diagGridFlow.textContent = 'Off-Grid (0.0 kW)';
             } else if (actualGridExport > 0) {
-                gridExport.textContent = `+${actualGridExport.toFixed(2)} kW (Net Metering)`;
-                gridExport.className = 'font-bold text-brandGreen truncate block';
-                gridImport.textContent = '0.00 kW (Exporting)';
-                gridImport.className = 'font-bold text-brandBlack truncate block';
-                diagGridFlow.textContent = `${actualGridExport.toFixed(2)} kW (Exporting)`;
-                diagGridFlow.className = 'text-[11px] font-bold text-brandGreen';
-                if (diagGridRoleBadge) {
-                    diagGridRoleBadge.textContent = 'Export to Grid';
-                    diagGridRoleBadge.className = 'text-[9px] px-1 py-0.2 rounded bg-brandGreen/10 text-brandGreen font-bold';
-                }
+                gridExport.textContent = `+${actualGridExport.toFixed(2)} kW`;
+                gridImport.textContent = '0.00 kW';
+                diagGridFlow.textContent = `${actualGridExport.toFixed(2)} kW (Export)`;
             } else if (actualGridImport > 0) {
-                gridExport.textContent = '0.00 kW (Zero Export)';
-                gridExport.className = 'font-bold text-brandGreen truncate block';
-                gridImport.textContent = `${actualGridImport.toFixed(2)} kW (WAPDA Grid)`;
-                gridImport.className = 'font-bold text-brandBlack truncate block';
-                diagGridFlow.textContent = `${actualGridImport.toFixed(2)} kW (Grid Import)`;
-                diagGridFlow.className = 'text-[11px] font-bold text-brandBlack';
-                if (diagGridRoleBadge) {
-                    diagGridRoleBadge.textContent = `Grid Import (${actualGridImport.toFixed(2)} kW)`;
-                    diagGridRoleBadge.className = 'text-[9px] px-1 py-0.2 rounded bg-black/10 dark:bg-white/10 text-brandBlack font-bold';
-                }
+                gridExport.textContent = '0.00 kW';
+                gridImport.textContent = `${actualGridImport.toFixed(2)} kW`;
+                diagGridFlow.textContent = `${actualGridImport.toFixed(2)} kW (${batteryCurrentSoC < 15.0 ? 'Cutoff Grid' : (isPeakHour ? 'Peak Extra' : 'Extra Load')})`;
             } else {
-                gridExport.textContent = '0.00 kW (Zero Export)';
-                gridExport.className = 'font-bold text-brandGreen truncate block';
-                gridImport.textContent = '0.00 kW (Self-Sufficient)';
-                gridImport.className = 'font-bold text-brandGreen truncate block';
-                diagGridFlow.textContent = '0.0 kW (Neutral Hold)';
-                diagGridFlow.className = 'text-[11px] font-bold text-brandGreen';
-                if (diagGridRoleBadge) {
-                    diagGridRoleBadge.textContent = isSolarCurtailed ? 'Zero Export (Curtailed)' : 'Input Only (Zero CT)';
-                    diagGridRoleBadge.className = 'text-[9px] px-1 py-0.2 rounded bg-brandGreen-light text-brandGreen font-bold';
-                }
+                gridExport.textContent = '0.00 kW';
+                gridImport.textContent = '0.00 kW (Self)';
+                diagGridFlow.textContent = '0.0 kW (Zero Export)';
             }
 
             if (batterySoCLabel) {
-                batterySoCLabel.textContent = Math.round(batteryCurrentSoC) + (isBatteryFull ? '% (Full)' : '%');
+                batterySoCLabel.textContent = Math.round(batteryCurrentSoC) + (batteryCurrentSoC < 15.0 ? '% (Cutoff)' : (batteryCurrentSoC >= 99.0 ? '% (Full)' : '%'));
+                batterySoCLabel.className = batteryCurrentSoC < 15.0 ? 'font-extrabold text-rose-500 text-xs tabular-nums ml-1' : 'font-extrabold text-brandGreen text-xs tabular-nums ml-1';
             }
 
             // Push latest tick to history
@@ -3381,28 +4200,24 @@
             const flowGrid = document.getElementById('flowGridInv');
             const flowHome = document.getElementById('flowInvHome');
             const flowBat = document.getElementById('flowBatInv');
-            const batBox = document.getElementById('nodeBatBox');
-            const diagBatDirBadge = document.getElementById('diagBatDirBadge');
             const batConduitBadge = document.getElementById('batConduitBadge');
             const batConduitIcon = document.getElementById('batConduitIcon');
             const batConduitText = document.getElementById('batConduitText');
 
-            // 1. Solar Input (Flows DOWN into NORA-3, calibrated to actual generated kW)
-            window._simSolarSpeed = actualSolarKw <= 0.05 ? 0 : Math.max(0.005, (actualSolarKw / 3.0) * 0.02);
+            // 1. Solar Input (Flows DOWN into NORA-3)
+            window._simSolarSpeed = actualSolarKw <= 0.05 ? 0 : Math.max(0.004, (actualSolarKw / 3.0) * 0.015);
             if (flowSolar) {
                 if (actualSolarKw <= 0.05) {
                     flowSolar.classList.add('is-idle');
                 } else {
                     flowSolar.classList.remove('is-idle');
-                    flowSolar.style.animationDuration = Math.max(0.5, 1.8 - (actualSolarKw / 3.0) * 1.1) + 's';
                 }
             }
 
             // 2. Home Output (Always flows strictly RIGHT into Home Demand)
-            window._simHomeSpeed = Math.max(0.005, (loadKw / 3.5) * 0.02);
+            window._simHomeSpeed = Math.max(0.004, (loadKw / 3.5) * 0.015);
             if (flowHome) {
                 flowHome.classList.remove('is-idle');
-                flowHome.style.animationDuration = Math.max(0.5, 1.8 - (loadKw / 3.5) * 1.1) + 's';
             }
 
             // 3. Grid Flow (Import vs. Export vs. Off-Grid)
@@ -3410,140 +4225,90 @@
                 if (currentSimMode === 'islanded') {
                     window._simGridSpeed = 0;
                     flowGrid.classList.add('is-idle');
-                    flowGrid.style.opacity = '0.08';
                 } else if (actualGridExport > 0) {
-                    window._simGridSpeed = Math.max(0.006, (actualGridExport / 3.0) * 0.02);
+                    window._simGridSpeed = Math.max(0.005, (actualGridExport / 3.0) * 0.015);
                     window._simGridDir = -1;
                     flowGrid.classList.remove('is-idle');
                     flowGrid.classList.add('flow-reverse');
-                    flowGrid.style.opacity = '1';
-                    flowGrid.style.animationDuration = Math.max(0.5, 1.6 - (actualGridExport / 3.0) * 0.8) + 's';
                 } else if (actualGridImport > 0) {
-                    window._simGridSpeed = Math.max(0.006, (actualGridImport / 3.0) * 0.02);
+                    window._simGridSpeed = Math.max(0.005, (actualGridImport / 3.0) * 0.015);
                     window._simGridDir = 1;
                     flowGrid.classList.remove('is-idle', 'flow-reverse');
-                    flowGrid.style.opacity = '1';
-                    flowGrid.style.animationDuration = Math.max(0.5, 1.6 - (actualGridImport / 3.0) * 0.8) + 's';
                 } else {
                     window._simGridSpeed = 0;
                     flowGrid.classList.add('is-idle');
-                    flowGrid.style.opacity = '0.15';
                 }
             }
 
-            // 4. Battery Bidirectional Flow (Charging vs. Discharging vs. 100% Full Float Idle)
+            // 4. Battery Bidirectional Flow (Always positioned cleanly off the conduit line)
             if (flowBat) {
-                if (isBatteryFull && batteryFlow === 0) {
-                    // BATTERY IS COMPLETELY CHARGED: ZERO FLOW GOING IN!
-                    window._simBatSpeed = 0; // Completely pauses and hides all photons!
+                const baseBatClass = 'absolute left-[calc(50%+30px)] sm:left-[calc(50%+38px)] bottom-[82px] sm:bottom-[92px] -translate-y-1/2 px-2.5 py-1 rounded-full text-[9px] sm:text-[10px] font-bold flex items-center gap-1.5 transition-all shadow-xs z-20 pointer-events-auto whitespace-nowrap ';
+
+                if (batteryCurrentSoC < 15.0) {
+                    // Battery < 15%: Discharge stopped, battery is OFF, alert triggered
+                    window._simBatSpeed = 0;
                     flowBat.classList.add('is-idle');
-                    flowBat.style.opacity = '0.08';
 
-                    [0, 1, 2].forEach(idx => {
-                        const dot = document.getElementById(`batPhoton${idx}`);
-                        if (dot) dot.style.opacity = '0';
-                    });
+                    if (nodeBatIcon) nodeBatIcon.className = 'fa-solid fa-battery-empty text-lg sm:text-xl text-rose-500 animate-pulse';
+                    if (nodeBatSoCPill) nodeBatSoCPill.textContent = `${Math.round(batteryCurrentSoC)}% Cutoff`;
 
-                    if (nodeBatIcon) nodeBatIcon.className = 'fa-solid fa-battery-full text-xl text-brandGreen';
-                    if (nodeBatSoCPill) {
-                        nodeBatSoCPill.textContent = '100% Full';
-                        nodeBatSoCPill.className = 'text-[8px] font-extrabold text-brandGreen tracking-tight mt-0.5';
-                    }
-
-                    if (diagBatDirBadge) {
-                        diagBatDirBadge.textContent = '✔ 100% Full';
-                        diagBatDirBadge.className = 'text-[9px] px-1.5 py-0.5 rounded-full bg-brandGreen-light text-brandGreen font-bold';
-                    }
                     if (batConduitBadge) {
-                        batConduitBadge.className = 'my-2 px-3 py-1 rounded-full text-[10px] font-extrabold flex items-center gap-1.5 transition-all shadow-sm z-20 bg-brandGreen/10 text-brandGreen border border-brandGreen/25';
-                        if (batConduitIcon) batConduitIcon.className = 'fa-solid fa-circle-check text-brandGreen';
-                        if (batConduitText) batConduitText.innerHTML = 'Battery 100% Charged &bull; Float Standby (0.00 kW Inflow)';
+                        batConduitBadge.className = baseBatClass + 'bg-rose-500/10 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/40 animate-pulse';
+                        if (batConduitIcon) batConduitIcon.className = 'fa-solid fa-triangle-exclamation text-rose-500';
+                        if (batConduitText) batConduitText.textContent = 'Battery Off (<15% Cutoff)';
                     }
-                    if (batBox) {
-                        batBox.classList.add('border-brandGreen');
-                        batBox.classList.remove('ring-2', 'ring-brandGreen/30');
+                } else if (isBatteryFull && batteryFlow === 0) {
+                    window._simBatSpeed = 0;
+                    flowBat.classList.add('is-idle');
+
+                    if (nodeBatIcon) nodeBatIcon.className = 'fa-solid fa-battery-full text-lg sm:text-xl text-brandGreen';
+                    if (nodeBatSoCPill) nodeBatSoCPill.textContent = '100%';
+
+                    if (batConduitBadge) {
+                        batConduitBadge.className = baseBatClass + 'bg-white dark:bg-[#0c140f] text-brandGreen border border-brandGreen/30';
+                        if (batConduitIcon) batConduitIcon.className = 'fa-solid fa-circle-check text-brandGreen';
+                        if (batConduitText) batConduitText.textContent = 'Float Standby (0.00 kW)';
                     }
                 } else if (batteryFlow > 0) {
-                    // CHARGING: The line goes into the battery from inverter!
                     window._simBatDir = 1;
-                    window._simBatSpeed = Math.max(0.006, (batteryFlow / 3.0) * 0.022);
+                    window._simBatSpeed = Math.max(0.005, (batteryFlow / 3.0) * 0.016);
 
-                    if (nodeBatIcon) nodeBatIcon.className = 'fa-solid fa-battery-three-quarters text-xl text-brandGreen animate-pulse';
-                    if (nodeBatSoCPill) {
-                        nodeBatSoCPill.textContent = Math.round(batteryCurrentSoC) + '% Charging';
-                        nodeBatSoCPill.className = 'text-[8px] font-extrabold text-brandGreen tracking-tight mt-0.5';
-                    }
+                    if (nodeBatIcon) nodeBatIcon.className = 'fa-solid fa-battery-three-quarters text-lg sm:text-xl text-brandGreen';
+                    if (nodeBatSoCPill) nodeBatSoCPill.textContent = Math.round(batteryCurrentSoC) + '% In';
 
                     flowBat.classList.remove('is-idle', 'flow-reverse');
-                    flowBat.setAttribute('stroke', 'url(#batChargeGrad)');
-                    flowBat.style.opacity = '1';
-                    flowBat.style.animationDuration = Math.max(0.5, 1.6 - (batteryFlow / 3.0) * 0.9) + 's';
 
-                    if (diagBatDirBadge) {
-                        diagBatDirBadge.textContent = '↓ Charging';
-                        diagBatDirBadge.className = 'text-[9px] px-1 py-0.2 rounded bg-brandGreen-light text-brandGreen font-bold';
-                    }
                     if (batConduitBadge) {
-                        batConduitBadge.className = 'my-2 px-3 py-1 rounded-full text-[10px] font-extrabold flex items-center gap-1.5 transition-all shadow-sm z-20 bg-brandGreen/10 text-brandGreen border border-brandGreen/25';
-                        if (batConduitIcon) batConduitIcon.className = 'fa-solid fa-arrow-down text-brandGreen animate-bounce';
-                        if (batConduitText) batConduitText.textContent = `↓ Inflow: Charging Pack (+${batteryFlow.toFixed(2)} kW)`;
-                    }
-                    if (batBox) {
-                        batBox.classList.add('border-brandGreen', 'ring-2', 'ring-brandGreen/30');
+                        batConduitBadge.className = baseBatClass + 'bg-brandGreen/10 dark:bg-brandGreen/20 text-brandGreen border border-brandGreen/40';
+                        if (batConduitIcon) batConduitIcon.className = 'fa-solid fa-arrow-down text-brandGreen';
+                        if (batConduitText) batConduitText.textContent = `Charging (+${batteryFlow.toFixed(2)} kW)`;
                     }
                 } else if (batteryFlow < 0) {
-                    // DISCHARGING: The line goes into NORA-3 from the battery!
                     const absDischarge = Math.abs(batteryFlow);
                     window._simBatDir = -1;
-                    window._simBatSpeed = Math.max(0.006, (absDischarge / MAX_BATTERY_POWER) * 0.022);
+                    window._simBatSpeed = Math.max(0.005, (absDischarge / MAX_BATTERY_POWER) * 0.016);
 
-                    if (nodeBatIcon) nodeBatIcon.className = 'fa-solid fa-battery-half text-xl text-brandBlack';
-                    if (nodeBatSoCPill) {
-                        nodeBatSoCPill.textContent = Math.round(batteryCurrentSoC) + '% Deliver';
-                        nodeBatSoCPill.className = 'text-[8px] font-extrabold text-brandBlack tracking-tight mt-0.5';
-                    }
+                    if (nodeBatIcon) nodeBatIcon.className = 'fa-solid fa-battery-half text-lg sm:text-xl text-brandBlack dark:text-white';
+                    if (nodeBatSoCPill) nodeBatSoCPill.textContent = Math.round(batteryCurrentSoC) + '% Out';
 
                     flowBat.classList.remove('is-idle');
                     flowBat.classList.add('flow-reverse');
-                    flowBat.setAttribute('stroke', 'url(#batDischargeGrad)');
-                    flowBat.style.opacity = '1';
-                    flowBat.style.animationDuration = Math.max(0.5, 1.6 - (absDischarge / MAX_BATTERY_POWER) * 0.9) + 's';
 
-                    if (diagBatDirBadge) {
-                        diagBatDirBadge.textContent = '↑ Discharging';
-                        diagBatDirBadge.className = 'text-[9px] px-1 py-0.2 rounded bg-black/10 dark:bg-white/10 text-brandBlack font-bold';
-                    }
                     if (batConduitBadge) {
-                        batConduitBadge.className = 'my-2 px-3 py-1 rounded-full text-[10px] font-extrabold flex items-center gap-1.5 transition-all shadow-sm z-20 bg-black/5 dark:bg-white/10 text-brandBlack border border-black/10';
-                        if (batConduitIcon) batConduitIcon.className = 'fa-solid fa-arrow-up text-brandGreen animate-bounce';
-                        if (batConduitText) batConduitText.textContent = `↑ Outflow: Pack Delivering (-${absDischarge.toFixed(2)} kW)`;
-                    }
-                    if (batBox) {
-                        batBox.classList.remove('border-brandGreen', 'ring-2', 'ring-brandGreen/30');
+                        batConduitBadge.className = baseBatClass + 'bg-black/5 dark:bg-white/10 text-brandBlack dark:text-white border border-black/10 dark:border-white/20';
+                        if (batConduitIcon) batConduitIcon.className = 'fa-solid fa-arrow-up text-brandGreen';
+                        if (batConduitText) batConduitText.textContent = `Delivering (-${absDischarge.toFixed(2)} kW)`;
                     }
                 } else {
-                    // Standby
                     window._simBatDir = 1;
                     window._simBatSpeed = 0;
                     flowBat.classList.add('is-idle');
-                    flowBat.style.opacity = '0.08';
-                    [0, 1, 2].forEach(idx => {
-                        const dot = document.getElementById(`batPhoton${idx}`);
-                        if (dot) dot.style.opacity = '0';
-                    });
-                    if (nodeBatIcon) nodeBatIcon.className = 'fa-solid fa-battery-full text-xl text-brandGreen';
-                    if (nodeBatSoCPill) {
-                        nodeBatSoCPill.textContent = Math.round(batteryCurrentSoC) + '% Standby';
-                        nodeBatSoCPill.className = 'text-[8px] font-extrabold text-brandBlack-slate tracking-tight mt-0.5';
-                    }
-                    if (diagBatDirBadge) {
-                        diagBatDirBadge.textContent = 'Standby';
-                        diagBatDirBadge.className = 'text-[9px] px-1 py-0.2 rounded bg-black/5 text-brandBlack-slate font-bold';
-                    }
+                    if (nodeBatIcon) nodeBatIcon.className = 'fa-solid fa-battery-full text-lg sm:text-xl text-brandGreen';
+                    if (nodeBatSoCPill) nodeBatSoCPill.textContent = Math.round(batteryCurrentSoC) + '%';
                     if (batConduitBadge) {
-                        batConduitBadge.className = 'my-2 px-3 py-1 rounded-full text-[10px] font-extrabold flex items-center gap-1.5 transition-all shadow-sm z-20 bg-black/5 text-brandBlack-slate border border-black/5';
+                        batConduitBadge.className = baseBatClass + 'bg-white dark:bg-[#0c140f] text-brandBlack-slate border border-black/10 dark:border-white/10';
                         if (batConduitIcon) batConduitIcon.className = 'fa-solid fa-minus text-brandBlack-slate';
-                        if (batConduitText) batConduitText.textContent = 'Balanced / Standby';
+                        if (batConduitText) batConduitText.textContent = 'Standby';
                     }
                 }
             }
@@ -3551,9 +4316,16 @@
 
         // Window resize and initial mount listeners for SVG paths
         window.addEventListener('resize', updateSchematicPaths);
+        const simContainer = document.getElementById('schematicContainer');
+        if (simContainer && window.ResizeObserver) {
+            new ResizeObserver(() => {
+                updateSchematicPaths();
+            }).observe(simContainer);
+        }
         window.addEventListener('load', () => {
             updateSchematicPaths();
             applyWeatherCondition('sunny');
+            updatePeakUI();
         });
 
         // Periodic real-time simulator clock (advances battery SoC every 2.5 seconds)
@@ -3572,12 +4344,16 @@
                 }
             } else {
                 const deficit = loadKw - solarKw;
-                batteryCurrentSoC = Math.max(15, batteryCurrentSoC - deficit * 0.3);
+                // Only discharge if battery is at or above 15%
+                if (batteryCurrentSoC >= 15.0) {
+                    batteryCurrentSoC = Math.max(10, batteryCurrentSoC - deficit * 0.3);
+                }
             }
 
             const batterySoCLabel = document.getElementById('batterySoCLabel');
             if (batterySoCLabel) {
-                batterySoCLabel.textContent = Math.round(batteryCurrentSoC) + (batteryCurrentSoC >= 99.0 ? '% (Full)' : '%');
+                batterySoCLabel.textContent = Math.round(batteryCurrentSoC) + (batteryCurrentSoC < 15.0 ? '% (Cutoff)' : (batteryCurrentSoC >= 99.0 ? '% (Full)' : '%'));
+                batterySoCLabel.className = batteryCurrentSoC < 15.0 ? 'font-extrabold text-rose-500 text-xs tabular-nums ml-1' : 'font-extrabold text-brandGreen text-xs tabular-nums ml-1';
             }
 
             const timeStr = new Date().toLocaleTimeString([], { minute: '2-digit', second: '2-digit' });
@@ -3597,9 +4373,11 @@
         setTimeout(() => {
             updateSchematicPaths();
             applyWeatherCondition('sunny');
+            updatePeakUI();
         }, 300);
         setTimeout(() => {
             updateSchematicPaths();
+            updatePeakUI();
         }, 800);
 
         // 6. Electricity Bill Savings & ROI Calculator

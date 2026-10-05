@@ -43,6 +43,138 @@ app.get('/ai.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'ai.html'));
 });
 
+// City solar profiles for high-accuracy calculations
+const CITY_SOLAR_DB = {
+  islamabad: { name: 'Islamabad', country: 'Pakistan', lat: 33.6844, lon: 73.0479, peakSunHours: 5.5, avgTempC: 28, ghi: 980 },
+  rawalpindi: { name: 'Rawalpindi', country: 'Pakistan', lat: 33.5651, lon: 73.0169, peakSunHours: 5.5, avgTempC: 29, ghi: 975 },
+  lahore: { name: 'Lahore', country: 'Pakistan', lat: 31.5204, lon: 74.3587, peakSunHours: 5.4, avgTempC: 31, ghi: 960 },
+  karachi: { name: 'Karachi', country: 'Pakistan', lat: 24.8607, lon: 67.0011, peakSunHours: 5.8, avgTempC: 30, ghi: 1010 },
+  peshawar: { name: 'Peshawar', country: 'Pakistan', lat: 34.0151, lon: 71.5249, peakSunHours: 5.6, avgTempC: 27, ghi: 970 },
+  multan: { name: 'Multan', country: 'Pakistan', lat: 30.1575, lon: 71.5249, peakSunHours: 5.9, avgTempC: 33, ghi: 1020 },
+  faisalabad: { name: 'Faisalabad', country: 'Pakistan', lat: 31.4504, lon: 73.1350, peakSunHours: 5.5, avgTempC: 30, ghi: 970 },
+  quetta: { name: 'Quetta', country: 'Pakistan', lat: 30.1798, lon: 66.9750, peakSunHours: 6.2, avgTempC: 22, ghi: 1050 },
+  gujranwala: { name: 'Gujranwala', country: 'Pakistan', lat: 32.1877, lon: 74.1945, peakSunHours: 5.4, avgTempC: 30, ghi: 960 },
+  sialkot: { name: 'Sialkot', country: 'Pakistan', lat: 32.4945, lon: 74.5229, peakSunHours: 5.3, avgTempC: 29, ghi: 955 },
+};
+
+function calculateAllWattages(cityData) {
+  const psh = cityData.peakSunHours || 5.5;
+  const sysRatedKw = 3.0; // NORA-3 rated capacity
+  const dcArrayKw = 3.3; // Recommended 10% DC oversizing
+  
+  // Real-time calculation based on solar irradiance
+  const peakWattage = Math.round(sysRatedKw * 1000); // 3000 W
+  const currentClearWattage = Math.round(Math.min(peakWattage, sysRatedKw * 1000 * ((cityData.ghi || 980) / 1000) * 0.95)); // ~2800 W
+  const partlyCloudyWattage = Math.round(currentClearWattage * 0.75); // ~2100 W
+  const overcastWattage = Math.round(currentClearWattage * 0.35); // ~980 W
+  const rainyStormWattage = Math.round(currentClearWattage * 0.12); // ~330 W
+  const dailyKwh = +(psh * sysRatedKw * 0.86).toFixed(1); // e.g. 14.2 kWh/day
+  const monthlyUnits = Math.round(dailyKwh * 30); // ~425 units
+  const batteryCapacityWh = 2700; // Usable energy of 204V LiFePO4
+
+  return {
+    systemRatedWatts: peakWattage,
+    dcArrayWatts: Math.round(dcArrayKw * 1000),
+    peakSunHours: psh,
+    estimatedDailyKwh: dailyKwh,
+    estimatedMonthlyUnits: monthlyUnits,
+    wattages: {
+      peakCapacity: peakWattage,
+      clearSunNow: currentClearWattage,
+      partlyCloudy: partlyCloudyWattage,
+      overcast: overcastWattage,
+      stormy: rainyStormWattage,
+      night: 0,
+      inverterSurgeWatts: 6000,
+      batteryDischargeWatts: 3000,
+      batteryUsableWh: batteryCapacityWh,
+      loadBaseWatts: 550, // Fans + LED + Router + Fridge
+      loadNormalWatts: 1500, // Daytime Active (Fans, Lights, PC, TV)
+      loadHeavyWatts: 2500, // 1 Ton Inverter AC + Lights + Fans
+      maxSafeContinuousLoad: 3000
+    }
+  };
+}
+
+// Location and Solar Wattage API
+app.get('/api/location', async (req, res) => {
+  try {
+    const lat = parseFloat(req.query.lat);
+    const lon = parseFloat(req.query.lon);
+    const requestedCity = (req.query.city || '').toLowerCase().trim();
+
+    let matchedCity = null;
+
+    if (requestedCity && CITY_SOLAR_DB[requestedCity]) {
+      matchedCity = CITY_SOLAR_DB[requestedCity];
+    } else if (!isNaN(lat) && !isNaN(lon)) {
+      // Find nearest city in database or reverse geocode
+      let closest = null;
+      let minDistance = Infinity;
+
+      for (const key of Object.keys(CITY_SOLAR_DB)) {
+        const c = CITY_SOLAR_DB[key];
+        const dist = Math.hypot(c.lat - lat, c.lon - lon);
+        if (dist < minDistance) {
+          minDistance = dist;
+          closest = c;
+        }
+      }
+
+      // If within ~1.5 degrees, use matched city profile
+      if (closest && minDistance < 1.5) {
+        matchedCity = { ...closest, lat, lon };
+      } else {
+        // Generic location calculation
+        const absLat = Math.abs(lat);
+        const psh = Math.max(4.0, Math.min(6.5, 6.5 - (absLat - 20) * 0.08));
+        matchedCity = {
+          name: `Location (${lat.toFixed(2)}°, ${lon.toFixed(2)}°)`,
+          country: 'Detected Region',
+          lat,
+          lon,
+          peakSunHours: +psh.toFixed(1),
+          avgTempC: 28,
+          ghi: 950
+        };
+
+        // Try external reverse-geocoding if available
+        try {
+          const geoRes = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`);
+          if (geoRes.ok) {
+            const geoData = await geoRes.json();
+            const cityName = geoData.city || geoData.locality || geoData.principalSubdivision;
+            if (cityName) {
+              matchedCity.name = cityName;
+              matchedCity.country = geoData.countryName || 'Pakistan';
+            }
+          }
+        } catch (e) {
+          // Keep generic name on network timeout
+        }
+      }
+    } else {
+      matchedCity = CITY_SOLAR_DB.islamabad;
+    }
+
+    const calculations = calculateAllWattages(matchedCity);
+
+    return res.json({
+      success: true,
+      city: matchedCity.name,
+      country: matchedCity.country,
+      coordinates: { lat: matchedCity.lat, lon: matchedCity.lon },
+      temperatureC: matchedCity.avgTempC,
+      ghi: matchedCity.ghi,
+      peakSunHours: matchedCity.peakSunHours,
+      ...calculations
+    });
+  } catch (err) {
+    console.error('Location API error:', err);
+    return res.status(500).json({ error: 'Failed to calculate location solar wattages' });
+  }
+});
+
 // Fallback rule-based generator for NoraSol inquiries when external AI keys are not configured
 function generateLocalReply(query) {
   const q = (query || '').toLowerCase();
