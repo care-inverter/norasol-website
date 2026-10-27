@@ -178,35 +178,44 @@
             transition: background 0.5s ease;
         }
 
-        /* Apple Glassmorphic Design Specifications */
+        /* Flat Architectural Design Specifications (Clean Flat Aesthetic, Zero Shadows) */
         .apple-glass {
-            background: rgba(255, 255, 255, 0.78);
-            backdrop-filter: blur(32px);
-            -webkit-backdrop-filter: blur(32px);
-            border: 1px solid rgba(255, 255, 255, 0.95);
-            box-shadow: 0 12px 32px -8px rgba(12, 19, 15, 0.05), inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
+            background: #ffffff !important;
+            border: 1px solid rgba(12, 19, 15, 0.12) !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border-radius: 12px;
         }
 
         .apple-glass-card {
-            background: rgba(255, 255, 255, 0.82);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 14px 34px -10px rgba(12, 19, 15, 0.05), inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            background: #ffffff !important;
+            border: 1px solid rgba(12, 19, 15, 0.12) !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border-radius: 12px;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
         }
 
         .apple-glass-card:hover {
-            background: rgba(255, 255, 255, 0.95);
-            transform: translateY(-2px);
-            box-shadow: 0 20px 40px -12px rgba(12, 19, 15, 0.08), inset 0 1px 1px 0 rgba(255, 255, 255, 1);
+            background: #ffffff !important;
+            border-color: #1E7538 !important;
+            transform: none !important;
+            box-shadow: none !important;
         }
 
         .apple-glass-nav {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border-bottom: 1px solid rgba(12, 19, 15, 0.06);
+            background: #ffffff !important;
+            border-bottom: 1px solid rgba(12, 19, 15, 0.12) !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        /* Strictly eliminate drop-shadows across all components for flat look */
+        .shadow-xs, .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl, [class*="shadow-"] {
+            box-shadow: none !important;
         }
 
         /* 3D Showcase Stage */
@@ -327,26 +336,34 @@
         }
 
         html.dark .apple-glass {
-            background: rgba(16, 25, 20, 0.82);
-            border-color: rgba(255, 255, 255, 0.12);
-            box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.55), inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
+            background: #0d1511 !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
         }
 
         html.dark .apple-glass-card {
-            background: rgba(18, 28, 23, 0.76);
-            border-color: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 14px 34px -10px rgba(0, 0, 0, 0.65), inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
+            background: #0d1511 !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
         }
 
         html.dark .apple-glass-card:hover {
-            background: rgba(25, 40, 32, 0.88);
-            border-color: rgba(46, 139, 76, 0.45);
-            box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.75), inset 0 1px 1px 0 rgba(255, 255, 255, 0.18);
+            background: #111c16 !important;
+            border-color: #34D399 !important;
+            transform: none !important;
+            box-shadow: none !important;
         }
 
         html.dark .apple-glass-nav {
-            background: rgba(10, 16, 13, 0.88);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: #0a110d !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
         }
 
         html.dark .atmosphere-optical-scrim {
@@ -586,16 +603,16 @@
                             </span>
                         </h1>
 
-                        <!-- Concrete Description (Subtle acoustic phrasing & constructive mission) -->
+                        <!-- Concrete Description (Constructive mission & engineered durability) -->
                         <p class="text-base sm:text-lg text-brandBlack-muted leading-relaxed font-normal max-w-2xl mb-8">
                             Developed in Islamabad specifically to address local household energy needs, 
                             <strong class="font-bold text-brandBlack">NoraSol</strong> delivers an indigenously engineered hybrid solution with 
-                            <span class="text-brandGreen font-bold">whisper-quiet acoustic architecture</span>, 
-                            an integrated <span class="text-brandGreen font-bold">Current Transformer (CT) Zero-Export core</span>, and high-voltage 204V LiFePO4 storage.
+                            <span class="text-brandGreen font-bold">external high-flow cooling fan architecture</span>, 
+                            an integrated <span class="text-brandGreen font-bold">Current Transformer (CT) Zero-Export core</span>, and a robust unified <span class="text-brandGreen font-bold">non-expandable 204V LiFePO4 pack</span>.
                         </p>
 
-                        <!-- Key Metrics Row (Glassmorphic Cards, Tabular Figures) -->
-                        <div class="w-full grid grid-cols-3 gap-2 sm:gap-4 p-4 sm:p-5 rounded-2xl apple-glass mb-8 max-w-xl">
+                        <!-- Key Metrics Row (Clean Flat Border, Tabular Figures) -->
+                        <div class="w-full grid grid-cols-3 gap-2 sm:gap-4 p-4 sm:p-5 rounded-xl apple-glass mb-8 max-w-xl">
                             <div>
                                 <div class="text-2xl sm:text-3xl font-extrabold text-brandBlack tracking-tight tabular-nums">60<span class="text-brandGreen text-xl">°C</span></div>
                                 <div class="text-xs text-brandBlack-slate font-medium mt-0.5">Rated Thermal Range</div>
@@ -673,18 +690,18 @@
                                     <!-- Professional One-Sided Feature Selector (Right Column) -->
                                     <div class="sm:col-span-6 flex flex-col gap-2.5">
                                         
-                                        <!-- Feature 1: Acoustic & Thermal -->
+                                        <!-- Feature 1: External Cooling Fan Architecture -->
                                         <button 
                                             id="featureBtn1" 
-                                            onclick="selectHeroFeature('fanless')" 
-                                            class="w-full text-left p-3 rounded-2xl bg-white dark:bg-white/10 border-2 border-brandGreen shadow-xs transition-all"
+                                            onclick="selectHeroFeature('cooling')" 
+                                            class="w-full text-left p-3 rounded-xl bg-white dark:bg-white/10 border-2 border-brandGreen transition-all"
                                         >
                                             <div class="flex items-center justify-between text-xs font-bold text-brandGreen mb-0.5">
-                                                <span>Acoustic Architecture</span>
+                                                <span>External Cooling Fan</span>
                                                 <i class="fa-solid fa-check text-[10px]"></i>
                                             </div>
                                             <p class="text-[11px] text-brandBlack-muted dark:text-slate-300 leading-tight font-normal">
-                                                Whisper-quiet thermal dampening rated up to 60°C.
+                                                External high-flow fan with operational sound for peak heat exhaust.
                                             </p>
                                         </button>
 
@@ -692,7 +709,7 @@
                                         <button 
                                             id="featureBtn2" 
                                             onclick="selectHeroFeature('ct')" 
-                                            class="w-full text-left p-3 rounded-2xl bg-white/70 hover:bg-white dark:bg-white/5 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 transition-all"
+                                            class="w-full text-left p-3 rounded-xl bg-white/70 hover:bg-white dark:bg-white/5 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 transition-all"
                                         >
                                             <div class="flex items-center justify-between text-xs font-bold text-brandBlack mb-0.5">
                                                 <span>Zero-Export CT Core</span>
@@ -707,14 +724,14 @@
                                         <button 
                                             id="featureBtn3" 
                                             onclick="selectHeroFeature('battery')" 
-                                            class="w-full text-left p-3 rounded-2xl bg-white/70 hover:bg-white dark:bg-white/5 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 transition-all"
+                                            class="w-full text-left p-3 rounded-xl bg-white/70 hover:bg-white dark:bg-white/5 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 transition-all"
                                         >
                                             <div class="flex items-center justify-between text-xs font-bold text-brandBlack mb-0.5">
                                                 <span>204V LiFePO4 Battery</span>
                                                 <i class="fa-solid fa-chevron-right text-[10px] text-brandBlack-slate"></i>
                                             </div>
                                             <p class="text-[11px] text-brandBlack-slate dark:text-slate-400 leading-tight font-normal">
-                                                Grade-A chemistry with 6,000+ cycle proprietary BMS.
+                                                Unified non-expandable pack with 6,000+ cycle Grade-A cells.
                                             </p>
                                         </button>
 
@@ -723,13 +740,13 @@
                                 </div>
 
                                 <!-- Dynamic Feature Detail Readout -->
-                                <div id="heroFeatureDetail" class="w-full mt-3 p-3.5 rounded-2xl bg-white/90 dark:bg-white/10 border border-black/5 dark:border-white/10 text-xs text-brandBlack-muted dark:text-slate-200 leading-relaxed">
-                                    <strong class="text-brandBlack font-semibold">Low-Acoustic Thermal Design:</strong> Engineered with internal aerodynamic dampening to maintain a subtle, whisper-quiet profile suited for indoor domestic spaces while handling summer peaks.
+                                <div id="heroFeatureDetail" class="w-full mt-3 p-3.5 rounded-xl bg-white dark:bg-white/10 border border-black/10 dark:border-white/10 text-xs text-brandBlack-muted dark:text-slate-200 leading-relaxed">
+                                    <strong class="text-brandBlack font-semibold">External Cooling Fan Architecture:</strong> Equipped with an external cooling fan outside that generates audible airflow sound during active operation to rapidly disperse intense summer heat up to 60°C.
                                 </div>
 
-                                <!-- Quick Specs Strip -->
-                                <div class="w-full mt-3 pt-3 border-t border-black/5 flex items-center justify-between text-[11px] text-brandBlack-slate font-medium">
-                                    <span>IP54 Dust Armor</span>
+                                <!-- Quick Specs Strip (Outdoor & Indoor placement) -->
+                                <div class="w-full mt-3 pt-3 border-t border-black/10 flex items-center justify-between text-[11px] text-brandBlack-slate font-medium">
+                                    <span>Designed for Outdoor &amp; Indoor Placement</span>
                                     <span>·</span>
                                     <span>98% Dual MPPT</span>
                                     <span>·</span>
@@ -801,33 +818,33 @@
                         </div>
                     </div>
 
-                    <!-- Card 2: Acoustic & Thermal Physics (Col-span 5) -->
-                    <div class="lg:col-span-5 apple-glass-card rounded-3xl p-7 sm:p-9 flex flex-col justify-between">
+                    <!-- Card 2: Thermal & External Fan Architecture (Col-span 5) -->
+                    <div class="lg:col-span-5 apple-glass-card rounded-xl p-7 sm:p-9 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-4">
-                                <span class="text-xs font-bold uppercase tracking-wider text-brandGreen">02. Thermal & Acoustic Physics</span>
+                                <span class="text-xs font-bold uppercase tracking-wider text-brandGreen">02. Thermal Management &amp; Cooling</span>
                                 <span class="text-xs text-brandBlack-slate font-semibold">60°C Rating</span>
                             </div>
                             <h3 class="text-2xl font-bold text-brandBlack mb-3 tracking-tight">
-                                Acoustically Dampened Thermal Architecture
+                                External Forced-Air Cooling Architecture
                             </h3>
                             <p class="text-sm text-brandBlack-muted leading-relaxed font-normal">
-                                Engineered specifically for domestic residences, NoraSol combines custom oversized extruded heat-dissipation structures with internal aerodynamic channeling. 
-                                It maintains steady full-rated thermal performance up to 60°C while suppressing high-frequency mechanical vibration.
+                                Built to withstand extreme Pakistani summer heat, NORA-3 utilizes an external cooling fan mounted outside that activates under load. 
+                                While producing audible operational fan sound, it ensures rapid high-volume heat exhaustion and non-stop continuous operation up to 60°C.
                             </p>
                         </div>
 
-                        <div class="mt-6 p-4 rounded-2xl bg-white border border-black/5 flex items-center gap-3">
-                            <i class="fa-solid fa-volume-low text-brandGreen text-xl"></i>
+                        <div class="mt-6 p-4 rounded-xl bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 flex items-center gap-3">
+                            <i class="fa-solid fa-fan text-brandGreen text-xl"></i>
                             <div class="text-xs">
-                                <div class="font-bold text-brandBlack">Whisper-Quiet Residential Profile</div>
-                                <div class="text-brandBlack-slate">Low-decibel operation suited for indoor living quarters</div>
+                                <div class="font-bold text-brandBlack">External Cooling Fan (Operational Noise)</div>
+                                <div class="text-brandBlack-slate">External fan provides robust heat exhaust during peak solar and motor loads</div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Card 3: Zero-Export Sensor (Col-span 5) -->
-                    <div class="lg:col-span-5 apple-glass-card rounded-3xl p-7 sm:p-9 flex flex-col justify-between">
+                    <div class="lg:col-span-5 apple-glass-card rounded-xl p-7 sm:p-9 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-4">
                                 <span class="text-xs font-bold uppercase tracking-wider text-brandGreen">03. Grid Independence</span>
@@ -842,7 +859,7 @@
                             </p>
                         </div>
 
-                        <div class="mt-6 flex items-center justify-between text-xs text-brandBlack-slate pt-4 border-t border-black/5">
+                        <div class="mt-6 flex items-center justify-between text-xs text-brandBlack-slate pt-4 border-t border-black/10">
                             <span>No Green Meter Delay</span>
                             <span>·</span>
                             <span>Microsecond Response</span>
@@ -852,34 +869,34 @@
                     </div>
 
                     <!-- Card 4: Battery & BMS Chemistry (Col-span 7) -->
-                    <div class="lg:col-span-7 apple-glass-card rounded-3xl p-7 sm:p-9 flex flex-col justify-between">
+                    <div class="lg:col-span-7 apple-glass-card rounded-xl p-7 sm:p-9 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-4">
                                 <span class="text-xs font-bold uppercase tracking-wider text-brandGreen">04. Energy Storage Core</span>
                                 <span class="text-xs text-brandBlack-slate font-semibold">204V LiFePO4</span>
                             </div>
                             <h3 class="text-2xl sm:text-3xl font-bold text-brandBlack mb-3 tracking-tight">
-                                High-Voltage Architecture & Proprietary BMS
+                                High-Voltage Architecture &amp; Unified Storage
                             </h3>
                             <p class="text-sm sm:text-base text-brandBlack-muted leading-relaxed font-normal">
                                 Traditional 48V setups require thick, dangerous copper cables that overheat during heavy discharge. 
-                                NORA-3 pairs directly with an internal 204V nominal Grade-A Lithium Iron Phosphate (LiFePO4) battery pack. 
+                                NORA-3 pairs directly with an internal 204V nominal Grade-A Lithium Iron Phosphate (LiFePO4) battery pack in a fixed, non-expandable unified architecture. 
                                 Higher voltage means drastically lower amperage, negligible resistive heat loss, and maximum round-trip efficiency exceeding 95%.
                             </p>
                         </div>
 
-                        <div class="mt-8 pt-6 border-t border-black/5 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            <div class="p-3.5 rounded-2xl bg-white border border-black/5">
-                                <div class="text-base font-bold text-brandBlack">Active Balancing</div>
-                                <div class="text-xs text-brandBlack-slate mt-1">Smart cell-level voltage monitoring</div>
+                        <div class="mt-8 pt-6 border-t border-black/10 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div class="p-3.5 rounded-xl bg-white dark:bg-white/5 border border-black/10 dark:border-white/10">
+                                <div class="text-base font-bold text-brandBlack">Unified 204V Storage</div>
+                                <div class="text-xs text-brandBlack-slate mt-1">Standardized non-expandable high-voltage pack</div>
                             </div>
-                            <div class="p-3.5 rounded-2xl bg-white border border-black/5">
+                            <div class="p-3.5 rounded-xl bg-white dark:bg-white/5 border border-black/10 dark:border-white/10">
                                 <div class="text-base font-bold text-brandBlack">6,000+ Cycles</div>
                                 <div class="text-xs text-brandBlack-slate mt-1">12 to 15 years daily operation</div>
                             </div>
-                            <div class="p-3.5 rounded-2xl bg-white border border-black/5">
-                                <div class="text-base font-bold text-brandBlack">Expandable x2</div>
-                                <div class="text-xs text-brandBlack-slate mt-1">Scale up storage seamlessly</div>
+                            <div class="p-3.5 rounded-xl bg-white dark:bg-white/5 border border-black/10 dark:border-white/10">
+                                <div class="text-base font-bold text-brandBlack">Fixed Form Factor</div>
+                                <div class="text-xs text-brandBlack-slate mt-1">Non-expandable all-in-one footprint</div>
                             </div>
                         </div>
                     </div>
@@ -887,7 +904,7 @@
                 </div>
 
                 <!-- Comparison Table: Indigenous NoraSol vs Generic Imported Inverters -->
-                <div class="mt-14 apple-glass rounded-3xl p-6 sm:p-8 overflow-x-auto">
+                <div class="mt-14 apple-glass rounded-xl p-6 sm:p-8 overflow-x-auto">
                     <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
                             <h4 class="text-xl font-bold text-brandBlack">Indigenous Engineering Highlights</h4>
@@ -909,9 +926,9 @@
                         </thead>
                         <tbody class="divide-y divide-black/5 dark:divide-white/5 text-brandBlack dark:text-white">
                             <tr>
-                                <td class="py-3.5 px-4 font-semibold">Cooling & Acoustics</td>
-                                <td class="py-3.5 px-4 font-bold text-brandGreen dark:text-emerald-400 bg-brandGreen-light/30 dark:bg-emerald-950/20">Low-Acoustic Dampening (Whisper-quiet profile)</td>
-                                <td class="py-3.5 px-4 text-brandBlack-slate dark:text-slate-400">High-decibel unshielded fans</td>
+                                <td class="py-3.5 px-4 font-semibold">Cooling System</td>
+                                <td class="py-3.5 px-4 font-bold text-brandGreen dark:text-emerald-400 bg-brandGreen-light/30 dark:bg-emerald-950/20">External High-Flow Fan (Audible operational sound for peak heat exhaust)</td>
+                                <td class="py-3.5 px-4 text-brandBlack-slate dark:text-slate-400">Internal passive heatsinks prone to overheating</td>
                             </tr>
                             <tr>
                                 <td class="py-3.5 px-4 font-semibold">Zero Export Mechanism</td>
@@ -958,17 +975,17 @@
                                 </div>
                                 <!-- Finish Theme Selector -->
                                 <div class="flex items-center gap-1 p-1 rounded-xl bg-black/5 dark:bg-white/5 text-[11px]">
-                                    <button onclick="set3DFinishTheme('titanium')" id="themeBtnTitanium" class="px-2.5 py-1 rounded-lg font-bold bg-brandGreen text-white transition-all shadow-xs">Titanium</button>
+                                    <button onclick="set3DFinishTheme('white')" id="themeBtnWhite" class="px-2.5 py-1 rounded-lg font-bold bg-brandGreen text-white transition-all shadow-xs">White</button>
+                                    <button onclick="set3DFinishTheme('titanium')" id="themeBtnTitanium" class="px-2.5 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack dark:hover:text-white transition-all">Titanium</button>
                                     <button onclick="set3DFinishTheme('cad')" id="themeBtnCad" class="px-2.5 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack dark:hover:text-white transition-all">CAD Parts</button>
-                                    <button onclick="set3DFinishTheme('stealth')" id="themeBtnStealth" class="px-2.5 py-1 rounded-lg font-medium text-brandBlack-slate hover:text-brandBlack dark:hover:text-white transition-all">Stealth</button>
                                 </div>
                             </div>
 
                             <!-- Showcase Viewport with Interactive 3D GLB Inspector & Loading Screen -->
-                            <div class="relative w-full h-80 sm:h-96 md:h-[420px] flex items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-b from-[#0e1611] via-[#080d0a] to-[#040605] border border-black/15 dark:border-white/15 shadow-2xl">
+                            <div class="relative w-full h-80 sm:h-96 md:h-[420px] flex items-center justify-center overflow-hidden rounded-2xl bg-black border border-white/10 shadow-2xl">
                                 
-                                <!-- Studio Lighting Vignette for High-Contrast Crisp Visibility of 3D Chassis -->
-                                <div class="absolute inset-0 pointer-events-none rounded-2xl" style="background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(46, 213, 115, 0.22) 0%, rgba(14, 22, 17, 0.65) 55%, #040605 100%);"></div>
+                                <!-- Studio Lighting Vignette for High-Contrast Crisp Visibility of 3D Chassis on Pitch Black -->
+                                <div class="absolute inset-0 pointer-events-none rounded-2xl" style="background: radial-gradient(ellipse 75% 65% at 50% 50%, rgba(255, 255, 255, 0.04) 0%, rgba(10, 10, 10, 0.7) 60%, #000000 100%);"></div>
 
                                 <!-- Google Model Viewer: Hardware-Accelerated 3D GLB Inspector -->
                                 <model-viewer
@@ -984,17 +1001,17 @@
                                     touch-action="pan-y"
                                     environment-image="neutral"
                                     tone-mapping="neutral"
-                                    shadow-intensity="2.2"
-                                    shadow-softness="0.25"
-                                    exposure="0.8"
+                                    shadow-intensity="2.4"
+                                    shadow-softness="0.2"
+                                    exposure="0.95"
                                     camera-orbit="0deg 75deg 105%"
                                     min-camera-orbit="auto auto 60%"
                                     max-camera-orbit="auto auto 170%"
                                     class="w-full h-full cursor-grab active:cursor-grabbing outline-none relative z-10"
-                                    style="--poster-color: transparent; filter: contrast(1.15) brightness(1.02) drop-shadow(0 20px 30px rgba(0,0,0,0.7));"
+                                    style="background-color: #000000; --poster-color: #000000; filter: contrast(1.1) brightness(1.02) drop-shadow(0 20px 30px rgba(0,0,0,0.9));"
                                 >
                                     <!-- Elegant Loading Screen for 18MB Model with percentage progress bar -->
-                                    <div slot="poster" id="modelLoadingScreen" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0C130F]/95 backdrop-blur-md rounded-2xl z-30 transition-opacity duration-700">
+                                    <div slot="poster" id="modelLoadingScreen" class="absolute inset-0 flex flex-col items-center justify-center bg-black/95 backdrop-blur-md rounded-2xl z-30 transition-opacity duration-700">
                                         <div class="relative w-12 h-12 mb-3 flex items-center justify-center">
                                             <div class="w-12 h-12 rounded-full border-2 border-brandGreen/20"></div>
                                             <div class="w-12 h-12 rounded-full border-2 border-brandGreen border-t-transparent animate-spin absolute inset-0"></div>
@@ -1010,7 +1027,7 @@
                                 </model-viewer>
 
                                 <!-- Floating Status & Interaction Hint Overlay -->
-                                <div class="absolute bottom-3 left-3 z-20 px-3 py-1.5 rounded-xl bg-black/60 backdrop-blur-md border border-white/10 text-[11px] text-white font-semibold flex items-center gap-1.5 shadow-md pointer-events-none">
+                                <div class="absolute bottom-3 left-3 z-20 px-3 py-1.5 rounded-xl bg-black/75 backdrop-blur-md border border-white/10 text-[11px] text-white font-semibold flex items-center gap-1.5 shadow-md pointer-events-none">
                                     <span class="inline-block w-2 h-2 rounded-full bg-brandGreen animate-pulse"></span>
                                     <span id="modelViewerStatusText">Interactive 3D · Drag to Rotate · Scroll to Zoom</span>
                                 </div>
@@ -1078,33 +1095,33 @@
                                 </p>
                             </div>
 
-                            <div class="p-5 rounded-2xl apple-glass-card">
+                            <div class="p-5 rounded-xl apple-glass-card">
                                 <div class="flex items-center gap-3 mb-2">
                                     <div class="w-9 h-9 rounded-xl bg-brandGreen-light flex items-center justify-center text-brandGreen font-bold">
                                         <i class="fa-solid fa-battery-full text-sm"></i>
                                     </div>
                                     <div>
-                                        <h4 class="font-bold text-brandBlack text-sm sm:text-base">204V Grade-A LiFePO4 Module & Smart BMS</h4>
-                                        <div class="text-xs text-brandBlack-slate">204V Nominal · 15Ah · 6,000+ Cycles · Expandable to 2 units</div>
+                                        <h4 class="font-bold text-brandBlack text-sm sm:text-base">204V Grade-A LiFePO4 Module &amp; Robust BMS</h4>
+                                        <div class="text-xs text-brandBlack-slate">204V Nominal · 15Ah · 6,000+ Cycles · Non-Expandable Unified Pack</div>
                                     </div>
                                 </div>
                                 <p class="text-xs text-brandBlack-muted pl-12 leading-relaxed">
-                                    NoraSol proprietary active balancing BMS safeguards against over-voltage, short-circuits, and cell imbalances. Provides sufficient overnight power for fans, LED illumination, Wi-Fi, and energy-efficient refrigerators.
+                                    NoraSol proprietary BMS safeguards against over-voltage and short-circuits in a unified non-expandable architecture. Provides sufficient overnight power for fans, LED illumination, Wi-Fi, and energy-efficient refrigerators.
                                 </p>
                             </div>
 
-                            <div class="p-5 rounded-2xl apple-glass-card">
+                            <div class="p-5 rounded-xl apple-glass-card">
                                 <div class="flex items-center gap-3 mb-2">
                                     <div class="w-9 h-9 rounded-xl bg-brandGreen-light flex items-center justify-center text-brandGreen font-bold">
-                                        <i class="fa-solid fa-wind text-sm"></i>
+                                        <i class="fa-solid fa-fan text-sm"></i>
                                     </div>
                                     <div>
-                                        <h4 class="font-bold text-brandBlack text-sm sm:text-base">IP54 Sealed Armor & Whisper-Quiet Thermal Design</h4>
-                                        <div class="text-xs text-brandBlack-slate">Rugged steel baked paint · Dust proof · Moisture protected</div>
+                                        <h4 class="font-bold text-brandBlack text-sm sm:text-base">Designed for Outdoor Placement &amp; External Cooling Fan</h4>
+                                        <div class="text-xs text-brandBlack-slate">Rugged steel baked paint · Designed to be kept outdoors · Moisture protected</div>
                                     </div>
                                 </div>
                                 <p class="text-xs text-brandBlack-muted pl-12 leading-relaxed">
-                                    Engineered to be installed in car porches, utility rooms, or covered outdoor balconies with acoustic dampening that prevents intrusive operational noise in living spaces.
+                                    Engineered specifically to be kept outdoors or indoors—in car porches, exterior walls, utility corridors, or balconies—with an external high-flow cooling fan that produces operational noise while rapidly exhausting heat during heavy loads.
                                 </p>
                             </div>
 
@@ -1972,180 +1989,41 @@
         <section id="testimonials" class="py-20 md:py-28 relative reveal-on-scroll">
             <div class="max-w-[1560px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
                 
-                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-                    <div class="max-w-2xl">
-                        <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brandGreen mb-3">
-                            <i class="fa-solid fa-house-chimney-user"></i>
-                            <span>Homeowner Experiences · Pakistan</span>
-                        </div>
-                        <h2 class="text-3xl sm:text-4xl font-extrabold text-brandBlack tracking-tight">
-                            Trusted by Families Across the Nation.
-                        </h2>
-                        <p class="mt-3 text-brandBlack-muted text-sm sm:text-base leading-relaxed">
-                            Discover how Pakistani households in Islamabad, Lahore, Karachi, and beyond rely on NORA-3 for quiet, stable, and cost-effective daily power.
-                        </p>
+                <div class="max-w-3xl mb-8">
+                    <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brandGreen mb-3">
+                        <i class="fa-solid fa-house-chimney-user"></i>
+                        <span>Customer Experience · Pakistan</span>
                     </div>
-
-                    <!-- Carousel Controls (Previous / Next Buttons) -->
-                    <div class="flex items-center gap-3 self-start md:self-auto">
-                        <button 
-                            id="prevTestimonialBtn" 
-                            onclick="prevTestimonial()"
-                            aria-label="Previous testimonial"
-                            class="w-11 h-11 rounded-2xl apple-glass flex items-center justify-center text-brandBlack hover:text-brandGreen hover:border-brandGreen transition-all shadow-xs"
-                        >
-                            <i class="fa-solid fa-chevron-left text-sm"></i>
-                        </button>
-                        <button 
-                            id="nextTestimonialBtn" 
-                            onclick="nextTestimonial()"
-                            aria-label="Next testimonial"
-                            class="w-11 h-11 rounded-2xl bg-brandGreen text-white flex items-center justify-center hover:bg-brandGreen-hover transition-all shadow-sm"
-                        >
-                            <i class="fa-solid fa-chevron-right text-sm"></i>
-                        </button>
-                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-brandBlack tracking-tight">
+                        Proven Performance in Real Homes.
+                    </h2>
                 </div>
 
-                <!-- Testimonial Carousel Shell -->
-                <div id="testimonialCarousel" class="relative overflow-hidden apple-glass rounded-3xl p-6 sm:p-10 shadow-lg">
-                    
-                    <div id="testimonialTrack" class="flex transition-transform duration-500 ease-out">
-                        
-                        <!-- Slide 1 -->
-                        <div class="w-full flex-shrink-0 px-2 sm:px-4">
-                            <div class="p-6 sm:p-8 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 flex flex-col justify-between h-full">
-                                <div>
-                                    <div class="flex items-center justify-between mb-4">
-                                        <div class="flex items-center gap-1 text-brandGreen text-xs">
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                        </div>
-                                        <span class="text-xs font-semibold text-brandBlack-slate dark:text-slate-400">Bahria Town, Islamabad</span>
-                                    </div>
-                                    <p class="text-sm sm:text-base text-brandBlack leading-relaxed italic mb-6">
-                                        “Living in Bahria Town, whisper-quiet operation was our biggest requirement. NORA-3 sits in our utility corridor right next to the bedroom and is completely unobtrusive. The integrated CT sensor meant our solar started powering the home on day one with zero net-meter delay.”
-                                    </p>
-                                </div>
-                                <div class="pt-4 border-t border-black/5 dark:border-white/10 flex items-center justify-between">
-                                    <div>
-                                        <div class="font-bold text-brandBlack text-sm">Dr. Tariq Mahmood</div>
-                                        <div class="text-xs text-brandBlack-slate">Resident · NORA-3 System (3.0 kW + 3.06 kWh)</div>
-                                    </div>
-                                    <div class="text-xs font-semibold text-brandGreen flex items-center gap-1.5">
-                                        <i class="fa-solid fa-circle-check"></i>
-                                        <span>Verified Home Installation</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 2 -->
-                        <div class="w-full flex-shrink-0 px-2 sm:px-4">
-                            <div class="p-6 sm:p-8 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 flex flex-col justify-between h-full">
-                                <div>
-                                    <div class="flex items-center justify-between mb-4">
-                                        <div class="flex items-center gap-1 text-brandGreen text-xs">
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                        </div>
-                                        <span class="text-xs font-semibold text-brandBlack-slate dark:text-slate-400">DHA Phase 5, Lahore</span>
-                                    </div>
-                                    <p class="text-sm sm:text-base text-brandBlack leading-relaxed italic mb-6">
-                                        “Our electricity bills during Lahore summers were crossing PKR 50,000 monthly. With NORA-3, we run all our fans, LED lighting, media setup, and refrigerator continuously. The 204V battery charges rapidly under afternoon sun and comfortably carries our nighttime baseline load.”
-                                    </p>
-                                </div>
-                                <div class="pt-4 border-t border-black/5 dark:border-white/10 flex items-center justify-between">
-                                    <div>
-                                        <div class="font-bold text-brandBlack text-sm">Khurram Shahzad</div>
-                                        <div class="text-xs text-brandBlack-slate">Homeowner · NORA-3 Hybrid Inverter Setup</div>
-                                    </div>
-                                    <div class="text-xs font-semibold text-brandGreen flex items-center gap-1.5">
-                                        <i class="fa-solid fa-circle-check"></i>
-                                        <span>Verified Home Installation</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 3 -->
-                        <div class="w-full flex-shrink-0 px-2 sm:px-4">
-                            <div class="p-6 sm:p-8 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 flex flex-col justify-between h-full">
-                                <div>
-                                    <div class="flex items-center justify-between mb-4">
-                                        <div class="flex items-center gap-1 text-brandGreen text-xs">
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                        </div>
-                                        <span class="text-xs font-semibold text-brandBlack-slate dark:text-slate-400">Sector F-8, Islamabad</span>
-                                    </div>
-                                    <p class="text-sm sm:text-base text-brandBlack leading-relaxed italic mb-6">
-                                        “What gave our family absolute confidence is knowing NoraSol is an indigenous engineering effort backed by CARE Pvt. Ltd. Having direct warranty support and engineers right here in Islamabad means queries get answered in minutes on WhatsApp, without waiting weeks for imported replacement parts.”
-                                    </p>
-                                </div>
-                                <div class="pt-4 border-t border-black/5 dark:border-white/10 flex items-center justify-between">
-                                    <div>
-                                        <div class="font-bold text-brandBlack text-sm">Syeda Amina Rizvi</div>
-                                        <div class="text-xs text-brandBlack-slate">Resident · NORA-3 Clean Energy Station</div>
-                                    </div>
-                                    <div class="text-xs font-semibold text-brandGreen flex items-center gap-1.5">
-                                        <i class="fa-solid fa-circle-check"></i>
-                                        <span>Verified Home Installation</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 4 -->
-                        <div class="w-full flex-shrink-0 px-2 sm:px-4">
-                            <div class="p-6 sm:p-8 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 flex flex-col justify-between h-full">
-                                <div>
-                                    <div class="flex items-center justify-between mb-4">
-                                        <div class="flex items-center gap-1 text-brandGreen text-xs">
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                        </div>
-                                        <span class="text-xs font-semibold text-brandBlack-slate dark:text-slate-400">Gulshan-e-Iqbal, Karachi</span>
-                                    </div>
-                                    <p class="text-sm sm:text-base text-brandBlack leading-relaxed italic mb-6">
-                                        “Karachi’s humidity and heat are notorious for taxing power electronics. NORA-3 has performed steadily through peak temperatures. The zero-export feature gives peace of mind that we are self-consuming 100% of our daytime solar generation safely without grid feed-in issues.”
-                                    </p>
-                                </div>
-                                <div class="pt-4 border-t border-black/5 dark:border-white/10 flex items-center justify-between">
-                                    <div>
-                                        <div class="font-bold text-brandBlack text-sm">Asim Farooq</div>
-                                        <div class="text-xs text-brandBlack-slate">Homeowner · NORA-3 Residential Setup</div>
-                                    </div>
-                                    <div class="text-xs font-semibold text-brandGreen flex items-center gap-1.5">
-                                        <i class="fa-solid fa-circle-check"></i>
-                                        <span>Verified Home Installation</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                <!-- Flat Single Testimonial Panel -->
+                <div class="max-w-4xl p-8 sm:p-10 rounded-xl bg-white dark:bg-[#0d1511] border border-black/10 dark:border-white/10">
+                    <div class="flex items-center gap-1.5 text-brandGreen text-base mb-5">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <span class="text-xs font-bold text-brandGreen ml-2">5.0 / 5.0 Rating</span>
                     </div>
 
-                    <!-- Pagination Dot Indicators -->
-                    <div class="flex items-center justify-center gap-2 mt-6">
-                        <button onclick="setTestimonialSlide(0)" class="testimonial-dot w-2.5 h-2.5 rounded-full bg-brandGreen transition-all" aria-label="Slide 1"></button>
-                        <button onclick="setTestimonialSlide(1)" class="testimonial-dot w-2.5 h-2.5 rounded-full bg-black/20 hover:bg-black/40 transition-all" aria-label="Slide 2"></button>
-                        <button onclick="setTestimonialSlide(2)" class="testimonial-dot w-2.5 h-2.5 rounded-full bg-black/20 hover:bg-black/40 transition-all" aria-label="Slide 3"></button>
-                        <button onclick="setTestimonialSlide(3)" class="testimonial-dot w-2.5 h-2.5 rounded-full bg-black/20 hover:bg-black/40 transition-all" aria-label="Slide 4"></button>
-                    </div>
+                    <blockquote class="text-base sm:text-lg md:text-xl font-normal text-brandBlack dark:text-slate-100 leading-relaxed mb-6">
+                        “The NORA-3 is working flawlessly for backup and occasional water pumping motors. The Android app layout is really easy to understand with all important details one touch away.”
+                    </blockquote>
 
+                    <div class="pt-5 border-t border-black/10 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <div class="font-bold text-brandBlack text-base">Shahid Razaq</div>
+                            <div class="text-xs text-brandBlack-slate">Homeowner · NORA-3 Residential Installation</div>
+                        </div>
+                        <div class="text-xs font-semibold text-brandGreen flex items-center gap-1.5 self-start sm:self-auto">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Verified Home Installation</span>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -2289,38 +2167,38 @@
                                     Zero-Export CT Mechanism
                                 </button>
                                 <button 
-                                    onclick="askAiFromPrompt('How does NoraSol achieve whisper-quiet cooling and 60°C thermal stability?')"
-                                    class="text-xs px-3.5 py-2 rounded-xl bg-white hover:bg-white/80 border border-black/10 text-brandBlack transition-colors text-left font-medium"
+                                    onclick="askAiFromPrompt('How does the external cooling fan keep NORA-3 running up to 60°C ambient?')"
+                                    class="text-xs px-3.5 py-2 rounded-lg bg-white hover:bg-neutral-100 dark:bg-white/10 dark:hover:bg-white/15 border border-black/10 dark:border-white/10 text-brandBlack dark:text-white transition-colors text-left font-medium"
                                 >
-                                    Low-Acoustic Thermal Design
+                                    External Cooling Fan
                                 </button>
                                 <button 
                                     onclick="askAiFromPrompt('What are the specs and battery capacities of the NoraStore series?')"
-                                    class="text-xs px-3.5 py-2 rounded-xl bg-white hover:bg-white/80 border border-black/10 text-brandBlack transition-colors text-left font-medium"
+                                    class="text-xs px-3.5 py-2 rounded-lg bg-white hover:bg-neutral-100 dark:bg-white/10 dark:hover:bg-white/15 border border-black/10 dark:border-white/10 text-brandBlack dark:text-white transition-colors text-left font-medium"
                                 >
                                     NoraStore Battery Capacities
                                 </button>
                             </div>
                         </div>
 
-                        <div class="p-4 rounded-2xl bg-white border border-black/5 text-xs text-brandBlack-slate flex items-center gap-3">
+                        <div class="p-4 rounded-xl bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs text-brandBlack-slate flex items-center gap-3">
                             <i class="fa-solid fa-lock text-brandGreen text-base"></i>
                             <span>Server-side AI processing with strict factual guardrails grounded in NoraSol data.</span>
                         </div>
                     </div>
 
-                    <!-- Live Embedded Chat Console (Apple Glass) -->
+                    <!-- Live Embedded Chat Console (Flat Architectural Panel) -->
                     <div class="lg:col-span-7">
-                        <div class="apple-glass rounded-3xl overflow-hidden flex flex-col h-[540px] shadow-xl">
+                        <div class="apple-glass rounded-xl overflow-hidden flex flex-col h-[540px]">
                             
                             <!-- Chat Header -->
-                            <div class="px-6 py-4 bg-white/70 border-b border-black/5 flex items-center justify-between">
+                            <div class="px-6 py-4 bg-white/70 dark:bg-black/30 border-b border-black/10 dark:border-white/10 flex items-center justify-between">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-xl bg-white border border-black/5 p-1 flex items-center justify-center">
+                                    <div class="w-8 h-8 rounded-lg bg-white border border-black/10 p-1 flex items-center justify-center">
                                         <img src="Images/norasol%20logo.png" alt="NoraSol AI" class="w-full h-full object-contain">
                                     </div>
                                     <div>
-                                        <div class="text-sm font-bold text-brandBlack flex items-center gap-2">
+                                        <div class="text-sm font-bold text-brandBlack dark:text-white flex items-center gap-2">
                                             <span>NoraSol AI Engineer</span>
                                             <span class="w-2 h-2 rounded-full bg-brandGreen"></span>
                                         </div>
@@ -2333,11 +2211,11 @@
                             <!-- Messages Area -->
                             <div id="embedChatMessages" class="flex-1 p-6 overflow-y-auto space-y-4 text-xs sm:text-sm">
                                 <div class="flex gap-3 max-w-[85%]">
-                                    <div class="w-7 h-7 rounded-xl bg-brandGreen-light flex-shrink-0 flex items-center justify-center text-brandGreen text-xs font-bold">
+                                    <div class="w-7 h-7 rounded-lg bg-brandGreen-light flex-shrink-0 flex items-center justify-center text-brandGreen text-xs font-bold">
                                         <i class="fa-solid fa-microchip"></i>
                                     </div>
-                                    <div class="p-4 rounded-2xl bg-white border border-black/5 text-brandBlack leading-relaxed shadow-sm">
-                                        Hello! I am the official NoraSol AI Assistant. You can ask me anything regarding our indigenous NORA-3 hybrid inverter, 204V LiFePO4 batteries, acoustic thermal design, or ROI calculations. How may I assist you today?
+                                    <div class="p-4 rounded-xl bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 text-brandBlack dark:text-white leading-relaxed">
+                                        Hello! I am the official NoraSol AI Assistant. You can ask me anything regarding our indigenous NORA-3 hybrid inverter, 204V LiFePO4 batteries, external cooling fan architecture, or ROI calculations. How may I assist you today?
                                     </div>
                                 </div>
                             </div>
@@ -3019,9 +2897,9 @@
 
         // 3. Hero Professional One-Sided Architecture Selector
         const heroFeatures = {
-            fanless: {
-                title: 'Low-Acoustic Thermal Design',
-                desc: 'Engineered with internal aerodynamic dampening to maintain a subtle, whisper-quiet profile suited for indoor domestic spaces while handling 60°C summer peaks.'
+            cooling: {
+                title: 'External Cooling Fan Architecture',
+                desc: 'Equipped with an external cooling fan outside that generates audible airflow sound during active operation to rapidly disperse intense summer heat up to 60°C.'
             },
             ct: {
                 title: 'Integrated Zero-Export CT Sensor',
@@ -3029,7 +2907,7 @@
             },
             battery: {
                 title: '204V LiFePO4 Energy Architecture',
-                desc: 'Nominal 204V high-voltage direct pairing minimizes resistive heating loss, maximizing round-trip efficiency with Grade-A cells and active cell-balancing BMS.'
+                desc: 'Nominal 204V high-voltage direct pairing minimizes resistive heating loss in a unified non-expandable pack with Grade-A LiFePO4 chemistry.'
             }
         };
 
@@ -3045,14 +2923,14 @@
             const btn2 = document.getElementById('featureBtn2');
             const btn3 = document.getElementById('featureBtn3');
 
-            const activeClass = 'w-full text-left p-3 rounded-2xl bg-white border-2 border-brandGreen shadow-xs transition-all';
-            const inactiveClass = 'w-full text-left p-3 rounded-2xl bg-white/70 hover:bg-white border border-black/10 transition-all';
+            const activeClass = 'w-full text-left p-3 rounded-xl bg-white dark:bg-white/10 border-2 border-brandGreen transition-all';
+            const inactiveClass = 'w-full text-left p-3 rounded-xl bg-white/70 hover:bg-white dark:bg-white/5 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 transition-all';
 
-            btn1.className = type === 'fanless' ? activeClass : inactiveClass;
+            btn1.className = type === 'cooling' ? activeClass : inactiveClass;
             btn2.className = type === 'ct' ? activeClass : inactiveClass;
             btn3.className = type === 'battery' ? activeClass : inactiveClass;
 
-            btn1.querySelector('i').className = type === 'fanless' ? 'fa-solid fa-check text-[10px] text-brandGreen' : 'fa-solid fa-chevron-right text-[10px] text-brandBlack-slate';
+            btn1.querySelector('i').className = type === 'cooling' ? 'fa-solid fa-check text-[10px] text-brandGreen' : 'fa-solid fa-chevron-right text-[10px] text-brandBlack-slate';
             btn2.querySelector('i').className = type === 'ct' ? 'fa-solid fa-check text-[10px] text-brandGreen' : 'fa-solid fa-chevron-right text-[10px] text-brandBlack-slate';
             btn3.querySelector('i').className = type === 'battery' ? 'fa-solid fa-check text-[10px] text-brandGreen' : 'fa-solid fa-chevron-right text-[10px] text-brandBlack-slate';
         }
@@ -3070,7 +2948,7 @@
         const modelLoadingBar = document.getElementById('modelLoadingBar');
         const modelLoadingPercent = document.getElementById('modelLoadingPercent');
 
-        let current3DTheme = 'titanium';
+        let current3DTheme = 'white';
         let current3DPartFocus = 'all';
 
         function apply3DMaterialColors(theme) {
@@ -3078,52 +2956,71 @@
             const mats = nora3Viewer.model.materials;
 
             const palettes = {
+                white: {
+                    chassis: [0.96, 0.97, 0.98, 1.0],   // Arctic White main chassis
+                    bezel: [0.90, 0.92, 0.94, 1.0],     // Refined matching white / platinum bezel
+                    green: [0.0, 0.85, 0.42, 1.0],      // Norasol signature emerald green
+                    heatsink: [0.18, 0.20, 0.22, 1.0],   // Anodized titanium heatsink
+                    welds: [0.72, 0.75, 0.78, 1.0],     // Brushed titanium seams
+                    fasteners: [0.85, 0.87, 0.90, 1.0], // Titanium/chrome hardware
+                    terminals: [0.85, 0.55, 0.28, 1.0]  // Copper terminal blocks
+                },
                 titanium: {
-                    chassis: [0.18, 0.20, 0.22, 1.0],
-                    bezel: [0.10, 0.11, 0.13, 1.0],
+                    chassis: [0.22, 0.24, 0.26, 1.0],
+                    bezel: [0.12, 0.13, 0.15, 1.0],
                     green: [0.0, 0.85, 0.42, 1.0],
-                    heatsink: [0.05, 0.06, 0.07, 1.0],
+                    heatsink: [0.07, 0.08, 0.09, 1.0],
                     welds: [0.65, 0.68, 0.72, 1.0],
                     fasteners: [0.80, 0.82, 0.86, 1.0],
                     terminals: [0.85, 0.55, 0.28, 1.0]
                 },
                 cad: {
-                    chassis: [0.14, 0.26, 0.52, 1.0],
-                    bezel: [0.22, 0.24, 0.28, 1.0],
+                    chassis: [0.14, 0.28, 0.55, 1.0],
+                    bezel: [0.24, 0.26, 0.30, 1.0],
                     green: [0.0, 1.0, 0.45, 1.0],
                     heatsink: [0.92, 0.58, 0.12, 1.0],
                     welds: [0.35, 0.85, 0.95, 1.0],
                     fasteners: [0.95, 0.95, 0.98, 1.0],
                     terminals: [1.0, 0.38, 0.0, 1.0]
-                },
-                stealth: {
-                    chassis: [0.06, 0.06, 0.07, 1.0],
-                    bezel: [0.04, 0.04, 0.05, 1.0],
-                    green: [0.0, 0.70, 0.35, 1.0],
-                    heatsink: [0.08, 0.08, 0.09, 1.0],
-                    welds: [0.32, 0.34, 0.36, 1.0],
-                    fasteners: [0.28, 0.30, 0.32, 1.0],
-                    terminals: [0.65, 0.45, 0.25, 1.0]
                 }
             };
 
-            const p = palettes[theme] || palettes.titanium;
+            const p = palettes[theme] || palettes.white;
 
             mats.forEach(mat => {
                 const name = (mat.name || '').toLowerCase();
-                if (name.includes('chassis')) mat.pbrMetallicRoughness.setBaseColorFactor(p.chassis);
-                else if (name.includes('bezel')) mat.pbrMetallicRoughness.setBaseColorFactor(p.bezel);
-                else if (name.includes('green')) mat.pbrMetallicRoughness.setBaseColorFactor(p.green);
-                else if (name.includes('heatsink')) mat.pbrMetallicRoughness.setBaseColorFactor(p.heatsink);
-                else if (name.includes('weld')) mat.pbrMetallicRoughness.setBaseColorFactor(p.welds);
-                else if (name.includes('fastener')) mat.pbrMetallicRoughness.setBaseColorFactor(p.fasteners);
-                else if (name.includes('terminal')) mat.pbrMetallicRoughness.setBaseColorFactor(p.terminals);
+                if (name.includes('chassis')) {
+                    mat.pbrMetallicRoughness.setBaseColorFactor(p.chassis);
+                    if (theme === 'white') {
+                        if (mat.pbrMetallicRoughness.setRoughnessFactor) mat.pbrMetallicRoughness.setRoughnessFactor(0.35);
+                        if (mat.pbrMetallicRoughness.setMetallicFactor) mat.pbrMetallicRoughness.setMetallicFactor(0.08);
+                    }
+                } else if (name.includes('bezel')) {
+                    mat.pbrMetallicRoughness.setBaseColorFactor(p.bezel);
+                    if (theme === 'white') {
+                        if (mat.pbrMetallicRoughness.setRoughnessFactor) mat.pbrMetallicRoughness.setRoughnessFactor(0.32);
+                        if (mat.pbrMetallicRoughness.setMetallicFactor) mat.pbrMetallicRoughness.setMetallicFactor(0.08);
+                    }
+                } else if (name.includes('green')) {
+                    mat.pbrMetallicRoughness.setBaseColorFactor(p.green);
+                } else if (name.includes('heatsink')) {
+                    mat.pbrMetallicRoughness.setBaseColorFactor(p.heatsink);
+                } else if (name.includes('weld')) {
+                    mat.pbrMetallicRoughness.setBaseColorFactor(p.welds);
+                    if (mat.pbrMetallicRoughness.setMetallicFactor) mat.pbrMetallicRoughness.setMetallicFactor(0.75);
+                } else if (name.includes('fastener')) {
+                    mat.pbrMetallicRoughness.setBaseColorFactor(p.fasteners);
+                    if (mat.pbrMetallicRoughness.setMetallicFactor) mat.pbrMetallicRoughness.setMetallicFactor(0.85);
+                } else if (name.includes('terminal')) {
+                    mat.pbrMetallicRoughness.setBaseColorFactor(p.terminals);
+                    if (mat.pbrMetallicRoughness.setMetallicFactor) mat.pbrMetallicRoughness.setMetallicFactor(0.9);
+                }
             });
         }
 
         function set3DFinishTheme(theme) {
             current3DTheme = theme;
-            ['titanium', 'cad', 'stealth'].forEach(t => {
+            ['white', 'titanium', 'cad'].forEach(t => {
                 const btn = document.getElementById(`themeBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
                 if (btn) {
                     btn.className = (t === theme)
@@ -3162,7 +3059,7 @@
             } else if (part === 'heatsink') {
                 nora3Viewer.cameraOrbit = '145deg 72deg 88%';
                 nora3Viewer.autoRotate = false;
-                if (statusText) statusText.textContent = 'Rear Heat Sink · Fanless High-Thermal-Conductivity Extrusion';
+                if (statusText) statusText.textContent = 'Rear Heat Dissipation · External Cooling Fan Assembly';
             } else if (part === 'welds') {
                 nora3Viewer.cameraOrbit = '-40deg 78deg 76%';
                 nora3Viewer.autoRotate = false;
@@ -4566,47 +4463,13 @@
             if (icon) icon.className = 'fa-solid fa-bars text-sm';
         }
 
-        // 9. Testimonials Carousel Controller
-        let currentTestimonialIndex = 0;
-        const totalTestimonials = 4;
-        const testimonialTrack = document.getElementById('testimonialTrack');
-        const testimonialDots = document.querySelectorAll('.testimonial-dot');
-
+        // 9. Verified Customer Testimonial (Single Featured Review)
         function updateTestimonialCarousel() {
-            if (!testimonialTrack) return;
-            testimonialTrack.style.transform = `translateX(-${currentTestimonialIndex * 100}%)`;
-            testimonialDots.forEach((dot, idx) => {
-                dot.className = idx === currentTestimonialIndex 
-                    ? 'testimonial-dot w-2.5 h-2.5 rounded-full bg-brandGreen transition-all' 
-                    : 'testimonial-dot w-2.5 h-2.5 rounded-full bg-black/20 hover:bg-black/40 transition-all';
-            });
+            // Single review for Shahid Razaq; no carousel sliding required
         }
-
-        function nextTestimonial() {
-            currentTestimonialIndex = (currentTestimonialIndex + 1) % totalTestimonials;
-            updateTestimonialCarousel();
-        }
-
-        function prevTestimonial() {
-            currentTestimonialIndex = (currentTestimonialIndex - 1 + totalTestimonials) % totalTestimonials;
-            updateTestimonialCarousel();
-        }
-
-        function setTestimonialSlide(idx) {
-            currentTestimonialIndex = idx;
-            updateTestimonialCarousel();
-        }
-
-        // Auto advance carousel every 6.5 seconds (pauses on hover)
-        let testimonialInterval = setInterval(nextTestimonial, 6500);
-        const carouselEl = document.getElementById('testimonialCarousel');
-        if (carouselEl) {
-            carouselEl.addEventListener('mouseenter', () => clearInterval(testimonialInterval));
-            carouselEl.addEventListener('mouseleave', () => {
-                clearInterval(testimonialInterval);
-                testimonialInterval = setInterval(nextTestimonial, 6500);
-            });
-        }
+        function nextTestimonial() {}
+        function prevTestimonial() {}
+        function setTestimonialSlide() {}
 
         // 10. Generic Accordion FAQ Toggle
         function toggleFaq(btn) {
